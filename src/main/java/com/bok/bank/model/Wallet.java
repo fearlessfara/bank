@@ -11,9 +11,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Currency;
+import java.util.List;
 
 @Entity
 public class Wallet implements Serializable {
@@ -51,6 +54,9 @@ public class Wallet implements Serializable {
 
     @UpdateTimestamp
     private Instant updateTimestamp;
+
+    @OneToMany
+    private List<Card> cards = new ArrayList<>();
 
     public Long getId() {
         return id;

@@ -9,8 +9,11 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class User implements Serializable {
@@ -91,6 +94,12 @@ public class User implements Serializable {
 
     @Column
     private String addCountry;
+
+    @OneToMany
+    private List<Card> cards = new ArrayList<>();
+
+    @OneToMany
+    private List<Wallet> wallets = new ArrayList<>();
 
     public User() {
     }

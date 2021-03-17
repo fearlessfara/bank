@@ -11,6 +11,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Currency;
@@ -26,7 +28,7 @@ public class Card implements Serializable {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @ManyToOne
     private User user;
 
     @Column(nullable = false)
@@ -81,6 +83,9 @@ public class Card implements Serializable {
 
     @UpdateTimestamp
     private Instant updateTimestamp;
+
+    @ManyToOne
+    private Wallet wallet;
 
     public Card() {
     }
