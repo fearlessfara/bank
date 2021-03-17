@@ -1,0 +1,19 @@
+active-mq:
+  users-queue: users
+  broker-url: tcp://active-mq:61616
+
+spring:
+  activemq:
+    packages:
+      trusted: com.bok.krypto.model
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mysql://bank-db:3306/bankdb
+    username: bank
+    password: bank
+  jooq:
+    sql-dialect: org.hibernate.dialect.MariaDBDialect
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
