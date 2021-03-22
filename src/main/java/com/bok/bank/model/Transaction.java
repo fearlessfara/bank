@@ -48,14 +48,6 @@ public class Transaction implements Serializable {
     @Enumerated(EnumType.STRING)
     public Status status;
 
-    @ManyToOne
-    private User user;
-
-//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "activityId")
-//    private List<TransactionHistory> timeline = new ArrayList<>();
-
-
     public Transaction() {
     }
 
@@ -131,14 +123,6 @@ public class Transaction implements Serializable {
         this.status = status;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this)
@@ -151,7 +135,6 @@ public class Transaction implements Serializable {
                 .append("amount", amount)
                 .append("type", type)
                 .append("status", status)
-                .append("user", user)
                 .toString();
     }
 

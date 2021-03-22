@@ -1,5 +1,6 @@
 package com.bok.bank.model;
 
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -15,7 +16,6 @@ import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 
 @Entity
@@ -34,20 +34,11 @@ public class Wallet implements Serializable {
     @Column
     private String label;
 
-    @Column(name = "currency", nullable = false, updatable = false)
-    private Currency currency;
-
     @Embedded
     private Money availableAmount;
 
     @Embedded
     private Money blockedAmount;
-
-    @Column(nullable = false, updatable = false)
-    private String publicId;
-
-    @Column(name = "note")
-    private String note;
 
     @CreationTimestamp
     private Instant creationTimestamp;
@@ -57,6 +48,9 @@ public class Wallet implements Serializable {
 
     @OneToMany
     private List<Card> cards = new ArrayList<>();
+
+    public Wallet() {
+    }
 
     public Long getId() {
         return id;
@@ -90,14 +84,6 @@ public class Wallet implements Serializable {
         this.label = label;
     }
 
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
-
     public Money getAvailableAmount() {
         return availableAmount;
     }
@@ -112,22 +98,6 @@ public class Wallet implements Serializable {
 
     public void setBlockedAmount(Money blockedAmount) {
         this.blockedAmount = blockedAmount;
-    }
-
-    public String getPublicId() {
-        return publicId;
-    }
-
-    public void setPublicId(String publicId) {
-        this.publicId = publicId;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
     }
 
     public Instant getCreationTimestamp() {
@@ -146,6 +116,14 @@ public class Wallet implements Serializable {
         this.updateTimestamp = updateTimestamp;
     }
 
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
@@ -153,11 +131,8 @@ public class Wallet implements Serializable {
                 .append("user", user)
                 .append("name", name)
                 .append("label", label)
-                .append("currency", currency)
                 .append("availableAmount", availableAmount)
                 .append("blockedAmount", blockedAmount)
-                .append("publicId", publicId)
-                .append("note", note)
                 .append("creationTimestamp", creationTimestamp)
                 .append("updateTimestamp", updateTimestamp)
                 .toString();

@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,8 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Currency;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Card implements Serializable {
@@ -28,15 +29,16 @@ public class Card implements Serializable {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private User user;
 
-    @Column(nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private Account.Type holderType;
-
+    @Column
     @Enumerated(EnumType.STRING)
     private CardStatus CardStatus;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Type type;
 
     @Column(nullable = false)
     private Instant expirationDate;
@@ -44,39 +46,12 @@ public class Card implements Serializable {
     @Column(unique = true, nullable = false)
     private String token;
 
-    @Column(name = "currency", nullable = false, updatable = false)
-    private Currency currency;
 
     @Column
     private String label;
 
     @Column(nullable = false)
     private String maskedpan;
-
-    //Delivery address
-    @Column
-    private String delvAddLine1;
-
-    @Column
-    private String delvAddLine2;
-
-    @Column
-    private String delvAddLine3;
-
-    @Column
-    private String delvCity;
-
-    @Column
-    private String delvPostCode;
-
-    @Column
-    private String delvCounty;
-
-    @Column
-    private String delvCountry;
-
-    @Column(nullable = false, updatable = false)
-    private String publicId = UUID.randomUUID().toString();
 
     @CreationTimestamp
     private Instant creationTimestamp;
@@ -86,6 +61,10 @@ public class Card implements Serializable {
 
     @ManyToOne
     private Wallet wallet;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Transaction> transactions = new ArrayList<>();
+
 
     public Card() {
     }
@@ -114,14 +93,6 @@ public class Card implements Serializable {
         this.user = user;
     }
 
-    public Account.Type getHolderType() {
-        return holderType;
-    }
-
-    public void setHolderType(Account.Type holderType) {
-        this.holderType = holderType;
-    }
-
     public Card.CardStatus getCardStatus() {
         return CardStatus;
     }
@@ -146,13 +117,6 @@ public class Card implements Serializable {
         this.token = token;
     }
 
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
 
     public String getLabel() {
         return label;
@@ -168,70 +132,6 @@ public class Card implements Serializable {
 
     public void setMaskedpan(String maskedpan) {
         this.maskedpan = maskedpan;
-    }
-
-    public String getDelvAddLine1() {
-        return delvAddLine1;
-    }
-
-    public void setDelvAddLine1(String delvAddLine1) {
-        this.delvAddLine1 = delvAddLine1;
-    }
-
-    public String getDelvAddLine2() {
-        return delvAddLine2;
-    }
-
-    public void setDelvAddLine2(String delvAddLine2) {
-        this.delvAddLine2 = delvAddLine2;
-    }
-
-    public String getDelvAddLine3() {
-        return delvAddLine3;
-    }
-
-    public void setDelvAddLine3(String delvAddLine3) {
-        this.delvAddLine3 = delvAddLine3;
-    }
-
-    public String getDelvCity() {
-        return delvCity;
-    }
-
-    public void setDelvCity(String delvCity) {
-        this.delvCity = delvCity;
-    }
-
-    public String getDelvPostCode() {
-        return delvPostCode;
-    }
-
-    public void setDelvPostCode(String delvPostCode) {
-        this.delvPostCode = delvPostCode;
-    }
-
-    public String getDelvCounty() {
-        return delvCounty;
-    }
-
-    public void setDelvCounty(String delvCounty) {
-        this.delvCounty = delvCounty;
-    }
-
-    public String getDelvCountry() {
-        return delvCountry;
-    }
-
-    public void setDelvCountry(String delvCountry) {
-        this.delvCountry = delvCountry;
-    }
-
-    public String getPublicId() {
-        return publicId;
-    }
-
-    public void setPublicId(String publicId) {
-        this.publicId = publicId;
     }
 
     public Instant getCreationTimestamp() {
@@ -256,21 +156,11 @@ public class Card implements Serializable {
                 .append("id", id)
                 .append("name", name)
                 .append("user", user)
-                .append("holderType", holderType)
                 .append("CardStatus", CardStatus)
                 .append("expirationDate", expirationDate)
                 .append("token", token)
-                .append("currency", currency)
                 .append("label", label)
                 .append("maskedpan", maskedpan)
-                .append("delvAddLine1", delvAddLine1)
-                .append("delvAddLine2", delvAddLine2)
-                .append("delvAddLine3", delvAddLine3)
-                .append("delvCity", delvCity)
-                .append("delvPostCode", delvPostCode)
-                .append("delvCounty", delvCounty)
-                .append("delvCountry", delvCountry)
-                .append("publicId", publicId)
                 .append("creationTimestamp", creationTimestamp)
                 .append("updateTimestamp", updateTimestamp)
                 .toString();
@@ -284,5 +174,9 @@ public class Card implements Serializable {
         STOLEN,
         BROKEN,
         DESTROYED
+    }
+
+    public enum Type {
+        CREDIT, DEBIT, VIRTUAL, ONE_USE
     }
 }
