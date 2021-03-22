@@ -1,0 +1,65 @@
+#spring:
+#  jpa:
+#    open-in-view: false
+#    show-sql: false
+#  profiles:
+#    active: "externalfara"
+#
+#---
+##External DB
+active-mq:
+  transfers-queue: transfers
+  market-sell-queue: market-sell
+  market-purchase-queue: market-purchase
+  prices-topic: prices
+  users-queue: users
+  transactions-queue: transactions
+  wallets-queue: wallets
+  emails-queue: emails
+  broker-url: tcp://dev.faraone.ovh:61616
+
+
+spring:
+  profile: externalfara
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://dev.faraone.ovh:3307/bank
+    username: developer
+    password: password4testing
+#---
+#HSQL config
+#spring:
+#  profile: hsql
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop
+#  datasource:
+#    password: root
+#    url: jdbc:hsqldb:mem:bank&createDatabaseIfNotExist=true;DB_CLOSE_DELAY=-1
+#    username: root
+
+#---
+###local mySQL config
+#spring:
+#  profile: local
+#  datasource:
+#    password: root
+#    url: jdbc:mysql://localhost:3306/bank?serverTimezone=Europe/Rome&createDatabaseIfNotExist=true
+#    username: root
+#    driverClassName: com.mysql.jdbc.Driver
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+#
+#    show-sql: true
+#    database: mysql
+#    generate-ddl: true
