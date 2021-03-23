@@ -1,12 +1,12 @@
-#spring:
-#  jpa:
-#    open-in-view: false
-#    show-sql: false
-#  profiles:
-#    active: "externalfara"
-#
-#---
-##External DB
+spring:
+  jpa:
+    open-in-view: false
+    show-sql: false
+  profiles:
+    active: "local"
+
+---
+#External DB
 active-mq:
   transfers-queue: transfers
   market-sell-queue: market-sell
@@ -17,10 +17,8 @@ active-mq:
   wallets-queue: wallets
   emails-queue: emails
   broker-url: tcp://dev.faraone.ovh:61616
-
-
 spring:
-  profile: externalfara
+  profiles: external
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -32,34 +30,35 @@ spring:
     url: jdbc:mariadb://dev.faraone.ovh:3307/bank
     username: developer
     password: password4testing
-#---
-#HSQL config
-#spring:
-#  profile: hsql
-#  jpa:
-#    hibernate:
-#      ddl-auto: create-drop
-#  datasource:
-#    password: root
-#    url: jdbc:hsqldb:mem:bank&createDatabaseIfNotExist=true;DB_CLOSE_DELAY=-1
-#    username: root
 
-#---
-###local mySQL config
-#spring:
-#  profile: local
-#  datasource:
-#    password: root
-#    url: jdbc:mysql://localhost:3306/bank?serverTimezone=Europe/Rome&createDatabaseIfNotExist=true
-#    username: root
-#    driverClassName: com.mysql.jdbc.Driver
-#  jpa:
-#    hibernate:
-#      ddl-auto: create-drop
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-#
-#    show-sql: true
-#    database: mysql
-#    generate-ddl: true
+---
+#HSQL config
+spring:
+  profiles: hsql
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    password: root
+    url: jdbc:hsqldb:mem:bank&createDatabaseIfNotExist=true;DB_CLOSE_DELAY=-1
+    username: root
+
+---
+##local mySQL config
+spring:
+  profiles: local
+  datasource:
+    password: root
+    url: jdbc:mysql://localhost:3306/bank?serverTimezone=Europe/Rome&createDatabaseIfNotExist=true
+    username: root
+    driverClassName: com.mysql.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
+    show-sql: true
+    database: mysql
+    generate-ddl: true

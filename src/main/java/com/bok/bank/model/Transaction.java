@@ -1,9 +1,13 @@
 package com.bok.bank.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 
+import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -22,10 +26,10 @@ public class Transaction implements Serializable {
     private Long id;
 
     @ManyToOne
-    private Wallet fromWallet;
+    private BankAccount fromBankAccount;
 
     @ManyToOne
-    private Wallet toWallet;
+    private BankAccount toBankAccount;
 
     @ManyToOne
     private Card card;
@@ -37,7 +41,9 @@ public class Transaction implements Serializable {
     @CreationTimestamp
     private Instant timestamp;
 
-    @Column
+    @Embedded
+    @AttributeOverride(name="currency", column=@Column(name="amount_currency"))
+    @AttributeOverride(name="value", column=@Column(name="amount_value"))
     private Money amount;
 
     @Column
@@ -59,20 +65,20 @@ public class Transaction implements Serializable {
         this.id = id;
     }
 
-    public Wallet getFromWallet() {
-        return fromWallet;
+    public BankAccount getFromWallet() {
+        return fromBankAccount;
     }
 
-    public void setFromWallet(Wallet fromWallet) {
-        this.fromWallet = fromWallet;
+    public void setFromWallet(BankAccount fromBankAccount) {
+        this.fromBankAccount = fromBankAccount;
     }
 
-    public Wallet getToWallet() {
-        return toWallet;
+    public BankAccount getToWallet() {
+        return toBankAccount;
     }
 
-    public void setToWallet(Wallet toWallet) {
-        this.toWallet = toWallet;
+    public void setToWallet(BankAccount toBankAccount) {
+        this.toBankAccount = toBankAccount;
     }
 
     public Card getCard() {
@@ -123,12 +129,29 @@ public class Transaction implements Serializable {
         this.status = status;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Transaction that = (Transaction) o;
+
+        return new EqualsBuilder().append(id, that.id).append(fromBankAccount, that.fromBankAccount).append(toBankAccount, that.toBankAccount).append(card, that.card).append(transactionOwner, that.transactionOwner).append(timestamp, that.timestamp).append(amount, that.amount).append(type, that.type).append(status, that.status).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(id).append(fromBankAccount).append(toBankAccount).append(card).append(transactionOwner).append(timestamp).append(amount).append(type).append(status).toHashCode();
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .append("id", id)
-                .append("fromWallet", fromWallet)
-                .append("toWallet", toWallet)
+                .append("fromWallet", fromBankAccount)
+                .append("toWallet", toBankAccount)
                 .append("card", card)
                 .append("transactionOwner", transactionOwner)
                 .append("timestamp", timestamp)

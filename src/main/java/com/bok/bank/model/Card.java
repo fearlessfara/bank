@@ -1,9 +1,12 @@
 package com.bok.bank.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,6 +20,7 @@ import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 
 @Entity
@@ -34,7 +38,7 @@ public class Card implements Serializable {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private CardStatus CardStatus;
+    private CardStatus cardStatus;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -46,6 +50,8 @@ public class Card implements Serializable {
     @Column(unique = true, nullable = false)
     private String token;
 
+    @Column(name = "currency", nullable = false, updatable = false)
+    private Currency currency;
 
     @Column
     private String label;
@@ -60,13 +66,27 @@ public class Card implements Serializable {
     private Instant updateTimestamp;
 
     @ManyToOne
-    private Wallet wallet;
+    private BankAccount bankAccount;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.MERGE)
     private List<Transaction> transactions = new ArrayList<>();
 
 
     public Card() {
+    }
+
+    public Card(String name, User user, Card.CardStatus cardStatus, Type type, Instant expirationDate, String token, Currency currency, String label, String maskedpan, BankAccount bankAccount, List<Transaction> transactions) {
+        this.name = name;
+        this.user = user;
+        this.cardStatus = cardStatus;
+        this.type = type;
+        this.expirationDate = expirationDate;
+        this.token = token;
+        this.currency = currency;
+        this.label = label;
+        this.maskedpan = maskedpan;
+        this.bankAccount = bankAccount;
+        this.transactions = transactions;
     }
 
     public Long getId() {
@@ -94,11 +114,11 @@ public class Card implements Serializable {
     }
 
     public Card.CardStatus getCardStatus() {
-        return CardStatus;
+        return cardStatus;
     }
 
     public void setCardStatus(Card.CardStatus cardStatus) {
-        CardStatus = cardStatus;
+        this.cardStatus = cardStatus;
     }
 
     public Instant getExpirationDate() {
@@ -150,13 +170,61 @@ public class Card implements Serializable {
         this.updateTimestamp = updateTimestamp;
     }
 
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
+    public BankAccount getWallet() {
+        return bankAccount;
+    }
+
+    public void setWallet(BankAccount bankAccount) {
+        this.bankAccount = bankAccount;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Card card = (Card) o;
+
+        return new EqualsBuilder().append(id, card.id).append(name, card.name).append(user, card.user).append(cardStatus, card.cardStatus).append(type, card.type).append(expirationDate, card.expirationDate).append(token, card.token).append(currency, card.currency).append(label, card.label).append(maskedpan, card.maskedpan).append(creationTimestamp, card.creationTimestamp).append(updateTimestamp, card.updateTimestamp).append(bankAccount, card.bankAccount).append(transactions, card.transactions).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(id).append(name).append(user).append(cardStatus).append(type).append(expirationDate).append(token).append(currency).append(label).append(maskedpan).append(creationTimestamp).append(updateTimestamp).append(bankAccount).append(transactions).toHashCode();
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .append("id", id)
                 .append("name", name)
                 .append("user", user)
-                .append("CardStatus", CardStatus)
+                .append("CardStatus", cardStatus)
                 .append("expirationDate", expirationDate)
                 .append("token", token)
                 .append("label", label)
