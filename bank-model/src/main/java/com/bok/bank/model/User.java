@@ -9,7 +9,6 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @DiscriminatorValue("INDIVIDUAL_USER")

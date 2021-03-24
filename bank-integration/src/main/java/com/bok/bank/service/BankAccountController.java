@@ -1,4 +1,4 @@
-package com.bok.bank.controller.interfaces;
+package com.bok.bank.service;
 
 public interface BankAccountController {
 }

@@ -1,13 +1,12 @@
 package com.bok.bank.controller;
 
-import com.bok.bank.controller.interfaces.MainController;
 import com.bok.bank.model.Account;
-import com.bok.bank.model.Card;
 import com.bok.bank.model.Company;
 import com.bok.bank.model.User;
 import com.bok.bank.repository.AccountRepository;
 import com.bok.bank.repository.BankAccountRepository;
 import com.bok.bank.repository.CardRepository;
+import com.bok.bank.service.MainController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +43,6 @@ public class MainControllerImpl implements MainController {
                 new Company("Softlab", "sftlb", "soft.lab@softlab.com", "1234562290", "+39", Account.Status.ACTIVE, "Italy", "Lazio", "Rome", "00159",
                         "via le mani dal bell stu sit", "13/c", "123499342")
         );
-        accountRepository.saveAll(accounts);
         return accountRepository.saveAll(accounts).toString();
     }
 

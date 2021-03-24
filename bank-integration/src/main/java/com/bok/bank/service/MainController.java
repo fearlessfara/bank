@@ -1,4 +1,4 @@
-package com.bok.bank.controller.interfaces;
+package com.bok.bank.service;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +12,5 @@ public interface MainController {
 
     @PostMapping("/clean-database")
     String cleanDB();
-
-
 
 }

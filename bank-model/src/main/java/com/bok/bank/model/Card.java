@@ -75,7 +75,7 @@ public class Card implements Serializable {
     public Card() {
     }
 
-    public Card(String name, User user, Card.CardStatus cardStatus, Type type, Instant expirationDate, String token, Currency currency, String label, String maskedpan, BankAccount bankAccount, List<Transaction> transactions) {
+    public Card(String name, User user, CardStatus cardStatus, Type type, Instant expirationDate, String token, Currency currency, String label, String maskedpan, BankAccount bankAccount, List<Transaction> transactions) {
         this.name = name;
         this.user = user;
         this.cardStatus = cardStatus;
@@ -113,11 +113,11 @@ public class Card implements Serializable {
         this.user = user;
     }
 
-    public Card.CardStatus getCardStatus() {
+    public CardStatus getCardStatus() {
         return cardStatus;
     }
 
-    public void setCardStatus(Card.CardStatus cardStatus) {
+    public void setCardStatus(CardStatus cardStatus) {
         this.cardStatus = cardStatus;
     }
 
