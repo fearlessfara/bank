@@ -1,6 +1,7 @@
 package com.bok.bank.model;
 
 
+import com.bok.bank.util.Money;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -32,7 +33,7 @@ public class BankAccount implements Serializable {
     private Long id;
 
     @ManyToOne(optional = false)
-    private User user;
+    private Account account;
 
     @Column(nullable = false, unique = true, length = 34)
     private String IBAN;
@@ -68,8 +69,8 @@ public class BankAccount implements Serializable {
     public BankAccount() {
     }
 
-    public BankAccount(User user, String IBAN, String name, String label, Currency currency, Money blockedAmount, Money availableAmount) {
-        this.user = user;
+    public BankAccount(Account account, String IBAN, String name, String label, Currency currency, Money blockedAmount, Money availableAmount) {
+        this.account = account;
         this.IBAN = IBAN;
         this.name = name;
         this.label = label;
@@ -86,12 +87,12 @@ public class BankAccount implements Serializable {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public String getName() {
@@ -171,7 +172,7 @@ public class BankAccount implements Serializable {
     public String toString() {
         return new ToStringBuilder(this)
                 .append("id", id)
-                .append("user", user)
+                .append("user", account)
                 .append("IBAN", IBAN)
                 .append("name", name)
                 .append("label", label)
@@ -191,11 +192,11 @@ public class BankAccount implements Serializable {
 
         BankAccount that = (BankAccount) o;
 
-        return new EqualsBuilder().append(id, that.id).append(user, that.user).append(IBAN, that.IBAN).append(name, that.name).append(label, that.label).append(currency, that.currency).append(blockedAmount, that.blockedAmount).append(availableAmount, that.availableAmount).append(creationTimestamp, that.creationTimestamp).append(updateTimestamp, that.updateTimestamp).append(cards, that.cards).isEquals();
+        return new EqualsBuilder().append(id, that.id).append(account, that.account).append(IBAN, that.IBAN).append(name, that.name).append(label, that.label).append(currency, that.currency).append(blockedAmount, that.blockedAmount).append(availableAmount, that.availableAmount).append(creationTimestamp, that.creationTimestamp).append(updateTimestamp, that.updateTimestamp).append(cards, that.cards).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(id).append(user).append(IBAN).append(name).append(label).append(currency).append(blockedAmount).append(availableAmount).append(creationTimestamp).append(updateTimestamp).append(cards).toHashCode();
+        return new HashCodeBuilder(17, 37).append(id).append(account).append(IBAN).append(name).append(label).append(currency).append(blockedAmount).append(availableAmount).append(creationTimestamp).append(updateTimestamp).append(cards).toHashCode();
     }
 }
