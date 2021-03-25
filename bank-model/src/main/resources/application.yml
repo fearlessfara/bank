@@ -4,6 +4,10 @@ spring:
     show-sql: false
   profiles:
     active: "external"
+exchange-currency:
+  endpoint: https://v6.exchangerate-api.com/v6/
+  api-key: ceb94d443f6398dd5e640cd1
+  base-currency: USD
 
 ---
 #External DB
@@ -54,7 +58,7 @@ spring:
     driverClassName: com.mysql.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect

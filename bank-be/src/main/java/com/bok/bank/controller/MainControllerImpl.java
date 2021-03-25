@@ -8,6 +8,7 @@ import com.bok.bank.repository.AccountRepository;
 import com.bok.bank.repository.BankAccountRepository;
 import com.bok.bank.repository.CardRepository;
 import com.bok.bank.service.MainController;
+import com.bok.bank.util.ExchangeData;
 import com.bok.bank.util.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,9 @@ public class MainControllerImpl implements MainController {
 
     @Autowired
     CardRepository cardRepository;
+
+    @Autowired
+    ExchangeData exchangeData;
 
     @Override
     public String populateDB() {
@@ -59,5 +63,10 @@ public class MainControllerImpl implements MainController {
     @Override
     public String cleanDB() {
         return null;
+    }
+
+    @Override
+    public String conversionRate() {
+        return exchangeData.fetchData().toString();
     }
 }

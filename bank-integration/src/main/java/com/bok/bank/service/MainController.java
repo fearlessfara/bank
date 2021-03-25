@@ -13,4 +13,7 @@ public interface MainController {
     @PostMapping("/clean-database")
     String cleanDB();
 
+    @GetMapping("/conversionRate")
+    String conversionRate();
+
 }
