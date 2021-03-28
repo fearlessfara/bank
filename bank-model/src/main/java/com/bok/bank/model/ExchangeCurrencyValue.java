@@ -55,6 +55,38 @@ public class ExchangeCurrencyValue {
         this.id = id;
     }
 
+    public Instant getTime_last_update_unix() {
+        return time_last_update_unix;
+    }
+
+    public void setTime_last_update_unix(Instant time_last_update_unix) {
+        this.time_last_update_unix = time_last_update_unix;
+    }
+
+    public Instant getTime_next_update_unix() {
+        return time_next_update_unix;
+    }
+
+    public void setTime_next_update_unix(Instant time_next_update_unix) {
+        this.time_next_update_unix = time_next_update_unix;
+    }
+
+    public String getBaseCurrency() {
+        return baseCurrency;
+    }
+
+    public void setBaseCurrency(String baseCurrency) {
+        this.baseCurrency = baseCurrency;
+    }
+
+    public Map<String, BigDecimal> getConversion_rates() {
+        return this.conversion_rates;
+    }
+
+    public void setConversion_rates(Map<String, BigDecimal> conversion_rates) {
+        this.conversion_rates = conversion_rates;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

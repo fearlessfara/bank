@@ -5,6 +5,7 @@ import com.bok.bank.dto.CheckPaymentAmountResponseDTO;
 import com.bok.bank.helper.BankAccountHelper;
 import com.bok.bank.service.BankAccountController;
 import com.bok.bank.util.Money;
+import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,10 @@ public class BankAccountControllerImpl implements BankAccountController {
     BankAccountHelper bankAccountHelper;
 
     @Override
-    public CheckPaymentAmountResponseDTO checkPaymentAmount(Long userId, CheckPaymentAmountRequestDTO request) {
-        log.info(request.amount +" "+ request.currency);
-        return bankAccountHelper.isAmountAvailable(userId, Money.money(request.amount, request.currency));
+    public CheckPaymentAmountResponseDTO checkPaymentAmount(Long accountId, CheckPaymentAmountRequestDTO request) {
+        log.info(request.amount.toString() +" "+ request.currency);
+        Preconditions.checkNotNull(request.amount, "Amount passed is null");
+        Preconditions.checkNotNull(request.currency, "Currency passed is null");
+        return bankAccountHelper.isAmountAvailable(accountId, Money.money(request.amount, request.currency));
     }
 }

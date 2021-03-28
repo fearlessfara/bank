@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/bankAccount")
 public interface BankAccountController {
 
-    @PostMapping("/checkPaymentAmount/{userId}")
-    CheckPaymentAmountResponseDTO checkPaymentAmount(@PathVariable("userId") Long userId, @RequestBody CheckPaymentAmountRequestDTO checkPaymentAmountRequestDTO);
+    @PostMapping("/checkPaymentAmount/{accountId}")
+    CheckPaymentAmountResponseDTO checkPaymentAmount(@PathVariable("accountId") Long accountId, @RequestBody CheckPaymentAmountRequestDTO checkPaymentAmountRequestDTO);
 
 }

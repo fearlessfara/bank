@@ -1,7 +1,5 @@
 package com.bok.bank.util;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -16,7 +14,7 @@ import java.util.Currency;
 @Embeddable
 public class Money implements Comparable<Money>, Serializable {
 
-    public final static int DEFAULT_SCALE = Scale.CENTS.getValue();
+    public final static int DEFAULT_SCALE = Scale.MICRO.getValue();
     public final static Money ZERO = new Money(new BigDecimal(BigInteger.ZERO, DEFAULT_SCALE));
     public final static RoundingMode DEFAULT_ROUNDING = RoundingMode.HALF_EVEN;
     public final static Currency DEFAULT_CURRENCY = Currency.getInstance("EUR");
@@ -28,16 +26,6 @@ public class Money implements Comparable<Money>, Serializable {
     protected Money() {
 
     }
-    private Money(double value) {
-        this.currency = DEFAULT_CURRENCY;
-        this.value = BigDecimal.valueOf(value).setScale(DEFAULT_SCALE, DEFAULT_ROUNDING);
-    }
-
-    private Money(double value, Currency currency) {
-        this.currency = currency;
-        this.value = BigDecimal.valueOf(value).setScale(DEFAULT_SCALE, DEFAULT_ROUNDING);
-    }
-
     private Money(long value, Scale scale) {
         this.currency = DEFAULT_CURRENCY;
         this.value = BigDecimal.valueOf(value, scale.getValue()).setScale(DEFAULT_SCALE, DEFAULT_ROUNDING);
@@ -178,20 +166,13 @@ public class Money implements Comparable<Money>, Serializable {
         return new Money(value, scale);
     }
 
-    public static Money money(double value) {
-        return new Money(value);
-    }
-
-    public static Money money(double value, Currency currency) {
-        return new Money(value, currency);
-    }
 
     public static Money money(BigDecimal bigDecimal, Currency currency) {
         return new Money(bigDecimal, currency);
     }
 
     public static Money zero(Currency currency) {
-        return new Money(0, currency);
+        return new Money(BigDecimal.ZERO, currency);
     }
 
     public static Money max(final Money m1, final Money m2) {

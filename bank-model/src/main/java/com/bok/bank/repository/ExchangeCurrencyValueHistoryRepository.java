@@ -8,7 +8,15 @@ import java.util.List;
 
 public interface ExchangeCurrencyValueHistoryRepository extends JpaRepository<ExchangeCurrencyValueHistory, Long> {
 
-    @Query("select ecvh from ExchangeCurrencyValueHistory ecvh ORDER BY ecvh.time_last_update_unix DESC LIMIT 3")
+    @Query(value = "select * " +
+            "from bank.exchange_currency_value_history ecvh " +
+            "where ecvh.time_next_update_unix = " +
+            "      (select max(ecvh2.time_next_update_unix) " +
+            "       from exchange_currency_value_history ecvh2 " +
+            "       where ecvh.base_currency = ecvh2.base_currency)", nativeQuery = true)
+//    @Query("select ExchangeCurrencyValueHistory from ExchangeCurrencyValueHistory ecvh where ecvh.time_next_update_unix = " +
+//            "(select max(ecvh2.time_next_update_unix) " +
+//            "from ExchangeCurrencyValueHistory ecvh2 where ecvh.baseCurrency = ecvh2.baseCurrency)")
     List<ExchangeCurrencyValueHistory> findLastValueForAllCurrency();
 
 }

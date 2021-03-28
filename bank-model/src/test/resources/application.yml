@@ -5,10 +5,7 @@ spring:
     hibernate:
       ddl-auto: create-drop
     datasource:
-      password: root
-      url: jdbc:hsqldb:mem:bank&createDatabaseIfNotExist=true;DB_CLOSE_DELAY=-1
-      username: root
-exchange-currency:
-  endpoint: https://v6.exchangerate-api.com/v6/
-  api-key: ceb94d443f6398dd5e640cd1
-  base-currency: USD
+      driver-class-name: org.hsqldb.jdbc.JDBCDriver
+      password:
+      url: jdbc:hsqldb:mem:mydb&createDatabaseIfNotExist=true;DB_CLOSE_DELAY=-1
+      username: SA

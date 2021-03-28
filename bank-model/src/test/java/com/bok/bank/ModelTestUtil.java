@@ -1,4 +1,4 @@
-package com.bok.bank.util;
+package com.bok.bank;
 
 import com.bok.bank.model.Account;
 import com.bok.bank.model.BankAccount;
@@ -10,8 +10,10 @@ import com.bok.bank.repository.AccountRepository;
 import com.bok.bank.repository.BankAccountRepository;
 import com.bok.bank.repository.ExchangeCurrencyValueHistoryRepository;
 import com.bok.bank.repository.ExchangeCurrencyValueRepository;
+import com.bok.bank.util.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -22,11 +24,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component
+@Service
 public class ModelTestUtil {
 
     @Autowired
-    public ExchangeCurrencyValueHistoryRepository exchangeCurrencyValueHistoryRepository;
+    ExchangeCurrencyValueHistoryRepository exchangeCurrencyValueHistoryRepository;
 
     @Autowired
     ExchangeCurrencyValueRepository exchangeCurrencyValueRepository;

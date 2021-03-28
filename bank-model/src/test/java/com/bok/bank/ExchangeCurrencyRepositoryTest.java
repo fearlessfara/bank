@@ -1,23 +1,31 @@
 package com.bok.bank;
 
 import com.bok.bank.model.ExchangeCurrencyValueHistory;
-import com.bok.bank.util.ModelTestUtil;
+import com.bok.bank.repository.ExchangeCurrencyValueHistoryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@SpringBootTest
+@RunWith(SpringRunner.class)
+@ComponentScan(basePackages = "com.bok.bank")
+@EnableAutoConfiguration
 @Slf4j
 public class ExchangeCurrencyRepositoryTest {
 
     @Autowired
     ModelTestUtil modelTestUtil;
+
+    @Autowired
+    ExchangeCurrencyValueHistoryRepository exchangeCurrencyValueHistoryRepository;
 
     @BeforeEach
     public void configureTests() {
@@ -29,7 +37,7 @@ public class ExchangeCurrencyRepositoryTest {
 
     @Test
     public void findLastValueForAllCurrencyTest(){
-        List<ExchangeCurrencyValueHistory> exchangeCurrencyValueHistories = modelTestUtil.exchangeCurrencyValueHistoryRepository.findLastValueForAllCurrency();
+        List<ExchangeCurrencyValueHistory> exchangeCurrencyValueHistories = exchangeCurrencyValueHistoryRepository.findLastValueForAllCurrency();
         assertThat(exchangeCurrencyValueHistories.get(0).getId()).isEqualTo(1l);
         assertThat(exchangeCurrencyValueHistories.get(1).getId()).isEqualTo(2l);
         assertThat(exchangeCurrencyValueHistories.get(2).getId()).isEqualTo(3l);

@@ -34,9 +34,6 @@ public class MainControllerImpl implements MainController {
     @Autowired
     CardRepository cardRepository;
 
-    @Autowired
-    ExchangeData exchangeData;
-
     @Override
     public String populateDB() {
         List<Account> accounts = Arrays.asList(
@@ -62,11 +59,9 @@ public class MainControllerImpl implements MainController {
 
     @Override
     public String cleanDB() {
-        return null;
-    }
-
-    @Override
-    public String conversionRate() {
-        return exchangeData.fetchData().toString();
+        cardRepository.deleteAll();
+        bankAccountRepository.deleteAll();
+        accountRepository.deleteAll();
+        return "cleaned";
     }
 }

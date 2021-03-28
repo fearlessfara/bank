@@ -23,9 +23,10 @@ public class ExchangeCurrencyValueHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "time_last_update_unix")
     private Instant time_last_update_unix;
-    @Column
+
+    @Column(name = "time_next_update_unix")
     private Instant time_next_update_unix;
 
     @Column

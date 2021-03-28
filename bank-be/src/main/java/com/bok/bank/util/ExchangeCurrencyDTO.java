@@ -7,10 +7,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.hibernate.annotations.Type;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +19,7 @@ import java.util.Map;
 @JsonPropertyOrder({
         "time_last_update_unix",
         "time_next_update_unix",
+        "base_code",
         "conversion_rates"
 })
 @Slf4j
@@ -30,9 +31,9 @@ public class ExchangeCurrencyDTO {
     @JsonProperty("time_next_update_unix")
     public Long time_next_update_unix;
 
-    @Type(type = "com.bok.bank.util.JsonType",
-            parameters = {@org.hibernate.annotations.Parameter(name = JsonType.CLASSNAME, value = "java.util.Map")}
-    )
+    @JsonProperty("base_code")
+    public Currency base_code;
+
     @JsonProperty("conversion_rates")
     public Map<String, BigDecimal> conversion_rates = new HashMap<>();
 

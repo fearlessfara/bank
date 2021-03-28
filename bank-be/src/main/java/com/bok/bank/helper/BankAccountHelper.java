@@ -15,12 +15,20 @@ public class BankAccountHelper {
     @Autowired
     BankAccountRepository bankAccountRepository;
 
-    public CheckPaymentAmountResponseDTO isAmountAvailable(Long userId, Money amount){
-        Optional<BankAccount> bankAccount = bankAccountRepository.findByAccount_Id(userId);
-        if(!bankAccount.isPresent())
+    @Autowired
+    ExchangeCurrencyAmountHelper exchangeCurrencyAmountHelper;
+
+    public CheckPaymentAmountResponseDTO isAmountAvailable(Long accountId, Money amount){
+        Optional<BankAccount> bankAccountOptional = bankAccountRepository.findByAccount_Id(accountId);
+        if(!bankAccountOptional.isPresent())
             return new CheckPaymentAmountResponseDTO(false, "User not have a bank account");
-        Money availableBalance = bankAccount.get().getAvailableAmount().subtract(bankAccount.get().getBlockedAmount());
-        return new CheckPaymentAmountResponseDTO(availableBalance.isGreaterOrEqualsThan(amount), "");
+        BankAccount bankAccount = bankAccountOptional.get();
+        Money availableBalance = bankAccount.getAvailableAmount().subtract(bankAccount.getBlockedAmount());
+        if(bankAccount.getCurrency().equals(amount.getCurrency())){
+            return new CheckPaymentAmountResponseDTO(availableBalance.isGreaterOrEqualsThan(amount), "");
+        }
+        return new CheckPaymentAmountResponseDTO(availableBalance.isGreaterOrEqualsThan(exchangeCurrencyAmountHelper.convertAmount(amount, availableBalance)), "");
+
     }
 
 }
