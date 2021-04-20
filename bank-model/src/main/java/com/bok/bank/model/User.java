@@ -136,7 +136,7 @@ public class User extends Account implements Serializable {
     }
 
     public enum Gender {
-        M,F
+        M, F
     }
 }
 

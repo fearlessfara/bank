@@ -21,38 +21,30 @@ import java.time.Instant;
 @Entity
 public class Transaction implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne
-    private BankAccount fromBankAccount;
-
-    @ManyToOne
-    private BankAccount toBankAccount;
-
-    @ManyToOne
-    private Card card;
-
-    @ManyToOne
-    private User transactionOwner;
-
-    @Column
-    @CreationTimestamp
-    private Instant timestamp;
-
-    @Embedded
-    @AttributeOverride(name="currency", column=@Column(name="amount_currency"))
-    @AttributeOverride(name="value", column=@Column(name="amount_value"))
-    private Money amount;
-
     @Column
     @Enumerated(EnumType.STRING)
     public Type type;
-
     @Column
     @Enumerated(EnumType.STRING)
     public Status status;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @ManyToOne
+    private BankAccount fromBankAccount;
+    @ManyToOne
+    private BankAccount toBankAccount;
+    @ManyToOne
+    private Card card;
+    @ManyToOne
+    private User transactionOwner;
+    @Column
+    @CreationTimestamp
+    private Instant timestamp;
+    @Embedded
+    @AttributeOverride(name = "currency", column = @Column(name = "amount_currency"))
+    @AttributeOverride(name = "value", column = @Column(name = "amount_value"))
+    private Money amount;
 
     public Transaction() {
     }

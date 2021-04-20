@@ -28,7 +28,7 @@ import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="account_type",
+@DiscriminatorColumn(name = "account_type",
         discriminatorType = DiscriminatorType.STRING)
 public class Account implements Serializable {
     @Id
@@ -245,14 +245,6 @@ public class Account implements Serializable {
         this.transactions = transactions;
     }
 
-    public enum Status {
-        ACTIVE, BLOCKED, SUSPENDED, PENDING, ARCHIVED, DELETED
-    }
-
-    public enum Type {
-        COMPANY, INDIVIDUAL_USER
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this)
@@ -287,5 +279,13 @@ public class Account implements Serializable {
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37).append(id).append(name).append(type).append(username).append(email).append(mobile).append(icc).append(status).append(country).append(county).append(city).append(postCode).append(addLine).append(civicNumber).append(cards).append(bankAccounts).append(transactions).toHashCode();
+    }
+
+    public enum Status {
+        ACTIVE, BLOCKED, SUSPENDED, PENDING, ARCHIVED, DELETED
+    }
+
+    public enum Type {
+        COMPANY, INDIVIDUAL_USER
     }
 }

@@ -36,20 +36,20 @@ public class Money implements Comparable<Money>, Serializable {
         return value;
     }
 
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public int getScale() {
-        return value.scale();
-    }
-
     public void setValue(BigDecimal value) {
         this.value = value;
     }
 
+    public Currency getCurrency() {
+        return currency;
+    }
+
     public void setCurrency(Currency currency) {
         this.currency = currency;
+    }
+
+    public int getScale() {
+        return value.scale();
     }
 
     @Override

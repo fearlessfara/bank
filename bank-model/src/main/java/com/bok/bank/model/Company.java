@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 
 @Entity
 @DiscriminatorValue("COMPANY")
-public class Company extends Account{
+public class Company extends Account {
 
     @Column(unique = true, updatable = false, length = 15)
     private String vatNumber;

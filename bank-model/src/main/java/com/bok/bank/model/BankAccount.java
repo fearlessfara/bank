@@ -47,13 +47,13 @@ public class BankAccount implements Serializable {
     private Currency currency;
 
     @Embedded
-    @AttributeOverride(name="currency", column=@Column(name="blocked_amount_currency"))
-    @AttributeOverride(name="value", column=@Column(name="blocked_amount_value"))
+    @AttributeOverride(name = "currency", column = @Column(name = "blocked_amount_currency"))
+    @AttributeOverride(name = "value", column = @Column(name = "blocked_amount_value"))
     private Money blockedAmount;
 
     @Embedded
-    @AttributeOverride(name="currency", column=@Column(name="available_amount_currency"))
-    @AttributeOverride(name="value", column=@Column(name="available_amount_value"))
+    @AttributeOverride(name = "currency", column = @Column(name = "available_amount_currency"))
+    @AttributeOverride(name = "value", column = @Column(name = "available_amount_value"))
     private Money availableAmount;
 
     @CreationTimestamp
