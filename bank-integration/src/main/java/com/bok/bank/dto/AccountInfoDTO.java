@@ -1,7 +1,9 @@
 package com.bok.bank.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AccountInfoDTO {
     public String username;
     public String email;

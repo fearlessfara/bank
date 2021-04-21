@@ -2,23 +2,19 @@ package com.bok.bank.repository;
 
 import com.bok.bank.model.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-public interface AccountRepository extends JpaRepository<Account, Long>, JpaSpecificationExecutor<Account> {
+@Repository
+public interface AccountRepository extends JpaRepository<Account, Long> {
 
-    @Query("SELECT a.username, a.email, a.icc, a.mobile, a.status, a.type, a.name, a.middleName, a.surname FROM Account a WHERE a.id = :accountId")
+    @Query("SELECT a.username as username, a.email as email, a.icc as icc, a.mobile as mobile, a.status as status, a.type as type, a.name as name, a.middleName as middleName, a.surname as surname FROM Account a WHERE a.id = :accountId")
     Optional<Projection.AccountInfo> findAccountInfoByAccountId(Long accountId);
 
-    public static class Projection {
-
-        public interface AccountId{
-            Long getId();
-        }
-
-        public interface AccountInfo{
+    public class Projection {
+        public interface AccountInfo {
             String getUsername();
             String getEmail();
             String getIcc();
@@ -28,7 +24,6 @@ public interface AccountRepository extends JpaRepository<Account, Long>, JpaSpec
             String getName();
             String getMiddleName();
             String getSurname();
-
         }
     }
 

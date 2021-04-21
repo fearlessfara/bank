@@ -5,7 +5,9 @@ import com.bok.bank.helper.AccountHelper;
 import com.bok.bank.service.AccountController;
 import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AccountControllerImpl implements AccountController {
 
     @Autowired
