@@ -1,4 +1,4 @@
-package com.bok.bank.util;
+package com.bok.bank.util.echange;
 
 import com.bok.bank.model.ExchangeCurrencyValueHistory;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -13,7 +13,6 @@ import java.time.Instant;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)

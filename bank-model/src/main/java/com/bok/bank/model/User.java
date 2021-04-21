@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class User extends Account implements Serializable {
 
     @Column
-    private String middlename;
+    private String middleName;
 
     @Column
     private String surname;
@@ -41,7 +41,7 @@ public class User extends Account implements Serializable {
 
     public User(String name, String username, String email, String mobile, String icc, Status status, String country, String county, String city, String postCode, String addLine, String civicNumber, String middlename, String surname, Gender gender, String taxCode, String birthCity, String birthCountry, LocalDate birthDate) {
         super(name, Type.INDIVIDUAL_USER, username, email, mobile, icc, status, country, county, city, postCode, addLine, civicNumber);
-        this.middlename = middlename;
+        this.middleName = middlename;
         this.surname = surname;
         this.gender = gender;
         this.taxCode = taxCode;
@@ -50,12 +50,12 @@ public class User extends Account implements Serializable {
         this.birthDate = birthDate;
     }
 
-    public String getMiddlename() {
-        return middlename;
+    public String getMiddleName() {
+        return middleName;
     }
 
-    public void setMiddlename(String middlename) {
-        this.middlename = middlename;
+    public void setMiddleName(String middlename) {
+        this.middleName = middlename;
     }
 
     public String getSurname() {
@@ -114,18 +114,18 @@ public class User extends Account implements Serializable {
 
         User user = (User) o;
 
-        return new EqualsBuilder().appendSuper(super.equals(o)).append(middlename, user.middlename).append(surname, user.surname).append(gender, user.gender).append(taxCode, user.taxCode).append(birthCity, user.birthCity).append(birthCountry, user.birthCountry).append(birthDate, user.birthDate).isEquals();
+        return new EqualsBuilder().appendSuper(super.equals(o)).append(middleName, user.middleName).append(surname, user.surname).append(gender, user.gender).append(taxCode, user.taxCode).append(birthCity, user.birthCity).append(birthCountry, user.birthCountry).append(birthDate, user.birthDate).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).appendSuper(super.hashCode()).append(middlename).append(surname).append(gender).append(taxCode).append(birthCity).append(birthCountry).append(birthDate).toHashCode();
+        return new HashCodeBuilder(17, 37).appendSuper(super.hashCode()).append(middleName).append(surname).append(gender).append(taxCode).append(birthCity).append(birthCountry).append(birthDate).toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("middlename", middlename)
+                .append("middleName", middleName)
                 .append("surname", surname)
                 .append("gender", gender)
                 .append("taxCode", taxCode)

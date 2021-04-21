@@ -19,6 +19,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class BankAccount implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
+    @OneToOne(optional = false)
     private Account account;
 
     @Column(nullable = false, unique = true, length = 34)
@@ -57,6 +58,9 @@ public class BankAccount implements Serializable {
     @AttributeOverride(name="value", column=@Column(name="available_amount_value"))
     private Money availableAmount;
 
+    @Column
+    private Status status;
+
     @CreationTimestamp
     private Instant creationTimestamp;
 
@@ -69,7 +73,7 @@ public class BankAccount implements Serializable {
     public BankAccount() {
     }
 
-    public BankAccount(Account account, String IBAN, String name, String label, Currency currency, Money blockedAmount, Money availableAmount) {
+    public BankAccount(Account account, String IBAN, String name, String label, Currency currency, Money blockedAmount, Money availableAmount, Status status) {
         this.account = account;
         this.IBAN = IBAN;
         this.name = name;
@@ -77,6 +81,7 @@ public class BankAccount implements Serializable {
         this.currency = currency;
         this.blockedAmount = blockedAmount;
         this.availableAmount = availableAmount;
+        this.status = status;
     }
 
     public Long getId() {
@@ -168,6 +173,14 @@ public class BankAccount implements Serializable {
         this.IBAN = IBAN;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
@@ -179,6 +192,7 @@ public class BankAccount implements Serializable {
                 .append("currency", currency)
                 .append("blockedAmount", blockedAmount)
                 .append("availableAmount", availableAmount)
+                .append("status", status)
                 .append("creationTimestamp", creationTimestamp)
                 .append("updateTimestamp", updateTimestamp)
                 .toString();
@@ -192,11 +206,15 @@ public class BankAccount implements Serializable {
 
         BankAccount that = (BankAccount) o;
 
-        return new EqualsBuilder().append(id, that.id).append(account, that.account).append(IBAN, that.IBAN).append(name, that.name).append(label, that.label).append(currency, that.currency).append(blockedAmount, that.blockedAmount).append(availableAmount, that.availableAmount).append(creationTimestamp, that.creationTimestamp).append(updateTimestamp, that.updateTimestamp).append(cards, that.cards).isEquals();
+        return new EqualsBuilder().append(id, that.id).append(account, that.account).append(IBAN, that.IBAN).append(name, that.name).append(label, that.label).append(currency, that.currency).append(blockedAmount, that.blockedAmount).append(availableAmount, that.availableAmount).append(status, that.status).append(creationTimestamp, that.creationTimestamp).append(updateTimestamp, that.updateTimestamp).append(cards, that.cards).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(id).append(account).append(IBAN).append(name).append(label).append(currency).append(blockedAmount).append(availableAmount).append(creationTimestamp).append(updateTimestamp).append(cards).toHashCode();
+        return new HashCodeBuilder(17, 37).append(id).append(account).append(IBAN).append(name).append(label).append(currency).append(blockedAmount).append(availableAmount).append(status).append(creationTimestamp).append(updateTimestamp).append(cards).toHashCode();
+    }
+
+    public enum Status {
+        ACTIVE, BLOCKED, SUSPENDED, PENDING, ARCHIVED, DELETED
     }
 }

@@ -1,5 +1,6 @@
 package com.bok.bank.controller;
 
+import com.bok.bank.dto.BankAccountInfoDTO;
 import com.bok.bank.dto.CheckPaymentAmountRequestDTO;
 import com.bok.bank.dto.CheckPaymentAmountResponseDTO;
 import com.bok.bank.helper.BankAccountHelper;
@@ -21,8 +22,17 @@ public class BankAccountControllerImpl implements BankAccountController {
     @Override
     public CheckPaymentAmountResponseDTO checkPaymentAmount(Long accountId, CheckPaymentAmountRequestDTO request) {
         log.info(request.amount.toString() +" "+ request.currency);
+        Preconditions.checkNotNull(accountId, "accountId is null");
         Preconditions.checkNotNull(request.amount, "Amount passed is null");
         Preconditions.checkNotNull(request.currency, "Currency passed is null");
         return bankAccountHelper.isAmountAvailable(accountId, Money.money(request.amount, request.currency));
     }
+
+    @Override
+    public BankAccountInfoDTO bankAccountInfo(Long accountId) {
+        Preconditions.checkNotNull(accountId, "accountId is null");
+        return bankAccountHelper.getBankAccountInfo(accountId);
+    }
+
+
 }
