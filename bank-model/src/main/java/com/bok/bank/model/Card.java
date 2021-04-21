@@ -1,5 +1,6 @@
 package com.bok.bank.model;
 
+import com.bok.bank.repository.CardRepository;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -34,7 +35,7 @@ public class Card implements Serializable {
     private String name;
 
     @ManyToOne(optional = false)
-    private User user;
+    private Account account;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -57,7 +58,10 @@ public class Card implements Serializable {
     private String label;
 
     @Column(nullable = false)
-    private String maskedpan;
+    private String maskedPan;
+
+    @Column(nullable = false)
+    private int cvv;
 
     @CreationTimestamp
     private Instant creationTimestamp;
@@ -75,18 +79,18 @@ public class Card implements Serializable {
     public Card() {
     }
 
-    public Card(String name, User user, CardStatus cardStatus, Type type, Instant expirationDate, String token, Currency currency, String label, String maskedpan, BankAccount bankAccount, List<Transaction> transactions) {
+    public Card(String name, Account account, CardStatus cardStatus, Type type, Instant expirationDate, String token, Currency currency, String label, String maskedPan, BankAccount bankAccount, int cvv) {
         this.name = name;
-        this.user = user;
+        this.account = account;
         this.cardStatus = cardStatus;
         this.type = type;
         this.expirationDate = expirationDate;
         this.token = token;
         this.currency = currency;
         this.label = label;
-        this.maskedpan = maskedpan;
+        this.maskedPan = maskedPan;
         this.bankAccount = bankAccount;
-        this.transactions = transactions;
+        this.cvv = cvv;
     }
 
     public Long getId() {
@@ -105,12 +109,12 @@ public class Card implements Serializable {
         this.name = name;
     }
 
-    public User getUser() {
-        return user;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public CardStatus getCardStatus() {
@@ -146,12 +150,12 @@ public class Card implements Serializable {
         this.label = label;
     }
 
-    public String getMaskedpan() {
-        return maskedpan;
+    public String getMaskedPan() {
+        return maskedPan;
     }
 
-    public void setMaskedpan(String maskedpan) {
-        this.maskedpan = maskedpan;
+    public void setMaskedPan(String maskedPan) {
+        this.maskedPan = maskedPan;
     }
 
     public Instant getCreationTimestamp() {
@@ -210,12 +214,12 @@ public class Card implements Serializable {
 
         Card card = (Card) o;
 
-        return new EqualsBuilder().append(id, card.id).append(name, card.name).append(user, card.user).append(cardStatus, card.cardStatus).append(type, card.type).append(expirationDate, card.expirationDate).append(token, card.token).append(currency, card.currency).append(label, card.label).append(maskedpan, card.maskedpan).append(creationTimestamp, card.creationTimestamp).append(updateTimestamp, card.updateTimestamp).append(bankAccount, card.bankAccount).append(transactions, card.transactions).isEquals();
+        return new EqualsBuilder().append(id, card.id).append(name, card.name).append(account, card.account).append(cardStatus, card.cardStatus).append(type, card.type).append(expirationDate, card.expirationDate).append(token, card.token).append(currency, card.currency).append(label, card.label).append(maskedPan, card.maskedPan).append(creationTimestamp, card.creationTimestamp).append(updateTimestamp, card.updateTimestamp).append(bankAccount, card.bankAccount).append(transactions, card.transactions).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(id).append(name).append(user).append(cardStatus).append(type).append(expirationDate).append(token).append(currency).append(label).append(maskedpan).append(creationTimestamp).append(updateTimestamp).append(bankAccount).append(transactions).toHashCode();
+        return new HashCodeBuilder(17, 37).append(id).append(name).append(account).append(cardStatus).append(type).append(expirationDate).append(token).append(currency).append(label).append(maskedPan).append(creationTimestamp).append(updateTimestamp).append(bankAccount).append(transactions).toHashCode();
     }
 
     @Override
@@ -223,12 +227,12 @@ public class Card implements Serializable {
         return new ToStringBuilder(this)
                 .append("id", id)
                 .append("name", name)
-                .append("user", user)
+                .append("user", account)
                 .append("CardStatus", cardStatus)
                 .append("expirationDate", expirationDate)
                 .append("token", token)
                 .append("label", label)
-                .append("maskedpan", maskedpan)
+                .append("maskedpan", maskedPan)
                 .append("creationTimestamp", creationTimestamp)
                 .append("updateTimestamp", updateTimestamp)
                 .toString();

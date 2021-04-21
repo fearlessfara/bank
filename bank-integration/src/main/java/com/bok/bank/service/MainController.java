@@ -9,8 +9,13 @@ public interface MainController {
 
     @GetMapping("/db-populator")
     String populateDB();
+    @GetMapping("/db-populator-card")
+    String populateDBCard();
+    @GetMapping("/db-populator-bankAccount")
+    String populateDBBankAccount();
 
     @PostMapping("/clean-database")
     String cleanDB();
+
 
 }

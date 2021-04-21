@@ -1,0 +1,11 @@
+spring:
+  jpa:
+    open-in-view: false
+    show-sql: false
+    hibernate:
+      ddl-auto: create-drop
+    datasource:
+      driver-class-name: org.hsqldb.jdbc.JDBCDriver
+      password:
+      url: jdbc:hsqldb:mem:mydb&createDatabaseIfNotExist=true;DB_CLOSE_DELAY=-1
+      username: SA

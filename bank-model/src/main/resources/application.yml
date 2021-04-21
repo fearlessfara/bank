@@ -7,6 +7,16 @@ spring:
     show-sql: false
   profiles:
     active: "external"
+exchange-currency:
+  endpoint: https://v6.exchangerate-api.com/v6/
+  api-key: ceb94d443f6398dd5e640cd1
+  base-currency: USD
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka:8761/eureka
+  instance:
+    lease-renewal-interval-in-seconds: 30
 
 ---
 #External DB
@@ -21,10 +31,9 @@ active-mq:
   emails-queue: emails
   broker-url: tcp://dev.faraone.ovh:61616
 spring:
-  profiles: external
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MariaDBDialect
@@ -33,11 +42,13 @@ spring:
     url: jdbc:mariadb://dev.faraone.ovh:3307/bank
     username: developer
     password: password4testing
+  config:
+    activate:
+      on-profile: external
 
 ---
 #HSQL config
 spring:
-  profiles: hsql
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -45,19 +56,21 @@ spring:
     password: root
     url: jdbc:hsqldb:mem:bank&createDatabaseIfNotExist=true;DB_CLOSE_DELAY=-1
     username: root
+  config:
+    activate:
+      on-profile: hsql
 
 ---
 ##local mySQL config
 spring:
-  profiles: local
   datasource:
     password: root
-    url: jdbc:mysql://localhost:3306/bank?serverTimezone=Europe/Rome&createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/bank?serverTimezone=UTC&createDatabaseIfNotExist=true
     username: root
-    driverClassName: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -65,3 +78,6 @@ spring:
     show-sql: true
     database: mysql
     generate-ddl: true
+  config:
+    activate:
+      on-profile: mysql
