@@ -24,11 +24,13 @@ public class BankAccountHelper {
             return new CheckPaymentAmountResponseDTO(false, "User not have a bank account");
         BankAccount bankAccount = bankAccountOptional.get();
         Money availableBalance = bankAccount.getAvailableAmount().subtract(bankAccount.getBlockedAmount());
+        boolean isImportAvailable;
         if(bankAccount.getCurrency().equals(amount.getCurrency())){
-            return new CheckPaymentAmountResponseDTO(availableBalance.isGreaterOrEqualsThan(amount), "");
+             isImportAvailable = availableBalance.isGreaterOrEqualsThan(amount);
+        } else {
+            isImportAvailable = availableBalance.isGreaterOrEqualsThan(exchangeCurrencyAmountHelper.convertAmount(amount, availableBalance));
         }
-        return new CheckPaymentAmountResponseDTO(availableBalance.isGreaterOrEqualsThan(exchangeCurrencyAmountHelper.convertAmount(amount, availableBalance)), "");
-
+        return (isImportAvailable) ? new CheckPaymentAmountResponseDTO(true, "") : new CheckPaymentAmountResponseDTO(false, "Amount not available");
     }
 
 }
