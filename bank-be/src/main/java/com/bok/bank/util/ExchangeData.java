@@ -66,7 +66,10 @@ public class ExchangeData {
         return null;
     }
 
-    @Scheduled(fixedDelay = 5000000, initialDelay = 1000)
+    /**
+     * update currencies exchange value every 24H
+     */
+    @Scheduled(fixedDelay = 86400000, initialDelay = 1000)
     public void updateDatabaseCurrenciesExchange() {
         List<ExchangeCurrencyValueHistory> exchangeCurrencyValuesHistories = exchangeCurrencyValueHistoryRepository.findLastValueForAllCurrency();
         if (!exchangeCurrencyValuesHistories.isEmpty() && exchangeCurrencyValuesHistories.stream().allMatch(exchangeValue -> exchangeValue.getTime_next_update_unix().isAfter(Instant.now()))) {
