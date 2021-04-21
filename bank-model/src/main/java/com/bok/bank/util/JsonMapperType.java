@@ -47,6 +47,7 @@ public class JsonMapperType {
         mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true);
         mapper.configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, false);
         mapper.configure(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS, false);
+        mapper.configure(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS, true);
         if (abstractSupport)
             mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_CONCRETE_AND_ARRAYS, JsonTypeInfo.As.PROPERTY);
         if (onlyFields) {

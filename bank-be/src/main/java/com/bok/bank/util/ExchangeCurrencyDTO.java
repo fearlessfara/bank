@@ -13,6 +13,7 @@ import java.time.Instant;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -41,6 +42,7 @@ public class ExchangeCurrencyDTO {
     }
 
     public ExchangeCurrencyValueHistory toExchangeCurrencyValues(String baseCurrency){
+        this.conversion_rates.forEach((s, bigDecimal) -> this.conversion_rates.replace(s, (bigDecimal.scale()==0) ? bigDecimal.setScale(4, BigDecimal.ROUND_FLOOR) : bigDecimal));
         return new ExchangeCurrencyValueHistory(Instant.ofEpochSecond(this.time_last_update_unix), Instant.ofEpochSecond(this.time_next_update_unix), baseCurrency, this.conversion_rates);
     }
 
