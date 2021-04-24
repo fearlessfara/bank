@@ -4,7 +4,7 @@ import com.bok.bank.model.ExchangeCurrencyValueHistory;
 import com.bok.bank.repository.ExchangeCurrencyValueHistoryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -27,7 +27,7 @@ public class ExchangeCurrencyRepositoryTest {
     @Autowired
     ExchangeCurrencyValueHistoryRepository exchangeCurrencyValueHistoryRepository;
 
-    @BeforeEach
+    @Before
     public void configureTests() {
         modelTestUtil.clearAll();
         log.info("DB dropped correctly.");

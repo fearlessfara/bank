@@ -7,6 +7,7 @@ import java.util.Currency;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CardInfoDTO {
+    public Long cardId;
     public String name;
     public String cardStatus;
     public String type;
@@ -18,14 +19,14 @@ public class CardInfoDTO {
     public CardInfoDTO() {
     }
 
-    public CardInfoDTO(String name, String cardStatus, String type, Currency currency, String label, String maskedPan, Integer cvv) {
+    public CardInfoDTO(Long cardId, String name, String cardStatus, String type, Currency currency, String label, String maskedPan) {
+        this.cardId = cardId;
         this.name = name;
         this.cardStatus = cardStatus;
         this.type = type;
         this.currency = currency;
         this.label = label;
         this.maskedPan = maskedPan;
-        this.cvv = cvv;
     }
 
     @Override

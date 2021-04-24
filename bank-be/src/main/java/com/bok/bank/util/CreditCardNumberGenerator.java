@@ -85,11 +85,15 @@ public class CreditCardNumberGenerator {
     }
 
     public int generateCvv() {
-        return this.random.nextInt(999);
+        return Integer.parseInt(this.randomNum() + "" + this.randomNum() + "" + this.randomNum());
     }
 
     public String generateToken() {
-        return this.random.nextInt(999) + "" + this.random.nextInt(999) + "" + this.random.nextInt(999);
+        return this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + randomNum() + "" + this.randomNum();
+    }
+
+    private int randomNum() {
+        return this.random.nextInt(9);
     }
 
 }

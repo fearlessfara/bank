@@ -1,5 +1,6 @@
 package com.bok.bank;
 
+import com.bok.bank.setup.BankDatabaseSetup;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;

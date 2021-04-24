@@ -1,4 +1,4 @@
-package com.bok.bank;
+package com.bok.bank.setup;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;

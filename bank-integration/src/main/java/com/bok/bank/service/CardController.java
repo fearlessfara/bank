@@ -22,6 +22,12 @@ public interface CardController {
     @GetMapping("/{cardId}")
     public CardInfoDTO findCard(@RequestParam Long accountId, @PathVariable Long cardId);
 
+    @GetMapping("/getPlainPAN/{cardId}")
+    public String getPlainPan(@RequestParam Long accountId, @PathVariable Long cardId);
+
+    @GetMapping("/getCvv/{cardId}")
+    public Integer getCvv(@RequestParam Long accountId, @PathVariable Long cardId);
+
     @PostMapping("/")
     public CardInfoDTO newCard(@RequestParam Long accountId, @RequestBody NewCardDTO newCardDTO);
 }
