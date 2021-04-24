@@ -190,6 +190,14 @@ public class Card implements Serializable {
         this.currency = currency;
     }
 
+    public int getCvv() {
+        return cvv;
+    }
+
+    public void setCvv(int cvv) {
+        this.cvv = cvv;
+    }
+
     public BankAccount getWallet() {
         return bankAccount;
     }

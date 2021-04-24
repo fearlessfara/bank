@@ -94,6 +94,10 @@ public class Account implements Serializable {
     public Account() {
     }
 
+    public Account(Long id) {
+        this.id = id;
+    }
+
     public Account(String name, Type type, String username, String email, String mobile, String icc, Status status, String country, String county, String city, String postCode, String addLine, String civicNumber) {
         this.name = name;
         this.type = type;

@@ -73,6 +73,10 @@ public class BankAccount implements Serializable {
     public BankAccount() {
     }
 
+    public BankAccount(Long id) {
+        this.id = id;
+    }
+
     public BankAccount(Account account, String IBAN, String name, String label, Currency currency, Money blockedAmount, Money availableAmount, Status status) {
         this.account = account;
         this.IBAN = IBAN;

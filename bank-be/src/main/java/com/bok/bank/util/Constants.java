@@ -6,4 +6,5 @@ import java.util.List;
 public class Constants {
 
     public static final List<String> CURRENCIES_SAVED = Arrays.asList("USD", "EUR", "GBP");
+    public static final String BIN_BOK = "593796";
 }

@@ -1,6 +1,7 @@
 package com.bok.bank.controller;
 
 import com.bok.bank.dto.CardInfoDTO;
+import com.bok.bank.dto.NewCardDTO;
 import com.bok.bank.helper.CardHelper;
 import com.bok.bank.service.CardController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,5 +22,11 @@ public class CardControllerImpl implements CardController {
     @Override
     public CardInfoDTO findCard(Long accountId, Long cardId) {
         return cardHelper.findCardInfoById(accountId, cardId);
+    }
+
+    @Override
+    public CardInfoDTO newCard(Long accountId, NewCardDTO newCardDTO) {
+        cardHelper.checkNewCardDTOData(newCardDTO);
+        return cardHelper.createCard(accountId, newCardDTO);
     }
 }
