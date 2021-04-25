@@ -11,7 +11,6 @@ public class CardInfoDTO {
     public String name;
     public String cardStatus;
     public String type;
-    public Currency currency;
     public String label;
     public String maskedPan;
     public Integer cvv;
@@ -19,12 +18,11 @@ public class CardInfoDTO {
     public CardInfoDTO() {
     }
 
-    public CardInfoDTO(Long cardId, String name, String cardStatus, String type, Currency currency, String label, String maskedPan) {
+    public CardInfoDTO(Long cardId, String name, String cardStatus, String type, String label, String maskedPan) {
         this.cardId = cardId;
         this.name = name;
         this.cardStatus = cardStatus;
         this.type = type;
-        this.currency = currency;
         this.label = label;
         this.maskedPan = maskedPan;
     }
@@ -35,7 +33,6 @@ public class CardInfoDTO {
                 .append("name", name)
                 .append("cardStatus", cardStatus)
                 .append("type", type)
-                .append("currency", currency)
                 .append("label", label)
                 .append("maskedPan", maskedPan)
                 .append("cvv", cvv)

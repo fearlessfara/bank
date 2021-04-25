@@ -36,13 +36,13 @@ public class CardHelper {
     public List<CardInfoDTO> findAllCardsByAccount(Long accountId) {
         List<CardInfo> cardInfos = cardRepository.findAllCardInfoByAccountId(accountId);
         return cardInfos.stream()
-                .map(cardInfo -> new CardInfoDTO(cardInfo.getCardId(), cardInfo.getName(), cardInfo.getCardStatus().name(), cardInfo.getType().name(), cardInfo.getCurrency(), cardInfo.getLabel(), creditCardNumberGenerator.maskingPan(cardInfo.getMaskedPan())))
+                .map(cardInfo -> new CardInfoDTO(cardInfo.getCardId(), cardInfo.getName(), cardInfo.getCardStatus().name(), cardInfo.getType().name(), cardInfo.getLabel(), creditCardNumberGenerator.maskingPan(cardInfo.getMaskedPan())))
                 .collect(Collectors.toList());
     }
 
     public CardInfoDTO findCardInfoById(Long accountId, Long cardId) {
         CardInfo cardInfo = cardRepository.findCardInfoByAccountIdAndCardId(accountId, cardId).orElseThrow(() -> new IllegalArgumentException("Card not found for cardId " + cardId + "and accountId " + accountId));
-        return new CardInfoDTO(cardInfo.getCardId(), cardInfo.getName(), cardInfo.getCardStatus().name(), cardInfo.getType().name(), cardInfo.getCurrency(), cardInfo.getLabel(), creditCardNumberGenerator.maskingPan(cardInfo.getMaskedPan()));
+        return new CardInfoDTO(cardInfo.getCardId(), cardInfo.getName(), cardInfo.getCardStatus().name(), cardInfo.getType().name(), cardInfo.getLabel(), creditCardNumberGenerator.maskingPan(cardInfo.getMaskedPan()));
     }
 
     public String getPlainPan(Long accountId, Long cardId) {
@@ -56,13 +56,10 @@ public class CardHelper {
     public CardInfoDTO createCard(Long accountId, NewCardDTO newCardDTO) {
         BankAccountBasicInfo bankAccountBasicInfo = bankAccountRepository.findBankAccountBasicInfoByAccountId(accountId).orElseThrow(() -> new IllegalArgumentException("Account not found for id: " + accountId));
         Preconditions.checkArgument(bankAccountBasicInfo.getStatus().equals(BankAccount.Status.ACTIVE), "Fail creation card related to not active bank account, bankAccountId: " + bankAccountBasicInfo.getId());
-        if(Objects.isNull(newCardDTO.currency)){
-            newCardDTO.currency = bankAccountBasicInfo.getCurrency();
-        }
         Card newCard = new Card(newCardDTO.name, new Account(accountId), Card.CardStatus.TO_ACTIVATE, Card.Type.valueOf(newCardDTO.type.trim()), Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS),
-                creditCardNumberGenerator.generateToken(), newCardDTO.currency, newCardDTO.label, creditCardNumberGenerator.generate(BIN_BOK, 15), new BankAccount(bankAccountBasicInfo.getId()), creditCardNumberGenerator.generateCvv());
+                creditCardNumberGenerator.generateToken(), newCardDTO.label, creditCardNumberGenerator.generate(BIN_BOK, 15), new BankAccount(bankAccountBasicInfo.getId()), creditCardNumberGenerator.generateCvv());
         newCard = cardRepository.save(newCard);
-        return new CardInfoDTO(newCard.getId(), newCard.getName(), newCard.getCardStatus().name(), newCard.getType().name(), newCard.getCurrency(), newCard.getLabel(), creditCardNumberGenerator.maskingPan(newCard.getMaskedPan()));
+        return new CardInfoDTO(newCard.getId(), newCard.getName(), newCard.getCardStatus().name(), newCard.getType().name(), newCard.getLabel(), creditCardNumberGenerator.maskingPan(newCard.getMaskedPan()));
     }
 
     public void checkNewCardDTOData(NewCardDTO newCardDTO) {

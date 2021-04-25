@@ -18,4 +18,5 @@ public class AccountControllerImpl implements AccountController {
         Preconditions.checkNotNull(accountId, "accountId is null");
         return accountHelper.getAccountInfo(accountId);
     }
+
 }

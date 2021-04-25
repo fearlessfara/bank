@@ -51,9 +51,6 @@ public class Card implements Serializable {
     @Column(unique = true, nullable = false)
     private String token;
 
-    @Column(name = "currency", nullable = false, updatable = false)
-    private Currency currency;
-
     @Column
     private String label;
 
@@ -79,14 +76,13 @@ public class Card implements Serializable {
     public Card() {
     }
 
-    public Card(String name, Account account, CardStatus cardStatus, Type type, Instant expirationDate, String token, Currency currency, String label, String maskedPan, BankAccount bankAccount, int cvv) {
+    public Card(String name, Account account, CardStatus cardStatus, Type type, Instant expirationDate, String token, String label, String maskedPan, BankAccount bankAccount, int cvv) {
         this.name = name;
         this.account = account;
         this.cardStatus = cardStatus;
         this.type = type;
         this.expirationDate = expirationDate;
         this.token = token;
-        this.currency = currency;
         this.label = label;
         this.maskedPan = maskedPan;
         this.bankAccount = bankAccount;
@@ -182,14 +178,6 @@ public class Card implements Serializable {
         this.type = type;
     }
 
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
-
     public int getCvv() {
         return cvv;
     }
@@ -222,12 +210,12 @@ public class Card implements Serializable {
 
         Card card = (Card) o;
 
-        return new EqualsBuilder().append(id, card.id).append(name, card.name).append(account, card.account).append(cardStatus, card.cardStatus).append(type, card.type).append(expirationDate, card.expirationDate).append(token, card.token).append(currency, card.currency).append(label, card.label).append(maskedPan, card.maskedPan).append(creationTimestamp, card.creationTimestamp).append(updateTimestamp, card.updateTimestamp).append(bankAccount, card.bankAccount).append(transactions, card.transactions).isEquals();
+        return new EqualsBuilder().append(id, card.id).append(name, card.name).append(account, card.account).append(cardStatus, card.cardStatus).append(type, card.type).append(expirationDate, card.expirationDate).append(token, card.token).append(label, card.label).append(maskedPan, card.maskedPan).append(creationTimestamp, card.creationTimestamp).append(updateTimestamp, card.updateTimestamp).append(bankAccount, card.bankAccount).append(transactions, card.transactions).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(id).append(name).append(account).append(cardStatus).append(type).append(expirationDate).append(token).append(currency).append(label).append(maskedPan).append(creationTimestamp).append(updateTimestamp).append(bankAccount).append(transactions).toHashCode();
+        return new HashCodeBuilder(17, 37).append(id).append(name).append(account).append(cardStatus).append(type).append(expirationDate).append(token).append(label).append(maskedPan).append(creationTimestamp).append(updateTimestamp).append(bankAccount).append(transactions).toHashCode();
     }
 
     @Override

@@ -10,11 +10,11 @@ import java.util.Optional;
 
 public interface CardRepository extends JpaRepository<Card, Long> {
 
-    @Query("SELECT c.id as cardId, c.name as name, c.cardStatus as cardStatus, c.type as type, c.currency as currency, c.label as label, c.maskedPan as maskedPan, c.cvv as cvv " +
+    @Query("SELECT c.id as cardId, c.name as name, c.cardStatus as cardStatus, c.type as type, c.label as label, c.maskedPan as maskedPan, c.cvv as cvv " +
             "FROM Card c WHERE c.account.id = :accountId")
     List<Projection.CardInfo> findAllCardInfoByAccountId(Long accountId);
 
-    @Query("SELECT c.id as cardId, c.name as name, c.cardStatus as cardStatus, c.type as type, c.currency as currency, c.label as label, c.maskedPan as maskedPan, c.cvv as cvv " +
+    @Query("SELECT c.id as cardId, c.name as name, c.cardStatus as cardStatus, c.type as type, c.label as label, c.maskedPan as maskedPan, c.cvv as cvv " +
             "FROM Card c WHERE c.account.id = :accountId AND c.id = :cardId")
     Optional<Projection.CardInfo> findCardInfoByAccountIdAndCardId(Long accountId, Long cardId);
 
@@ -32,7 +32,6 @@ public interface CardRepository extends JpaRepository<Card, Long> {
             String getName();
             Card.CardStatus getCardStatus();
             Card.Type getType();
-            Currency getCurrency();
             String getLabel();
             String getMaskedPan();
             Integer getCvv();

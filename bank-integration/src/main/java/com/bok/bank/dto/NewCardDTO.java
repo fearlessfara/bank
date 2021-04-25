@@ -7,7 +7,6 @@ import java.util.Currency;
 public class NewCardDTO {
     public String name;
     public String type;
-    public Currency currency;
     public String label;
 
     public NewCardDTO() {
@@ -19,7 +18,6 @@ public class NewCardDTO {
         return new ToStringBuilder(this)
                 .append("name", name)
                 .append("type", type)
-                .append("currency", currency)
                 .append("label", label)
                 .toString();
     }

@@ -3,6 +3,7 @@ package com.bok.bank.controller;
 import com.bok.bank.dto.BankAccountInfoDTO;
 import com.bok.bank.dto.CheckPaymentAmountRequestDTO;
 import com.bok.bank.dto.CheckPaymentAmountResponseDTO;
+import com.bok.bank.dto.NewBankAccountDTO;
 import com.bok.bank.helper.BankAccountHelper;
 import com.bok.bank.service.BankAccountController;
 import com.bok.bank.util.Money;
@@ -32,6 +33,12 @@ public class BankAccountControllerImpl implements BankAccountController {
     public BankAccountInfoDTO bankAccountInfo(Long accountId) {
         Preconditions.checkNotNull(accountId, "accountId is null");
         return bankAccountHelper.getBankAccountInfo(accountId);
+    }
+
+    @Override
+    public BankAccountInfoDTO newBankAccount(Long accountId, NewBankAccountDTO newBankAccountDTO) {
+        bankAccountHelper.checkBankAccountInfoForCreation(accountId, newBankAccountDTO);
+        return bankAccountHelper.createBankAccount(accountId, newBankAccountDTO);
     }
 
 

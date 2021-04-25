@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface BankAccountRepository extends JpaRepository<BankAccount, Long> {
 
     Optional<BankAccount> findByAccount_Id(Long accountId);
+    boolean existsByAccount_Id(Long accountId);
 
     Optional<BankAccount> findByAccount_IdAndStatus(Long accountId, BankAccount.Status status);
 
