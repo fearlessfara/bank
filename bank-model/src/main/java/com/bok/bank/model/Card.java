@@ -1,6 +1,5 @@
 package com.bok.bank.model;
 
-import com.bok.bank.repository.CardRepository;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;

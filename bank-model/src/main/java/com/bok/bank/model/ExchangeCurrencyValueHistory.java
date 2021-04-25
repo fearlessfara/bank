@@ -39,7 +39,6 @@ public class ExchangeCurrencyValueHistory {
     private Map<String, BigDecimal> conversion_rates = new HashMap<>();
 
 
-
     public ExchangeCurrencyValueHistory() {
     }
 

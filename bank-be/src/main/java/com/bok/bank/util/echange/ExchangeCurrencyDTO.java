@@ -40,8 +40,8 @@ public class ExchangeCurrencyDTO {
     public ExchangeCurrencyDTO() {
     }
 
-    public ExchangeCurrencyValueHistory toExchangeCurrencyValues(String baseCurrency){
-        this.conversion_rates.forEach((s, bigDecimal) -> this.conversion_rates.replace(s, (bigDecimal.scale()==0) ? bigDecimal.setScale(4, BigDecimal.ROUND_FLOOR) : bigDecimal));
+    public ExchangeCurrencyValueHistory toExchangeCurrencyValues(String baseCurrency) {
+        this.conversion_rates.forEach((s, bigDecimal) -> this.conversion_rates.replace(s, (bigDecimal.scale() == 0) ? bigDecimal.setScale(4, BigDecimal.ROUND_FLOOR) : bigDecimal));
         return new ExchangeCurrencyValueHistory(Instant.ofEpochSecond(this.time_last_update_unix), Instant.ofEpochSecond(this.time_next_update_unix), baseCurrency, this.conversion_rates);
     }
 

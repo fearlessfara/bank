@@ -36,7 +36,7 @@ public class ExchangeCurrencyRepositoryTest {
     }
 
     @Test
-    public void findLastValueForAllCurrencyTest(){
+    public void findLastValueForAllCurrencyTest() {
         List<ExchangeCurrencyValueHistory> exchangeCurrencyValueHistories = exchangeCurrencyValueHistoryRepository.findLastValueForAllCurrency();
         assertThat(exchangeCurrencyValueHistories.get(0).getId()).isEqualTo(1l);
         assertThat(exchangeCurrencyValueHistories.get(1).getId()).isEqualTo(2l);

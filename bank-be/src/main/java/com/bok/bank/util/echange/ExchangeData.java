@@ -4,7 +4,6 @@ import com.bok.bank.model.ExchangeCurrencyValue;
 import com.bok.bank.model.ExchangeCurrencyValueHistory;
 import com.bok.bank.repository.ExchangeCurrencyValueHistoryRepository;
 import com.bok.bank.repository.ExchangeCurrencyValueRepository;
-import com.bok.bank.util.echange.ExchangeCurrencyDTO;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -101,11 +100,11 @@ public class ExchangeData {
         return gson.fromJson(jsonobj, ExchangeCurrencyDTO.class);
     }
 
-    private void updateCurrencyValue(List<ExchangeCurrencyValueHistory> exchangeCurrencyValueHistories){
+    private void updateCurrencyValue(List<ExchangeCurrencyValueHistory> exchangeCurrencyValueHistories) {
         log.info("updateCurrencyValue");
         Map<String, ExchangeCurrencyValueHistory> exchangeCurrencyValueHistoryMap = exchangeCurrencyValueHistories.stream().collect(Collectors.toMap(ExchangeCurrencyValueHistory::getBaseCurrency, Function.identity()));
         List<ExchangeCurrencyValue> exchangeCurrencyValues = exchangeCurrencyValueRepository.findAll();
-        if(exchangeCurrencyValues.isEmpty() || exchangeCurrencyValues.size()<CURRENCIES_SAVED.size()){
+        if (exchangeCurrencyValues.isEmpty() || exchangeCurrencyValues.size() < CURRENCIES_SAVED.size()) {
             exchangeCurrencyValueRepository.deleteAll();
             exchangeCurrencyValueRepository.saveAll(exchangeCurrencyValueHistories
                     .stream().map(ecvh -> new ExchangeCurrencyValue(ecvh.getTime_last_update_unix(), ecvh.getTime_next_update_unix(), ecvh.getBaseCurrency(), ecvh.getConversion_rates()))

@@ -16,13 +16,21 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     public class Projection {
         public interface AccountInfo {
             String getUsername();
+
             String getEmail();
+
             String getIcc();
+
             String getMobile();
+
             Account.Status getStatus();
+
             Account.Type getType();
+
             String getName();
+
             String getMiddleName();
+
             String getSurname();
         }
     }

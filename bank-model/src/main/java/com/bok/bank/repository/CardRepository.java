@@ -27,13 +27,17 @@ public interface CardRepository extends JpaRepository<Card, Long> {
     Optional<Integer> findCvvByAccountIdAndCardId(Long accountId, Long cardId);
 
     class Projection {
-        public interface CardInfo{
+        public interface CardInfo {
             Long getCardId();
             String getName();
+
             Card.CardStatus getCardStatus();
+
             Card.Type getType();
             String getLabel();
+
             String getMaskedPan();
+
             Integer getCvv();
         }
     }

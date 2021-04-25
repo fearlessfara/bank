@@ -26,6 +26,7 @@ public class Money implements Comparable<Money>, Serializable {
     protected Money() {
 
     }
+
     private Money(long value, Scale scale) {
         this.currency = DEFAULT_CURRENCY;
         this.value = BigDecimal.valueOf(value, scale.getValue()).setScale(DEFAULT_SCALE, DEFAULT_ROUNDING);
@@ -126,7 +127,7 @@ public class Money implements Comparable<Money>, Serializable {
                 longValue();
     }
 
-    public Money roundingCents(){
+    public Money roundingCents() {
         return roundingCents(DEFAULT_ROUNDING);
     }
 

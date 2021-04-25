@@ -22,7 +22,7 @@ public class BankAccountControllerImpl implements BankAccountController {
 
     @Override
     public CheckPaymentAmountResponseDTO checkPaymentAmount(Long accountId, CheckPaymentAmountRequestDTO request) {
-        log.info(request.amount.toString() +" "+ request.currency);
+        log.info(request.amount.toString() + " " + request.currency);
         Preconditions.checkNotNull(accountId, "accountId is null");
         Preconditions.checkNotNull(request.amount, "Amount passed is null");
         Preconditions.checkNotNull(request.currency, "Currency passed is null");

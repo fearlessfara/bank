@@ -20,6 +20,7 @@ public class CardControllerImpl implements CardController {
     public List<CardInfoDTO> allCards(Long accountId) {
         return cardHelper.findAllCardsByAccount(accountId);
     }
+
     @Override
     public CardInfoDTO findCard(Long accountId, Long cardId) {
         Preconditions.checkNotNull(cardId, "cardId must not be null");

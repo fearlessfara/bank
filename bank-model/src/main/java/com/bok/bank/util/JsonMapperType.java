@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
-import javax.jws.Oneway;
 import java.util.Map;
 
 public class JsonMapperType {
