@@ -10,4 +10,4 @@ FROM amazoncorretto:latest
 #COPY --from=build /usr/src/app/target/*.jar /usr/app/app.jar
 COPY /bank-be/target/*.jar /usr/app/app.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/usr/app/app.jar"," -Dspring.profiles.active=external"]
+ENTRYPOINT ["java","-jar","/usr/app/app.jar"]

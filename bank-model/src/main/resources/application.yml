@@ -6,7 +6,7 @@ spring:
     open-in-view: false
     show-sql: false
   profiles:
-    active: "mysql"
+    active: "external"
 exchange-currency:
   endpoint: https://v6.exchangerate-api.com/v6/
   api-key: ceb94d443f6398dd5e640cd1
