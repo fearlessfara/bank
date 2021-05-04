@@ -21,14 +21,14 @@ eureka:
 ---
 #External DB
 active-mq:
-  transfers-queue: transfers
-  market-sell-queue: market-sell
-  market-purchase-queue: market-purchase
+  transfers: transfers
+  market-sell: market-sell
+  market-purchase: market-purchase
   prices-topic: prices
-  users-queue: users
-  transactions-queue: transactions
-  wallets-queue: wallets
-  emails-queue: emails
+  users: users
+  transactions: transactions
+  wallets: wallets
+  emails: emails
   broker-url: tcp://dev.faraone.ovh:61616
 spring:
   jpa:
