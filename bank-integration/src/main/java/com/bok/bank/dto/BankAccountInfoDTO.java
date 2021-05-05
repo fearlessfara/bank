@@ -8,7 +8,7 @@ import java.util.Currency;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BankAccountInfoDTO {
-    public String username;
+    public String email;
     public String bankAccountName;
     public String IBAN;
     public String label;
@@ -17,8 +17,8 @@ public class BankAccountInfoDTO {
     public BigDecimal availableAmount;
     public String status;
 
-    public BankAccountInfoDTO(String username, String bankAccountName, String IBAN, String label, Currency currency, BigDecimal blockedAmount, BigDecimal availableAmount, String status) {
-        this.username = username;
+    public BankAccountInfoDTO(String email, String bankAccountName, String IBAN, String label, Currency currency, BigDecimal blockedAmount, BigDecimal availableAmount, String status) {
+        this.email = email;
         this.bankAccountName = bankAccountName;
         this.IBAN = IBAN;
         this.label = label;

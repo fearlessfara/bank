@@ -40,7 +40,7 @@ public class BankAccountHelper {
     public BankAccountInfoDTO getBankAccountInfo(Long accountId) {
         BankAccount bankAccount = bankAccountRepository.findByAccount_Id(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("Not found bankAccount for accountId " + accountId));
-        return new BankAccountInfoDTO(bankAccount.getAccount().getUsername(), bankAccount.getName(), bankAccount.getIBAN(), bankAccount.getLabel(),
+        return new BankAccountInfoDTO(bankAccount.getAccount().getEmail(), bankAccount.getName(), bankAccount.getIBAN(), bankAccount.getLabel(),
                 bankAccount.getCurrency(), bankAccount.getBlockedAmount().getValue(), bankAccount.getAvailableAmount().getValue(), bankAccount.getStatus().name());
     }
 
