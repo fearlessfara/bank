@@ -9,9 +9,11 @@ import com.bok.integration.AccountCreationMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.Before;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -20,6 +22,7 @@ import static junit.framework.TestCase.assertEquals;
 
 @SpringBootTest
 @Slf4j
+@RunWith(SpringRunner.class)
 @ActiveProfiles("test")
 public class Prova {
 

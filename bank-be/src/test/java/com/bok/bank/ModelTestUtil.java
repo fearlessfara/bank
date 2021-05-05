@@ -118,7 +118,7 @@ public class ModelTestUtil {
 
     }
 
-    public synchronized void clearAll() {
+    public void clearAll() {
         cardRepository.deleteAll();
         bankAccountRepository.deleteAll();
         accountRepository.deleteAll();
