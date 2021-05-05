@@ -14,8 +14,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -33,7 +31,6 @@ import java.util.List;
         discriminatorType = DiscriminatorType.STRING)
 public class Account implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -42,10 +39,7 @@ public class Account implements Serializable {
     @Column
     private Type type;
 
-    @Column(nullable = false, unique = true, updatable = false)
-    private String username;
-
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -59,16 +53,16 @@ public class Account implements Serializable {
     private Status status;
 
     @Column(nullable = false)
-    private String country = "";
+    private String country;
 
     @Column
-    private String county = "";
+    private String county;
 
     @Column(nullable = false)
-    private String city = "";
+    private String city;
 
     @Column(nullable = false)
-    private String postCode = "";
+    private String postCode;
 
     @Column
     private String addLine;
@@ -98,10 +92,10 @@ public class Account implements Serializable {
         this.id = id;
     }
 
-    public Account(String name, Type type, String username, String email, String mobile, String icc, Status status, String country, String county, String city, String postCode, String addLine, String civicNumber) {
+    public Account(Long id, String name, Type type, String email, String mobile, String icc, Status status, String country, String county, String city, String postCode, String addLine, String civicNumber) {
+        this.id = id;
         this.name = name;
         this.type = type;
-        this.username = username;
         this.email = email;
         this.mobile = mobile;
         this.icc = icc;
@@ -136,14 +130,6 @@ public class Account implements Serializable {
 
     public void setType(Type type) {
         this.type = type;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getEmail() {
@@ -256,7 +242,6 @@ public class Account implements Serializable {
                 .append("id", id)
                 .append("name", name)
                 .append("type", type)
-                .append("username", username)
                 .append("email", email)
                 .append("mobile", mobile)
                 .append("icc", icc)
@@ -278,12 +263,12 @@ public class Account implements Serializable {
 
         Account account = (Account) o;
 
-        return new EqualsBuilder().append(id, account.id).append(name, account.name).append(type, account.type).append(username, account.username).append(email, account.email).append(mobile, account.mobile).append(icc, account.icc).append(status, account.status).append(country, account.country).append(county, account.county).append(city, account.city).append(postCode, account.postCode).append(addLine, account.addLine).append(civicNumber, account.civicNumber).append(cards, account.cards).append(bankAccount, account.bankAccount).append(transactions, account.transactions).isEquals();
+        return new EqualsBuilder().append(id, account.id).append(name, account.name).append(type, account.type).append(email, account.email).append(mobile, account.mobile).append(icc, account.icc).append(status, account.status).append(country, account.country).append(county, account.county).append(city, account.city).append(postCode, account.postCode).append(addLine, account.addLine).append(civicNumber, account.civicNumber).append(cards, account.cards).append(bankAccount, account.bankAccount).append(transactions, account.transactions).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(id).append(name).append(type).append(username).append(email).append(mobile).append(icc).append(status).append(country).append(county).append(city).append(postCode).append(addLine).append(civicNumber).append(cards).append(bankAccount).append(transactions).toHashCode();
+        return new HashCodeBuilder(17, 37).append(id).append(name).append(type).append(email).append(mobile).append(icc).append(status).append(country).append(county).append(city).append(postCode).append(addLine).append(civicNumber).append(cards).append(bankAccount).append(transactions).toHashCode();
     }
 
     public enum Status {

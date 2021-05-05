@@ -18,8 +18,8 @@ public class Company extends Account {
     public Company() {
     }
 
-    public Company(String name, String username, String email, String mobile, String icc, Status status, String country, String county, String city, String postCode, String addLine, String civicNumber, String vatNumber) {
-        super(name, Type.COMPANY, username, email, mobile, icc, status, country, county, city, postCode, addLine, civicNumber);
+    public Company(Long id, String name, String email, String mobile, String icc, Status status, String country, String county, String city, String postCode, String addLine, String civicNumber, String vatNumber) {
+        super(id, name, Type.COMPANY, email, mobile, icc, status, country, county, city, postCode, addLine, civicNumber);
         this.vatNumber = vatNumber;
     }
 

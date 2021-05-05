@@ -8,7 +8,9 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @DiscriminatorValue("INDIVIDUAL_USER")
@@ -33,14 +35,14 @@ public class User extends Account implements Serializable {
     private String birthCountry;
 
     @Column
-    private LocalDate birthDate;
+    private Instant birthDate;
 
     public User() {
         super();
     }
 
-    public User(String name, String username, String email, String mobile, String icc, Status status, String country, String county, String city, String postCode, String addLine, String civicNumber, String middlename, String surname, Gender gender, String taxCode, String birthCity, String birthCountry, LocalDate birthDate) {
-        super(name, Type.INDIVIDUAL_USER, username, email, mobile, icc, status, country, county, city, postCode, addLine, civicNumber);
+    public User(Long id, String name, String email, String mobile, String icc, Status status, String country, String county, String city, String postCode, String addLine, String civicNumber, String middlename, String surname, Gender gender, String taxCode, String birthCity, String birthCountry, Instant birthDate) {
+        super(id, name, Type.INDIVIDUAL_USER, email, mobile, icc, status, country, county, city, postCode, addLine, civicNumber);
         this.middleName = middlename;
         this.surname = surname;
         this.gender = gender;
@@ -98,11 +100,11 @@ public class User extends Account implements Serializable {
         this.birthCountry = birthCountry;
     }
 
-    public LocalDate getBirthDate() {
+    public Instant getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
+    public void setBirthDate(Instant birthDate) {
         this.birthDate = birthDate;
     }
 
