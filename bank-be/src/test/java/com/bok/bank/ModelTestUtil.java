@@ -14,6 +14,7 @@ import com.bok.bank.repository.ExchangeCurrencyValueHistoryRepository;
 import com.bok.bank.repository.ExchangeCurrencyValueRepository;
 import com.bok.bank.util.Money;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -28,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
+@Component
 public class ModelTestUtil {
 
     @Autowired

@@ -21,14 +21,7 @@ eureka:
 ---
 #External DB
 active-mq:
-  transfers: transfers
-  market-sell: market-sell
-  market-purchase: market-purchase
-  prices-topic: prices
-  users: users
-  transactions: transactions
-  wallets: wallets
-  emails: emails
+  krypto-users: bank-accounts
   broker-url: tcp://dev.faraone.ovh:61616
 spring:
   jpa:

@@ -1,3 +1,6 @@
+active-mq:
+  bank : bank-users
+  broker-url: tcp://localhost:61616
 spring:
   application:
     name: bank
