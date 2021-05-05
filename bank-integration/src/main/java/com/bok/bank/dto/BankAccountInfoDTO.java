@@ -34,7 +34,7 @@ public class BankAccountInfoDTO {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("username", username)
+                .append("email", email)
                 .append("bankAccountName", bankAccountName)
                 .append("IBAN", IBAN)
                 .append("label", label)

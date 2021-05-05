@@ -5,7 +5,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AccountInfoDTO {
-    public String username;
     public String email;
     public String icc;
     public String mobile;
@@ -16,8 +15,7 @@ public class AccountInfoDTO {
     public AccountInfoDTO() {
     }
 
-    public AccountInfoDTO(String username, String email, String icc, String mobile, String status, String type, String fullName) {
-        this.username = username;
+    public AccountInfoDTO(String email, String icc, String mobile, String status, String type, String fullName) {
         this.email = email;
         this.icc = icc;
         this.mobile = mobile;
@@ -29,7 +27,6 @@ public class AccountInfoDTO {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("username", username)
                 .append("email", email)
                 .append("icc", icc)
                 .append("mobile", mobile)

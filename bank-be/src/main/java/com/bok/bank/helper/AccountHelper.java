@@ -29,7 +29,7 @@ public class AccountHelper {
         } else{
             fullName = accountInfo.getName();
         }
-        return new AccountInfoDTO(accountInfo.getUsername(), accountInfo.getEmail(), accountInfo.getIcc(), accountInfo.getMobile(), accountInfo.getStatus().name(), accountInfo.getType().name(), fullName);
+        return new AccountInfoDTO(accountInfo.getEmail(), accountInfo.getIcc(), accountInfo.getMobile(), accountInfo.getStatus().name(), accountInfo.getType().name(), fullName);
     }
 
     public void createAccount(AccountCreationMessage message){

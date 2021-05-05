@@ -10,12 +10,11 @@ import java.util.Optional;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
-    @Query("SELECT a.username as username, a.email as email, a.icc as icc, a.mobile as mobile, a.status as status, a.type as type, a.name as name, a.middleName as middleName, a.surname as surname FROM Account a WHERE a.id = :accountId")
+    @Query("SELECT a.email as email, a.icc as icc, a.mobile as mobile, a.status as status, a.type as type, a.name as name, a.middleName as middleName, a.surname as surname FROM Account a WHERE a.id = :accountId")
     Optional<Projection.AccountInfo> findAccountInfoByAccountId(Long accountId);
 
     public class Projection {
         public interface AccountInfo {
-            String getUsername();
 
             String getEmail();
 
