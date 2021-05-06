@@ -48,7 +48,7 @@ public class ModelTestUtil {
     CardRepository cardRepository;
 
 
-    public synchronized void populateDB() {
+    public void populateDB() {
         List<Account> accounts = Arrays.asList(
                 new User(4997L, "Domenico", "mico.fasano@gmail.com", "3926772950", "+39", Account.Status.ACTIVE, "Italy", "Apulia", "Locorotondo", "70010",
                         "via le mani dal naso", "12/c", null, "Fasano", User.Gender.M, "FSNDNC99C13D508Y", "Fasano", "Italy", LocalDate.of(1999, 3, 13).atStartOfDay().toInstant(ZoneOffset.UTC)),

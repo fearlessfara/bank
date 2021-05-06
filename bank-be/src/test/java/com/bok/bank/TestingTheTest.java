@@ -24,7 +24,7 @@ import static junit.framework.TestCase.assertEquals;
 @Slf4j
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
-public class Prova {
+public class TestingTheTest {
 
     @Autowired
     CardRepository cardRepository;
@@ -49,14 +49,14 @@ public class Prova {
         log.info("DB populated correctly.");
     }
 
-    @Test
+    @org.junit.Test
     public void creationUserTest() throws InterruptedException {
         producer.send(new AccountCreationMessage("Domenico", "", "Fasano", "mico.fasano@gmail.com", Date.valueOf(LocalDate.of(1999, 3, 13)), "Fasano", "Italia", false, "FSNDNC99C13D508Y", "", "+39", "3926772950", "23", "via le mani dal naso", "Locorotondo", "BA", "Italy", "70010", 123L, User.Gender.M.name()));
         wait(1000);
         log.info(accountHelper.getAccountInfo(123L).toString());
     }
 
-    @Test
+    @org.junit.Test
     public void queryTest(){
         assertEquals(cardRepository.findAll().size(), 2);
     }
