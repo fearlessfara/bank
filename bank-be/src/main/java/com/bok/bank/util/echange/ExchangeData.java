@@ -40,6 +40,9 @@ public class ExchangeData {
     @Autowired
     ExchangeCurrencyValueRepository exchangeCurrencyValueRepository;
 
+    @Value("${scheduledFor}")
+    private String scheduledFor;
+
     @Value("${exchange-currency.api-key}")
     private String apiKey;
 
@@ -67,6 +70,11 @@ public class ExchangeData {
      */
     @Scheduled(fixedDelay = 86400000, initialDelay = 1000)
     public void updateDatabaseCurrenciesExchange() {
+        if(scheduledFor.equals("test")){
+            log.info("We are in test");
+            return;
+        }
+        log.info("Updating exchange currencies table...");
         List<ExchangeCurrencyValueHistory> exchangeCurrencyValuesHistories = exchangeCurrencyValueHistoryRepository.findLastValueForAllCurrency();
         if (!exchangeCurrencyValuesHistories.isEmpty() && exchangeCurrencyValuesHistories.stream().allMatch(exchangeValue -> exchangeValue.getTime_next_update_unix().isAfter(Instant.now()))) {
             return;

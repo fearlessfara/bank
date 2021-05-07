@@ -5,17 +5,17 @@ spring:
   application:
     name: bank
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/testing?useUnicode=true&characterEncoding=utf8&passwordCharacterEncoding=utf8&allowPublicKeyRetrieval=true
-    username: root
-    password: password4testing
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/bank
+    username: testing
+    password: testing
   jpa:
     hibernate:
       ddl-auto: create-drop
     open-in-view: false
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MariaDBDialect
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: false
 eureka:
   client:
@@ -27,4 +27,5 @@ exchange-currency:
   endpoint: https://v6.exchangerate-api.com/v6/
   api-key: ceb94d443f6398dd5e640cd1
   base-currency: USD
+scheduledFor: test
 

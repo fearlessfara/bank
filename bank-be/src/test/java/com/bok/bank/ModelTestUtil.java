@@ -13,9 +13,9 @@ import com.bok.bank.repository.CardRepository;
 import com.bok.bank.repository.ExchangeCurrencyValueHistoryRepository;
 import com.bok.bank.repository.ExchangeCurrencyValueRepository;
 import com.bok.bank.util.Money;
+import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -31,6 +31,7 @@ import java.util.Map;
 
 @Component
 public class ModelTestUtil {
+    public static final Faker faker = new Faker();
 
     @Autowired
     ExchangeCurrencyValueHistoryRepository exchangeCurrencyValueHistoryRepository;
@@ -124,7 +125,6 @@ public class ModelTestUtil {
         accountRepository.deleteAll();
         exchangeCurrencyValueHistoryRepository.deleteAll();
         exchangeCurrencyValueRepository.deleteAll();
-
     }
 
 

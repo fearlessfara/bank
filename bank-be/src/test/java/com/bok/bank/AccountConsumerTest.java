@@ -15,16 +15,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 
 @SpringBootTest
 @Slf4j
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
-public class TestingTheTest {
+public class AccountConsumerTest {
 
     @Autowired
     CardRepository cardRepository;
@@ -49,14 +50,14 @@ public class TestingTheTest {
         log.info("DB populated correctly.");
     }
 
-    @org.junit.Test
+    @Test
     public void creationUserTest() throws InterruptedException {
-        producer.send(new AccountCreationMessage("Domenico", "", "Fasano", "mico.fasano@gmail.com", Date.valueOf(LocalDate.of(1999, 3, 13)), "Fasano", "Italia", false, "FSNDNC99C13D508Y", "", "+39", "3926772950", "23", "via le mani dal naso", "Locorotondo", "BA", "Italy", "70010", 123L, User.Gender.M.name()));
-        wait(1000);
-        log.info(accountHelper.getAccountInfo(123L).toString());
+        producer.send(new AccountCreationMessage("Domenico", "", "Fasano", "mico@gmail.com", new Date(10212541), "Fasano", "Italia", false, "FSNDMC99C13D508Y", "", "+39", "3926772950", "23", "via le mani dal naso", "Locorotondo", "BA", "Italy", "70010", 123L, User.Gender.M.name()));
+        TimeUnit.SECONDS.sleep(5);
+        assertTrue(accountHelper.getAccountInfo(123L) != null);
     }
 
-    @org.junit.Test
+    @Test
     public void queryTest(){
         assertEquals(cardRepository.findAll().size(), 2);
     }
