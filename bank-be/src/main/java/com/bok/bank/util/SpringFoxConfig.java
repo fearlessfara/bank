@@ -1,4 +1,4 @@
-package com.bok.bank.utils;
+package com.bok.bank.util;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ public class SpringFoxConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.bok.bank.service"))
+                .apis(RequestHandlerSelectors.basePackage("com.bok.bank.controller"))
                 .paths(PathSelectors.any())
                 .build().apiInfo(apiInfo());
     }
