@@ -23,7 +23,6 @@ public class ConfirmationEmailHistory implements Serializable {
     private Long id;
 
     @ManyToOne(optional = false)
-    @Column(nullable = false)
     private Account account;
     @Column
     private Long resourceId;
