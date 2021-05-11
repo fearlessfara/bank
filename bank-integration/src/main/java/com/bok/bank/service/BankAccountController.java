@@ -21,7 +21,10 @@ public interface BankAccountController {
     @GetMapping("/bankAccountInfo")
     BankAccountInfoDTO bankAccountInfo(@RequestParam("accountId") Long accountId);
 
-    @PostMapping("/")
-    BankAccountInfoDTO newBankAccount(@RequestParam("accountId") Long accountId, BankAccountDTO bankAccountDTO);
+    @PostMapping("/create")
+    String createBankAccount(@RequestParam("accountId") Long accountId, BankAccountDTO bankAccountDTO);
+
+    @PostMapping("/verify")
+    BankAccountInfoDTO verify(@RequestParam("accountId") Long accountId, String confirmationToken);
 
 }

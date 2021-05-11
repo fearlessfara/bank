@@ -1,5 +1,6 @@
 server:
   port: 8080
+  base-url: http://dev.faraone.ovh:82
 scheduledFor: execution
 spring:
   jpa:
@@ -11,6 +12,9 @@ exchange-currency:
   endpoint: https://v6.exchangerate-api.com/v6/
   api-key: ceb94d443f6398dd5e640cd1
   base-currency: USD
+bank-info:
+  bank-bin: "593796"
+  bank-code: "59379"
 eureka:
   client:
     serviceUrl:
@@ -23,6 +27,7 @@ eureka:
 active-mq:
   bank-users: bank-accounts
   broker-url: tcp://dev.faraone.ovh:61616
+  emails: emails
 spring:
   jpa:
     hibernate:

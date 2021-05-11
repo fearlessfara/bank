@@ -1,6 +1,6 @@
 package com.bok.bank;
 
-import com.bok.bank.consumer.AccountConsumer;
+import com.bok.bank.messaging.AccountConsumer;
 import com.bok.bank.helper.AccountHelper;
 import com.bok.bank.model.User;
 import com.bok.bank.producer.Producer;

@@ -35,7 +35,7 @@ public class BankAccount implements Serializable {
     @OneToOne(optional = false)
     private Account account;
 
-    @Column(nullable = false, unique = true, length = 34)
+    @Column(nullable = false, unique = true)
     private String IBAN;
 
     @Column(nullable = false)

@@ -85,6 +85,9 @@ public class Account implements Serializable {
     @OneToMany(mappedBy = "id", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.MERGE)
     private List<Transaction> transactions = new ArrayList<>();
 
+    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.MERGE)
+    private List<ConfirmationEmailHistory> confirmationEmailHistories = new ArrayList<>();
+
     public Account() {
     }
 

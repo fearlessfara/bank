@@ -10,7 +10,11 @@ import java.util.Optional;
 public interface BankAccountRepository extends JpaRepository<BankAccount, Long> {
 
     Optional<BankAccount> findByAccount_Id(Long accountId);
-    boolean existsByAccount_Id(Long accountId);
+
+    boolean existsByIBAN(String IBAN);
+
+    @Query("SELECT count(ba) > 0 FROM BankAccount ba where ba.account.id = :accountId and ba.status NOT LIKE 'DELETED'")
+    boolean existsBankAccountNotDeletedByAccountId(Long accountId);
 
     Optional<BankAccount> findByAccount_IdAndStatus(Long accountId, BankAccount.Status status);
 

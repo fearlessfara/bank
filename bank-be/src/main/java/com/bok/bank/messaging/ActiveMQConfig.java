@@ -1,4 +1,4 @@
-package com.bok.bank.consumer;
+package com.bok.bank.messaging;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Value;

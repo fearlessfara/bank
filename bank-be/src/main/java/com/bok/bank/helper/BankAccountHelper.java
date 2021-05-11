@@ -3,23 +3,44 @@ package com.bok.bank.helper;
 import com.bok.bank.dto.BankAccountInfoDTO;
 import com.bok.bank.dto.CheckPaymentAmountResponseDTO;
 import com.bok.bank.dto.BankAccountDTO;
+import com.bok.bank.model.Account;
 import com.bok.bank.model.BankAccount;
+import com.bok.bank.model.ConfirmationEmailHistory;
 import com.bok.bank.repository.BankAccountRepository;
+import com.bok.bank.util.CreditCardNumberGenerator;
+import com.bok.bank.util.Generator;
 import com.bok.bank.util.Money;
 import com.google.common.base.Preconditions;
+import org.iban4j.CountryCode;
+import org.iban4j.Iban;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Component
 public class BankAccountHelper {
 
+
     @Autowired
     BankAccountRepository bankAccountRepository;
 
     @Autowired
+    CreditCardNumberGenerator creditCardNumberGenerator;
+
+    @Autowired
     ExchangeCurrencyAmountHelper exchangeCurrencyAmountHelper;
+
+    @Autowired
+    EmailHelper emailHelper;
+
+    @Autowired
+    Generator generator;
+
+    @Value("${bank-info.bank-code}")
+    private String BANK_CODE;
 
     public CheckPaymentAmountResponseDTO isAmountAvailable(Long accountId, Money amount) {
         Optional<BankAccount> bankAccountOptional = bankAccountRepository.findByAccount_IdAndStatus(accountId, BankAccount.Status.ACTIVE);
@@ -43,14 +64,18 @@ public class BankAccountHelper {
                 bankAccount.getCurrency(), bankAccount.getBlockedAmount().getValue(), bankAccount.getAvailableAmount().getValue(), bankAccount.getStatus().name());
     }
 
-    public BankAccountInfoDTO createBankAccount(Long accountId, BankAccountDTO bankAccountDTO) {
-        return null;
-//        BankAccount bankAccount = new BankAccount(new Account(accountId), newBankAccountDTO.name, newBankAccountDTO.name, newBankAccountDTO.currency, Money.ZERO, Money.ZERO, BankAccount.Status.ACTIVE);
+    public String createBankAccount(Long accountId, BankAccountDTO bankAccountDTO) {
+        BankAccount bankAccount = new BankAccount(new Account(accountId), generator.generateIBAN(), bankAccountDTO.name, bankAccountDTO.label, bankAccountDTO.currency, new Money(BigDecimal.ZERO, bankAccountDTO.currency), new Money(BigDecimal.ZERO, bankAccountDTO.currency), BankAccount.Status.PENDING);
+        bankAccount = bankAccountRepository.save(bankAccount);
+        emailHelper.sendAccountConfirmationEmail(bankAccount.getAccount(), bankAccount.getId(), ConfirmationEmailHistory.ResourceType.BANK_ACCOUNT);
+        return "Please check your mail and confirm bank account creation";
     }
 
     public void checkBankAccountInfoForCreation(Long accountId, BankAccountDTO bankAccountDTO) {
-        Preconditions.checkArgument(!bankAccountRepository.existsByAccount_Id(accountId), "This account have already an bank account with us; accountId: " + accountId);
+        Preconditions.checkArgument(!bankAccountRepository.existsBankAccountNotDeletedByAccountId(accountId), "This account have already a bank account with us; accountId: " + accountId);
         Preconditions.checkArgument(bankAccountDTO.name.trim().length()>1, "Name of bank account not valid");
         Preconditions.checkNotNull(bankAccountDTO.currency, "Cannot create bank account without currency");
     }
+
+
 }

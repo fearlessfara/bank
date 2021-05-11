@@ -1,4 +1,4 @@
-package com.bok.bank.consumer;
+package com.bok.bank.messaging;
 
 import com.bok.bank.helper.AccountHelper;
 import com.bok.integration.AccountCreationMessage;

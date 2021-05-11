@@ -1,9 +1,13 @@
-active-mq:
-  bank-users: bank-accounts
-  broker-url: tcp://localhost:61616
 spring:
   application:
     name: bank
+active-mq:
+  bank-users: bank-accounts
+  broker-url: tcp://localhost:61616
+  emails: emails
+bank-info:
+  bank-bin: "593796"
+  bank-code: "59379"
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3307/bank

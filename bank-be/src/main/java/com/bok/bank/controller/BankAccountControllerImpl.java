@@ -36,9 +36,14 @@ public class BankAccountControllerImpl implements BankAccountController {
     }
 
     @Override
-    public BankAccountInfoDTO newBankAccount(Long accountId, BankAccountDTO bankAccountDTO) {
+    public String createBankAccount(Long accountId, BankAccountDTO bankAccountDTO) {
         bankAccountHelper.checkBankAccountInfoForCreation(accountId, bankAccountDTO);
         return bankAccountHelper.createBankAccount(accountId, bankAccountDTO);
+    }
+
+    @Override
+    public BankAccountInfoDTO verify(Long accountId, String confirmationToken) {
+        return null;
     }
 
 
