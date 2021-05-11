@@ -2,8 +2,7 @@ package com.bok.bank.helper;
 
 import com.bok.bank.dto.BankAccountInfoDTO;
 import com.bok.bank.dto.CheckPaymentAmountResponseDTO;
-import com.bok.bank.dto.NewBankAccountDTO;
-import com.bok.bank.model.Account;
+import com.bok.bank.dto.BankAccountDTO;
 import com.bok.bank.model.BankAccount;
 import com.bok.bank.repository.BankAccountRepository;
 import com.bok.bank.util.Money;
@@ -44,14 +43,14 @@ public class BankAccountHelper {
                 bankAccount.getCurrency(), bankAccount.getBlockedAmount().getValue(), bankAccount.getAvailableAmount().getValue(), bankAccount.getStatus().name());
     }
 
-    public BankAccountInfoDTO createBankAccount(Long accountId, NewBankAccountDTO newBankAccountDTO) {
+    public BankAccountInfoDTO createBankAccount(Long accountId, BankAccountDTO bankAccountDTO) {
         return null;
 //        BankAccount bankAccount = new BankAccount(new Account(accountId), newBankAccountDTO.name, newBankAccountDTO.name, newBankAccountDTO.currency, Money.ZERO, Money.ZERO, BankAccount.Status.ACTIVE);
     }
 
-    public void checkBankAccountInfoForCreation(Long accountId, NewBankAccountDTO newBankAccountDTO) {
+    public void checkBankAccountInfoForCreation(Long accountId, BankAccountDTO bankAccountDTO) {
         Preconditions.checkArgument(!bankAccountRepository.existsByAccount_Id(accountId), "This account have already an bank account with us; accountId: " + accountId);
-        Preconditions.checkArgument(newBankAccountDTO.name.trim().length()>1, "Name of bank account not valid");
-        Preconditions.checkNotNull(newBankAccountDTO.currency, "Cannot create bank account without currency");
+        Preconditions.checkArgument(bankAccountDTO.name.trim().length()>1, "Name of bank account not valid");
+        Preconditions.checkNotNull(bankAccountDTO.currency, "Cannot create bank account without currency");
     }
 }

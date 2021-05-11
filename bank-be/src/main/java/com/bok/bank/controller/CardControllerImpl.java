@@ -1,7 +1,7 @@
 package com.bok.bank.controller;
 
 import com.bok.bank.dto.CardInfoDTO;
-import com.bok.bank.dto.NewCardDTO;
+import com.bok.bank.dto.CardDTO;
 import com.bok.bank.helper.CardHelper;
 import com.bok.bank.service.CardController;
 import com.google.common.base.Preconditions;
@@ -40,8 +40,8 @@ public class CardControllerImpl implements CardController {
     }
 
     @Override
-    public CardInfoDTO newCard(Long accountId, NewCardDTO newCardDTO) {
-        cardHelper.checkNewCardDTOData(newCardDTO);
-        return cardHelper.createCard(accountId, newCardDTO);
+    public CardInfoDTO newCard(Long accountId, CardDTO cardDTO) {
+        cardHelper.checkNewCardDTOData(cardDTO);
+        return cardHelper.createCard(accountId, cardDTO);
     }
 }

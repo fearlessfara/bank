@@ -12,6 +12,7 @@ import com.bok.bank.repository.BankAccountRepository;
 import com.bok.bank.repository.CardRepository;
 import com.bok.bank.repository.ExchangeCurrencyValueHistoryRepository;
 import com.bok.bank.repository.ExchangeCurrencyValueRepository;
+import com.bok.bank.util.CreditCardNumberGenerator;
 import com.bok.bank.util.Money;
 import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.bok.bank.util.Constants.BIN_BOK;
+
 @Component
 public class ModelTestUtil {
     public static final Faker faker = new Faker();
+
+    @Autowired
+    CreditCardNumberGenerator creditCardNumberGenerator;
 
     @Autowired
     ExchangeCurrencyValueHistoryRepository exchangeCurrencyValueHistoryRepository;
@@ -71,7 +77,7 @@ public class ModelTestUtil {
         bankAccountRepository.saveAll(bankAccounts);
 
         Map<String, BigDecimal> currenciesEUR = new HashMap<>();
-        currenciesEUR.put("USD", BigDecimal.valueOf(0.8));
+        currenciesEUR.put("USD", BigDecimal.valueOf(1.22));
         currenciesEUR.put("GBP", BigDecimal.valueOf(1.2));
         currenciesEUR.put("AMD", BigDecimal.valueOf(10.0));
         Map<String, BigDecimal> currenciesUSD = new HashMap<>();
@@ -92,17 +98,20 @@ public class ModelTestUtil {
         exchangeCurrencyValueHistoryRepository.saveAll(exchangeCurrencyValueHistories);
 
         Map<String, BigDecimal> currenciesEUR1 = new HashMap<>();
-        currenciesEUR.put("USD", BigDecimal.valueOf(0.8));
-        currenciesEUR.put("GBP", BigDecimal.valueOf(1.2));
-        currenciesEUR.put("AMD", BigDecimal.valueOf(10.0));
+        currenciesEUR1.put("EUR", BigDecimal.valueOf(1.000));
+        currenciesEUR1.put("USD", BigDecimal.valueOf(1.22));
+        currenciesEUR1.put("GBP", BigDecimal.valueOf(0.86));
+        currenciesEUR1.put("AMD", BigDecimal.valueOf(634.98));
         Map<String, BigDecimal> currenciesUSD1 = new HashMap<>();
-        currenciesUSD.put("EUR", BigDecimal.valueOf(1.2));
-        currenciesUSD.put("GBP", BigDecimal.valueOf(1.7));
-        currenciesUSD.put("AMD", BigDecimal.valueOf(12.0));
+        currenciesEUR1.put("USD", BigDecimal.valueOf(1.000));
+        currenciesUSD1.put("EUR", BigDecimal.valueOf(0.82));
+        currenciesUSD1.put("GBP", BigDecimal.valueOf(0.71));
+        currenciesUSD1.put("AMD", BigDecimal.valueOf(552.37));
         Map<String, BigDecimal> currenciesGBP1 = new HashMap<>();
-        currenciesGBP.put("USD", BigDecimal.valueOf(1.2));
-        currenciesGBP.put("EUR", BigDecimal.valueOf(1.5));
-        currenciesGBP.put("AMD", BigDecimal.valueOf(15));
+        currenciesEUR1.put("GBP", BigDecimal.valueOf(1.000));
+        currenciesGBP1.put("USD", BigDecimal.valueOf(1.41));
+        currenciesGBP1.put("EUR", BigDecimal.valueOf(1.16));
+        currenciesGBP1.put("AMD", BigDecimal.valueOf(738.70));
         List<ExchangeCurrencyValue> exchangeCurrencyValues = Arrays.asList(
                 new ExchangeCurrencyValue(Instant.now(), Instant.now(), "EUR", currenciesEUR1),
                 new ExchangeCurrencyValue(Instant.now(), Instant.now(), "USD", currenciesUSD1),
@@ -125,6 +134,30 @@ public class ModelTestUtil {
         accountRepository.deleteAll();
         exchangeCurrencyValueHistoryRepository.deleteAll();
         exchangeCurrencyValueRepository.deleteAll();
+    }
+
+    public User createAndSaveUser(Long accountId){
+        User user = new User(accountId, faker.name().firstName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone(), "+39",
+                Account.Status.ACTIVE, faker.address().country(), "RD", faker.address().city(), faker.address().zipCode(), faker.address().streetAddress(), faker.address().streetAddressNumber(), "",
+                faker.name().lastName(), User.Gender.M, faker.name().firstName().toUpperCase().substring(0,3)+faker.name().lastName().toUpperCase().substring(0,3)+"99"+"D"+faker.date().birthday().getDay()+"D512Y", faker.country().capital(), faker.country().name(), faker.date().birthday().toInstant());
+        return accountRepository.save(user);
+    }
+
+    public Company createAndSaveCompany(Long accountId){
+        Company company = new Company(accountId, faker.company().name(), faker.internet().emailAddress(), faker.phoneNumber().phoneNumber(), "+39",
+                Account.Status.ACTIVE, faker.address().country(), "RD", faker.address().city(), faker.address().zipCode(), faker.address().streetAddress(), faker.address().streetAddressNumber(),
+                faker.idNumber().valid());
+        return accountRepository.save(company);
+    }
+
+    public BankAccount createAndSaveBankAccount(Account account){
+        Currency currency = Currency.getInstance(faker.currency().code());
+        BankAccount bankAccount = new BankAccount(account, creditCardNumberGenerator.generate(BIN_BOK, 15), faker.funnyName().name(), faker.lorem().paragraph(), currency, new Money(BigDecimal.ZERO, currency), new Money(BigDecimal.valueOf(100), currency), BankAccount.Status.ACTIVE);
+        return bankAccountRepository.save(bankAccount);
+    }
+    public BankAccount createAndSaveBankAccount(Account account, Currency currency){
+        BankAccount bankAccount = new BankAccount(account, creditCardNumberGenerator.generate(BIN_BOK, 15), faker.funnyName().name(), faker.lorem().paragraph(), currency, new Money(BigDecimal.ZERO, currency), new Money(BigDecimal.valueOf(100), currency), BankAccount.Status.ACTIVE);
+        return bankAccountRepository.save(bankAccount);
     }
 
 

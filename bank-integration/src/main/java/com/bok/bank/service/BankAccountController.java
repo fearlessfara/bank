@@ -3,7 +3,7 @@ package com.bok.bank.service;
 import com.bok.bank.dto.BankAccountInfoDTO;
 import com.bok.bank.dto.CheckPaymentAmountRequestDTO;
 import com.bok.bank.dto.CheckPaymentAmountResponseDTO;
-import com.bok.bank.dto.NewBankAccountDTO;
+import com.bok.bank.dto.BankAccountDTO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +22,6 @@ public interface BankAccountController {
     BankAccountInfoDTO bankAccountInfo(@RequestParam("accountId") Long accountId);
 
     @PostMapping("/")
-    BankAccountInfoDTO newBankAccount(@RequestParam("accountId") Long accountId, NewBankAccountDTO newBankAccountDTO);
+    BankAccountInfoDTO newBankAccount(@RequestParam("accountId") Long accountId, BankAccountDTO bankAccountDTO);
 
 }

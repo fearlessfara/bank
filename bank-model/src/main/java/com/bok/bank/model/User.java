@@ -127,6 +127,7 @@ public class User extends Account implements Serializable {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
+                .append(super.toString())
                 .append("middleName", middleName)
                 .append("surname", surname)
                 .append("gender", gender)

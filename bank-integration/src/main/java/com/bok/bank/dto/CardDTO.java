@@ -4,12 +4,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Currency;
 
-public class NewCardDTO {
+public class CardDTO {
     public String name;
     public String type;
     public String label;
 
-    public NewCardDTO() {
+    public CardDTO() {
         /** JENKINS */
     }
 

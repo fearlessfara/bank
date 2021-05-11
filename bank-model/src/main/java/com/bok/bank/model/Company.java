@@ -54,6 +54,7 @@ public class Company extends Account {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
+                .append(super.toString())
                 .append("vatNumber", vatNumber)
                 .toString();
     }

@@ -1,7 +1,7 @@
 package com.bok.bank.helper;
 
 import com.bok.bank.dto.CardInfoDTO;
-import com.bok.bank.dto.NewCardDTO;
+import com.bok.bank.dto.CardDTO;
 import com.bok.bank.model.Account;
 import com.bok.bank.model.BankAccount;
 import com.bok.bank.model.Card;
@@ -16,7 +16,6 @@ import java.time.Instant;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.bok.bank.repository.BankAccountRepository.Projections.BankAccountBasicInfo;
@@ -53,17 +52,17 @@ public class CardHelper {
         return cardRepository.findCvvByAccountIdAndCardId(accountId, cardId).orElseThrow(() -> new IllegalArgumentException("Card not found for cardId: " + cardId + " and accountId: " + accountId));
     }
 
-    public CardInfoDTO createCard(Long accountId, NewCardDTO newCardDTO) {
+    public CardInfoDTO createCard(Long accountId, CardDTO cardDTO) {
         BankAccountBasicInfo bankAccountBasicInfo = bankAccountRepository.findBankAccountBasicInfoByAccountId(accountId).orElseThrow(() -> new IllegalArgumentException("Account not found for id: " + accountId));
         Preconditions.checkArgument(bankAccountBasicInfo.getStatus().equals(BankAccount.Status.ACTIVE), "Fail creation card related to not active bank account, bankAccountId: " + bankAccountBasicInfo.getId());
-        Card newCard = new Card(newCardDTO.name, new Account(accountId), Card.CardStatus.TO_ACTIVATE, Card.Type.valueOf(newCardDTO.type.trim()), Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS),
-                creditCardNumberGenerator.generateToken(), newCardDTO.label, creditCardNumberGenerator.generate(BIN_BOK, 15), new BankAccount(bankAccountBasicInfo.getId()), creditCardNumberGenerator.generateCvv());
+        Card newCard = new Card(cardDTO.name, new Account(accountId), Card.CardStatus.TO_ACTIVATE, Card.Type.valueOf(cardDTO.type.trim()), Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS),
+                creditCardNumberGenerator.generateToken(), cardDTO.label, creditCardNumberGenerator.generate(BIN_BOK, 15), new BankAccount(bankAccountBasicInfo.getId()), creditCardNumberGenerator.generateCvv());
         newCard = cardRepository.save(newCard);
         return new CardInfoDTO(newCard.getId(), newCard.getName(), newCard.getCardStatus().name(), newCard.getType().name(), newCard.getLabel(), creditCardNumberGenerator.maskingPan(newCard.getMaskedPan()));
     }
 
-    public void checkNewCardDTOData(NewCardDTO newCardDTO) {
-        Preconditions.checkArgument(newCardDTO.name.trim().length() > 1, "Invalid card name : " + newCardDTO.name.trim());
-        Preconditions.checkArgument(newCardDTO.type.trim().equals(Card.Type.CREDIT.name()) || newCardDTO.type.trim().equals(Card.Type.DEBIT.name()) || newCardDTO.type.trim().equals(Card.Type.VIRTUAL.name()) || newCardDTO.type.trim().equals(Card.Type.ONE_USE.name()), "Invalid card type : " + newCardDTO.type.trim());
+    public void checkNewCardDTOData(CardDTO cardDTO) {
+        Preconditions.checkArgument(cardDTO.name.trim().length() > 1, "Invalid card name : " + cardDTO.name.trim());
+        Preconditions.checkArgument(cardDTO.type.trim().equals(Card.Type.CREDIT.name()) || cardDTO.type.trim().equals(Card.Type.DEBIT.name()) || cardDTO.type.trim().equals(Card.Type.VIRTUAL.name()) || cardDTO.type.trim().equals(Card.Type.ONE_USE.name()), "Invalid card type : " + cardDTO.type.trim());
     }
 }

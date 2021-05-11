@@ -1,7 +1,7 @@
 package com.bok.bank.service;
 
 import com.bok.bank.dto.CardInfoDTO;
-import com.bok.bank.dto.NewCardDTO;
+import com.bok.bank.dto.CardDTO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,5 +29,5 @@ public interface CardController {
     public Integer getCvv(@RequestParam Long accountId, @PathVariable Long cardId);
 
     @PostMapping("/")
-    public CardInfoDTO newCard(@RequestParam Long accountId, @RequestBody NewCardDTO newCardDTO);
+    public CardInfoDTO newCard(@RequestParam Long accountId, @RequestBody CardDTO cardDTO);
 }
