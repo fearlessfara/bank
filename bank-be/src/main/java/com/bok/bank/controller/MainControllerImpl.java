@@ -68,7 +68,6 @@ public class MainControllerImpl implements MainController {
         );
         accountRepository.saveAll(accounts);
         bankAccountRepository.saveAll(bankAccounts);
-        accountRepository.saveAll(accounts);
         cardRepository.saveAll(cards);
         return "populated";
     }

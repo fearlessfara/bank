@@ -49,6 +49,7 @@ spring:
 active-mq:
   bank-users: bank-accounts
   broker-url: tcp://localhost:61616
+  emails: emails
 spring:
   datasource:
     password: root
