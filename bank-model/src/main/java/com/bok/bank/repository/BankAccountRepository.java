@@ -13,6 +13,9 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, Long> 
 
     boolean existsByIBAN(String IBAN);
 
+    @Query("UPDATE BankAccount set status = :status where id= :bankAccountId")
+    int changeBankAccountStatus(Long bankAccountId, BankAccount.Status status);
+
     @Query("SELECT count(ba) > 0 FROM BankAccount ba where ba.account.id = :accountId and ba.status NOT LIKE 'DELETED'")
     boolean existsBankAccountNotDeletedByAccountId(Long accountId);
 

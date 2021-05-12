@@ -34,7 +34,7 @@ public class EmailHelper {
         emailMessage.subject = "BOK Bank Account Verification";
         emailMessage.text = "Click on the following link to complete the bank account creation: \n" +
                 baseUrl + generator.generateUrlServiceByResourceType(resourceType)+
-                "/verify?verificationToken=" + confirmationEmailHistory.getConfirmationToken() +
+                "/verify?accountId=" + account.getId() + "&verificationToken=" + confirmationEmailHistory.getConfirmationToken() +
                 "\n\nThe BOK Team.";
 
         emailMQProducer.send(emailMessage);

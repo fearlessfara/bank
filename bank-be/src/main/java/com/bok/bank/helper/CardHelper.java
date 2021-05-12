@@ -8,6 +8,7 @@ import com.bok.bank.model.Card;
 import com.bok.bank.repository.BankAccountRepository;
 import com.bok.bank.repository.CardRepository;
 import com.bok.bank.util.CreditCardNumberGenerator;
+import com.bok.bank.util.exception.BankAccountException;
 import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -53,7 +54,7 @@ public class CardHelper {
     }
 
     public CardInfoDTO createCard(Long accountId, CardDTO cardDTO) {
-        BankAccountBasicInfo bankAccountBasicInfo = bankAccountRepository.findBankAccountBasicInfoByAccountId(accountId).orElseThrow(() -> new IllegalArgumentException("Account not found for id: " + accountId));
+        BankAccountBasicInfo bankAccountBasicInfo = bankAccountRepository.findBankAccountBasicInfoByAccountId(accountId).orElseThrow(BankAccountException::new);
         Preconditions.checkArgument(bankAccountBasicInfo.getStatus().equals(BankAccount.Status.ACTIVE), "Fail creation card related to not active bank account, bankAccountId: " + bankAccountBasicInfo.getId());
         Card newCard = new Card(cardDTO.name, new Account(accountId), Card.CardStatus.TO_ACTIVATE, Card.Type.valueOf(cardDTO.type.trim()), Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS),
                 creditCardNumberGenerator.generateToken(), cardDTO.label, creditCardNumberGenerator.generate(BIN_BOK, 15), new BankAccount(bankAccountBasicInfo.getId()), creditCardNumberGenerator.generateCvv());
