@@ -5,14 +5,15 @@ import com.bok.bank.dto.CheckPaymentAmountResponseDTO;
 import com.bok.bank.dto.BankAccountDTO;
 import com.bok.bank.model.Account;
 import com.bok.bank.model.BankAccount;
+import com.bok.bank.model.Company;
 import com.bok.bank.model.ConfirmationEmailHistory;
+import com.bok.bank.model.User;
+import com.bok.bank.repository.AccountRepository;
 import com.bok.bank.repository.BankAccountRepository;
 import com.bok.bank.util.CreditCardNumberGenerator;
 import com.bok.bank.util.Generator;
 import com.bok.bank.util.Money;
 import com.google.common.base.Preconditions;
-import org.iban4j.CountryCode;
-import org.iban4j.Iban;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,8 @@ public class BankAccountHelper {
 
     @Autowired
     BankAccountRepository bankAccountRepository;
+    @Autowired
+    AccountRepository accountRepository;
 
     @Autowired
     CreditCardNumberGenerator creditCardNumberGenerator;
@@ -67,14 +70,31 @@ public class BankAccountHelper {
     public String createBankAccount(Long accountId, BankAccountDTO bankAccountDTO) {
         BankAccount bankAccount = new BankAccount(new Account(accountId), generator.generateIBAN(), bankAccountDTO.name, bankAccountDTO.label, bankAccountDTO.currency, new Money(BigDecimal.ZERO, bankAccountDTO.currency), new Money(BigDecimal.ZERO, bankAccountDTO.currency), BankAccount.Status.PENDING);
         bankAccount = bankAccountRepository.save(bankAccount);
-        emailHelper.sendAccountConfirmationEmail(bankAccount.getAccount(), bankAccount.getId(), ConfirmationEmailHistory.ResourceType.BANK_ACCOUNT);
+        Account account = accountRepository.findById(accountId).orElseThrow(() -> new IllegalStateException("account not count for accountId: " + accountId));
+        account.setBankAccount(bankAccount);
+        account = accountRepository.save(account);
+        emailHelper.sendAccountConfirmationEmail(account, bankAccount.getId(), ConfirmationEmailHistory.ResourceType.BANK_ACCOUNT);
         return "Please check your mail and confirm bank account creation";
     }
 
     public void checkBankAccountInfoForCreation(Long accountId, BankAccountDTO bankAccountDTO) {
         Preconditions.checkArgument(!bankAccountRepository.existsBankAccountNotDeletedByAccountId(accountId), "This account have already a bank account with us; accountId: " + accountId);
-        Preconditions.checkArgument(bankAccountDTO.name.trim().length()>1, "Name of bank account not valid");
+        Preconditions.checkArgument(bankAccountDTO.name.trim().length() > 1, "Name of bank account not valid");
         Preconditions.checkNotNull(bankAccountDTO.currency, "Cannot create bank account without currency");
+    }
+
+    private void updateAccountAndSandEmail(Long accountId, BankAccount bankAccount) {
+        if (accountRepository.findAccountTypeById(accountId).equals(Account.Type.INDIVIDUAL_USER)) {
+            User account = (User) accountRepository.findById(accountId).orElseThrow(() -> new IllegalStateException("account not count for accountId: " + accountId));
+            account.setBankAccount(bankAccount);
+            account = accountRepository.save(account);
+            emailHelper.sendAccountConfirmationEmail(account, bankAccount.getId(), ConfirmationEmailHistory.ResourceType.BANK_ACCOUNT);
+        } else {
+            Company account = (Company) accountRepository.findById(accountId).orElseThrow(() -> new IllegalStateException("account not count for accountId: " + accountId));
+            account.setBankAccount(bankAccount);
+            account = accountRepository.save(account);
+            emailHelper.sendAccountConfirmationEmail(account, bankAccount.getId(), ConfirmationEmailHistory.ResourceType.BANK_ACCOUNT);
+        }
     }
 
 

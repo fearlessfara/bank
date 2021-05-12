@@ -6,10 +6,12 @@ import com.bok.bank.model.ConfirmationEmailHistory;
 import com.bok.bank.repository.ConfirmationEmailHistoryRepository;
 import com.bok.bank.util.Generator;
 import com.bok.integration.EmailMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class EmailHelper {
 
@@ -26,6 +28,7 @@ public class EmailHelper {
     public void sendAccountConfirmationEmail(Account account, Long resourceId, ConfirmationEmailHistory.ResourceType resourceType) {
         ConfirmationEmailHistory confirmationEmailHistory = new ConfirmationEmailHistory(account, resourceId, resourceType, generator.generateConfirmationToken());
         confirmationEmailHistory = confirmationEmailHistoryRepository.save(confirmationEmailHistory);
+        log.info("email: {}", account.getEmail());
         EmailMessage emailMessage = new EmailMessage();
         emailMessage.to = account.getEmail();
         emailMessage.subject = "BOK Bank Account Verification";
