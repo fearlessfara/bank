@@ -7,6 +7,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -22,7 +24,8 @@ public class User extends Account implements Serializable {
     @Column
     private String surname;
 
-    @Column
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     @Column(unique = true, updatable = false, length = 25)

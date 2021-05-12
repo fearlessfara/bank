@@ -22,15 +22,15 @@ import java.time.Instant;
 @Entity
 public class Transaction implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column
     @Enumerated(EnumType.STRING)
     public Type type;
     @Column
     @Enumerated(EnumType.STRING)
     public Status status;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @ManyToOne
     private BankAccount fromBankAccount;
     @ManyToOne
