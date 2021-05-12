@@ -66,9 +66,9 @@ public class ExchangeData {
     }
 
     /**
-     * update currencies exchange value every 5H
+     * update currencies exchange value every 6H
      */
-    @Scheduled(fixedDelay = 18000000, initialDelay = 1000)
+    @Scheduled(fixedDelay = 21600000, initialDelay = 1000)
     public void updateDatabaseCurrenciesExchange() {
         if(scheduledFor.equals("test")){
             log.info("We are in test");
