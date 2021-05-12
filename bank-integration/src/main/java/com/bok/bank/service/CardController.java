@@ -28,6 +28,9 @@ public interface CardController {
     @GetMapping("/getCvv/{cardId}")
     public Integer getCvv(@RequestParam Long accountId, @PathVariable Long cardId);
 
-    @PostMapping("/")
-    public CardInfoDTO newCard(@RequestParam Long accountId, @RequestBody CardDTO cardDTO);
+    @PostMapping("/create")
+    public String createCard(@RequestParam Long accountId, @RequestBody CardDTO cardDTO);
+
+    @GetMapping("/verify")
+    CardInfoDTO verify(@RequestParam("accountId") Long accountId, String confirmationToken);
 }

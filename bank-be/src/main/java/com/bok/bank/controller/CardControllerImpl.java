@@ -5,6 +5,7 @@ import com.bok.bank.dto.CardDTO;
 import com.bok.bank.helper.CardHelper;
 import com.bok.bank.service.CardController;
 import com.google.common.base.Preconditions;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +19,13 @@ public class CardControllerImpl implements CardController {
 
     @Override
     public List<CardInfoDTO> allCards(Long accountId) {
-        return cardHelper.findAllCardsByAccount(accountId);
+        return cardHelper.getAllCards(accountId);
     }
 
     @Override
     public CardInfoDTO findCard(Long accountId, Long cardId) {
         Preconditions.checkNotNull(cardId, "cardId must not be null");
-        return cardHelper.findCardInfoById(accountId, cardId);
+        return cardHelper.getCardInfo(accountId, cardId);
     }
 
     @Override
@@ -40,8 +41,15 @@ public class CardControllerImpl implements CardController {
     }
 
     @Override
-    public CardInfoDTO newCard(Long accountId, CardDTO cardDTO) {
+    public String createCard(Long accountId, CardDTO cardDTO) {
         cardHelper.checkNewCardDTOData(cardDTO);
         return cardHelper.createCard(accountId, cardDTO);
+    }
+
+    @Override
+    public CardInfoDTO verify(Long accountId, String confirmationToken) {
+        Preconditions.checkArgument(StringUtils.isNotBlank(confirmationToken.trim()), "configurationToken is blank");
+        return cardHelper.verifyCard(accountId, confirmationToken);
+
     }
 }

@@ -5,9 +5,7 @@ import com.bok.bank.dto.CheckPaymentAmountResponseDTO;
 import com.bok.bank.dto.BankAccountDTO;
 import com.bok.bank.model.Account;
 import com.bok.bank.model.BankAccount;
-import com.bok.bank.model.Company;
 import com.bok.bank.model.ConfirmationEmailHistory;
-import com.bok.bank.model.User;
 import com.bok.bank.repository.AccountRepository;
 import com.bok.bank.repository.BankAccountRepository;
 import com.bok.bank.repository.ConfirmationEmailHistoryRepository;
@@ -16,7 +14,6 @@ import com.bok.bank.util.Generator;
 import com.bok.bank.util.Money;
 import com.bok.bank.util.exception.AccountException;
 import com.bok.bank.util.exception.BankAccountException;
-import com.bok.bank.util.exception.ConfirmationTokenException;
 import com.bok.bank.util.exception.ErrorCode;
 import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +23,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import static com.bok.bank.model.ConfirmationEmailHistory.ResourceType.BANK_ACCOUNT;
+import static com.bok.bank.model.ConfirmationEmailHistory.ResourceType.CARD;
 
 @Component
 public class BankAccountHelper {
@@ -49,6 +46,8 @@ public class BankAccountHelper {
 
     @Autowired
     EmailHelper emailHelper;
+    @Autowired
+    ConfirmationEmailHelper confirmationEmailHelper;
 
     @Autowired
     Generator generator;
@@ -84,14 +83,13 @@ public class BankAccountHelper {
         Account account = accountRepository.findById(accountId).orElseThrow(AccountException::new);
         account.setBankAccount(bankAccount);
         account = accountRepository.save(account);
-        emailHelper.sendAccountConfirmationEmail(account, bankAccount.getId(), BANK_ACCOUNT);
+        emailHelper.sendBankAccountConfirmationEmail(account, bankAccount);
         return "Please check your mail and confirm bank account creation";
     }
 
     public BankAccountInfoDTO verifyBankAccount(Long accountId, String confirmationToken) {
-        ConfirmationEmailHistory confirmationEmailHistory = confirmationEmailHistoryRepository.findByConfirmationTokenAndResourceType(confirmationToken, BANK_ACCOUNT).orElseThrow(ConfirmationTokenException::new);
-        Preconditions.checkArgument(confirmationEmailHistory.getAccount().getId().equals(accountId), "Operation unauthorized from your account");
-        bankAccountRepository.changeBankAccountStatus(confirmationEmailHistory.getResourceId(), BankAccount.Status.ACTIVE);
+        ConfirmationEmailHistory confirmationEmailHistory = confirmationEmailHelper.findAndVerifyConfirmationToken(accountId, confirmationToken, CARD);
+        Preconditions.checkArgument(bankAccountRepository.changeBankAccountStatus(confirmationEmailHistory.getResourceId(), BankAccount.Status.ACTIVE) < 0, "Bank account confirmation is failed, please try again");
         return getBankAccountInfo(accountId);
     }
 
@@ -100,20 +98,5 @@ public class BankAccountHelper {
         Preconditions.checkArgument(bankAccountDTO.name.trim().length() > 1, "Name of bank account not valid");
         Preconditions.checkNotNull(bankAccountDTO.currency, "Cannot create bank account without currency");
     }
-
-    private void updateAccountAndSandEmail(Long accountId, BankAccount bankAccount) {
-        if (accountRepository.findAccountTypeById(accountId).equals(Account.Type.INDIVIDUAL_USER)) {
-            User account = (User) accountRepository.findById(accountId).orElseThrow(AccountException::new);
-            account.setBankAccount(bankAccount);
-            account = accountRepository.save(account);
-            emailHelper.sendAccountConfirmationEmail(account, bankAccount.getId(), BANK_ACCOUNT);
-        } else {
-            Company account = (Company) accountRepository.findById(accountId).orElseThrow(AccountException::new);
-            account.setBankAccount(bankAccount);
-            account = accountRepository.save(account);
-            emailHelper.sendAccountConfirmationEmail(account, bankAccount.getId(), BANK_ACCOUNT);
-        }
-    }
-
 
 }

@@ -2,42 +2,57 @@ package com.bok.bank.helper;
 
 import com.bok.bank.messaging.EmailMQProducer;
 import com.bok.bank.model.Account;
+import com.bok.bank.model.BankAccount;
+import com.bok.bank.model.Card;
 import com.bok.bank.model.ConfirmationEmailHistory;
-import com.bok.bank.repository.ConfirmationEmailHistoryRepository;
-import com.bok.bank.util.Generator;
 import com.bok.integration.EmailMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import static com.bok.bank.model.ConfirmationEmailHistory.ResourceType.BANK_ACCOUNT;
+import static com.bok.bank.model.ConfirmationEmailHistory.ResourceType.CARD;
+
 @Slf4j
 @Component
 public class EmailHelper {
 
     @Autowired
-    Generator generator;
-    @Autowired
     EmailMQProducer emailMQProducer;
+
     @Autowired
-    ConfirmationEmailHistoryRepository confirmationEmailHistoryRepository;
+    ConfirmationEmailHelper confirmationEmailHelper;
+
     @Value("${server.base-url}")
     String baseUrl;
 
 
-    public void sendAccountConfirmationEmail(Account account, Long resourceId, ConfirmationEmailHistory.ResourceType resourceType) {
-        ConfirmationEmailHistory confirmationEmailHistory = new ConfirmationEmailHistory(account, resourceId, resourceType, generator.generateConfirmationToken());
-        confirmationEmailHistory = confirmationEmailHistoryRepository.save(confirmationEmailHistory);
+    public void sendBankAccountConfirmationEmail(Account account, BankAccount bankAccount) {
+        ConfirmationEmailHistory confirmationEmailHistory = confirmationEmailHelper.saveConfirmationEmail(account, bankAccount.getId(), BANK_ACCOUNT);
         log.info("email: {}", account.getEmail());
         EmailMessage emailMessage = new EmailMessage();
         emailMessage.to = account.getEmail();
-        emailMessage.subject = "BOK Bank Account Verification";
-        emailMessage.text = "Click on the following link to complete the bank account creation: \n" +
-                baseUrl + generator.generateUrlServiceByResourceType(resourceType)+
-                "/verify?accountId=" + account.getId() + "&verificationToken=" + confirmationEmailHistory.getConfirmationToken() +
+        emailMessage.subject = "BOK - Bank Account activation";
+        emailMessage.text = "Dear "+ account.getName() + ",\nClick on the following link to complete creation of the bank account named " + bankAccount.getName() + "\n" +
+                baseUrl + "/bankAccount/verify?accountId=" + account.getId() + "&verificationToken=" + confirmationEmailHistory.getConfirmationToken() +
                 "\n\nThe BOK Team.";
 
         emailMQProducer.send(emailMessage);
     }
+    public void sendCardConfirmationEmail(Account account, Card card) {
+        ConfirmationEmailHistory confirmationEmailHistory = confirmationEmailHelper.saveConfirmationEmail(account, card.getId(), CARD);
+        log.info("email: {}", account.getEmail());
+        EmailMessage emailMessage = new EmailMessage();
+        emailMessage.to = account.getEmail();
+        emailMessage.subject = "BOK - Card activation";
+        emailMessage.text = "Dear "+ account.getName() + ",\nClick on the following link to complete creation of the card named " + card.getName() + "\n" +
+                baseUrl + "/card/verify?accountId=" + account.getId() + "&verificationToken=" + confirmationEmailHistory.getConfirmationToken() +
+                "\n\nThe BOK Team.";
+
+        emailMQProducer.send(emailMessage);
+    }
+
+
 
 }

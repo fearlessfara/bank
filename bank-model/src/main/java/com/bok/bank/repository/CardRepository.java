@@ -4,7 +4,6 @@ import com.bok.bank.model.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.Currency;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +24,9 @@ public interface CardRepository extends JpaRepository<Card, Long> {
     @Query("SELECT c.cvv " +
             "FROM Card c WHERE c.account.id = :accountId AND c.id = :cardId")
     Optional<Integer> findCvvByAccountIdAndCardId(Long accountId, Long cardId);
+
+    @Query("UPDATE Card set cardStatus = :status where id= :cardId")
+    int changeCardStatus(Long cardId, Card.CardStatus status);
 
     class Projection {
         public interface CardInfo {
