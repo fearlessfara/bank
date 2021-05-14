@@ -58,7 +58,7 @@ public class AccountConsumerTest {
     }
 
     @Test
-    public void queryTest(){
+    public void queryTest() {
         assertEquals(cardRepository.findAll().size(), 2);
     }
 

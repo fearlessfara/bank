@@ -31,11 +31,13 @@ public interface CardRepository extends JpaRepository<Card, Long> {
     class Projection {
         public interface CardInfo {
             Long getCardId();
+
             String getName();
 
             Card.CardStatus getCardStatus();
 
             Card.Type getType();
+
             String getLabel();
 
             String getMaskedPan();

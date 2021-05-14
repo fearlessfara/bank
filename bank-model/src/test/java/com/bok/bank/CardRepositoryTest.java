@@ -32,7 +32,7 @@ public class CardRepositoryTest {
     }
 
     @Test
-    public void queryTest(){
+    public void queryTest() {
         assertEquals(cardRepository.findAll().size(), 2);
     }
 }

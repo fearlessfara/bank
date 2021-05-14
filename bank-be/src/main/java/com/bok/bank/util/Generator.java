@@ -21,23 +21,29 @@ public class Generator {
     @Value("${bank-info.bank-code}")
     private String BANK_CODE;
 
-    public String generateIBAN(){
+    public String generateIBAN() {
         Iban iban = new Iban.Builder()
                 .countryCode(CountryCode.IT)
                 .bankCode(BANK_CODE)
                 .buildRandom();
         return bankAccountRepository.existsByIBAN(iban.toFormattedString()) ? generateIBAN() : iban.toFormattedString();
     }
-    public String generateConfirmationToken(){
+
+    public String generateConfirmationToken() {
         String confirmationToken = UUID.randomUUID().toString();
         return confirmationEmailHistoryRepository.existsByConfirmationToken(confirmationToken) ? generateConfirmationToken() : confirmationToken;
     }
-    public String generateUrlServiceByResourceType(ConfirmationEmailHistory.ResourceType resourceType){
-        switch (resourceType){
-            case CARD:  return "/card";
-            case TRANSACTION: return "/transaction";
-            case BANK_ACCOUNT: return "/bankAccount";
-            default: throw new IllegalStateException("ResourceType Not found");
+
+    public String generateUrlServiceByResourceType(ConfirmationEmailHistory.ResourceType resourceType) {
+        switch (resourceType) {
+            case CARD:
+                return "/card";
+            case TRANSACTION:
+                return "/transaction";
+            case BANK_ACCOUNT:
+                return "/bankAccount";
+            default:
+                throw new IllegalStateException("ResourceType Not found");
         }
     }
 }

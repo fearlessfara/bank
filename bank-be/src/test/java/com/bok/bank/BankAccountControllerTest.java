@@ -94,6 +94,7 @@ public class BankAccountControllerTest {
         assertEquals(checkPaymentAmount.reason, "");
         assertTrue(checkPaymentAmount.available);
     }
+
     @Test
     public void checkPaymentAmountGreaterWithAnotherCurrencyTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
@@ -102,6 +103,7 @@ public class BankAccountControllerTest {
         assertEquals(checkPaymentAmount.reason, "Amount not available");
         assertFalse(checkPaymentAmount.available);
     }
+
     @Test
     public void checkPaymentAmountWithNotCommonCurrencyTest() {
         User user = modelTestUtil.createAndSaveUser(17L);

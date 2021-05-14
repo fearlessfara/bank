@@ -63,7 +63,7 @@ public class ModelTestUtil {
                         "via le mani dal ferro", "69/c", "Gennaro", "Faraone", User.Gender.M, "CSTFRN99B44D508Y", "ViBBo Violenza", "Italy", LocalDate.of(1999, 8, 21).atStartOfDay().toInstant(ZoneOffset.UTC)),
                 new User(4999L, "Paolo", "paolo.pio@gmail.com", "3911172150", "+39", Account.Status.ACTIVE, "Italy", "Apulia", "San Marco In Lamis", "00001",
                         "via le mani dai taralli", "00/c", "Pio", "Bevilacqua", User.Gender.M, "PLPBLQ99O99D508Y", "San Giovanni Rotondo", "Italy", LocalDate.of(1999, 10, 2).atStartOfDay().toInstant(ZoneOffset.UTC)),
-                new Company(5000L,"Soldo", "soldo.soldo@soldo.com", "1234567890", "+39", Account.Status.ACTIVE, "Italy", "Lazio", "Rome", "00159",
+                new Company(5000L, "Soldo", "soldo.soldo@soldo.com", "1234567890", "+39", Account.Status.ACTIVE, "Italy", "Lazio", "Rome", "00159",
                         "via le mani dal soldo", "2/c", "123422342"),
                 new Company(5001L, "Softlab", "soft.lab@softlab.com", "1234562290", "+39", Account.Status.ACTIVE, "Italy", "Lazio", "Rome", "00159",
                         "via le mani dal bell stu sit", "13/c", "123499342")
@@ -120,7 +120,7 @@ public class ModelTestUtil {
 
         List<Card> cards = Arrays.asList(
                 new Card("firstCard", accounts.stream().filter(account -> account.getName().equals("Domenico")).findFirst().get(), Card.CardStatus.ACTIVE, Card.Type.DEBIT, Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS), "1352462", "prova", "*1234", bankAccounts.stream().filter(bankAccount -> bankAccount.getAccount().getName().equals("Domenico")).findFirst().get(), 123),
-                new Card("firstVirtualCard", accounts.stream().filter(account -> account.getName().equals("Chris")).findFirst().get(), Card.CardStatus.ACTIVE, Card.Type.VIRTUAL, Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS), "1352472", "provaV", "*1235", bankAccounts.stream().filter(bankAccount -> bankAccount.getAccount().getName().equals("Chris")).findFirst().get(),371)
+                new Card("firstVirtualCard", accounts.stream().filter(account -> account.getName().equals("Chris")).findFirst().get(), Card.CardStatus.ACTIVE, Card.Type.VIRTUAL, Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS), "1352472", "provaV", "*1235", bankAccounts.stream().filter(bankAccount -> bankAccount.getAccount().getName().equals("Chris")).findFirst().get(), 371)
         );
 
         cardRepository.saveAll(cards);
@@ -136,26 +136,27 @@ public class ModelTestUtil {
         exchangeCurrencyValueRepository.deleteAll();
     }
 
-    public User createAndSaveUser(Long accountId){
+    public User createAndSaveUser(Long accountId) {
         User user = new User(accountId, faker.name().firstName(), faker.internet().emailAddress(), faker.phoneNumber().cellPhone(), "+39",
                 Account.Status.ACTIVE, faker.address().country(), "RD", faker.address().city(), faker.address().zipCode(), faker.address().streetAddress(), faker.address().streetAddressNumber(), "",
-                faker.name().lastName(), User.Gender.M, faker.name().firstName().toUpperCase().substring(0,3)+faker.name().lastName().toUpperCase().substring(0,3)+"99"+"D"+faker.date().birthday().getDay()+"D512Y", faker.country().capital(), faker.country().name(), faker.date().birthday().toInstant());
+                faker.name().lastName(), User.Gender.M, faker.name().firstName().toUpperCase().substring(0, 3) + faker.name().lastName().toUpperCase().substring(0, 3) + "99" + "D" + faker.date().birthday().getDay() + "D512Y", faker.country().capital(), faker.country().name(), faker.date().birthday().toInstant());
         return accountRepository.save(user);
     }
 
-    public Company createAndSaveCompany(Long accountId){
+    public Company createAndSaveCompany(Long accountId) {
         Company company = new Company(accountId, faker.company().name(), faker.internet().emailAddress(), faker.phoneNumber().phoneNumber(), "+39",
                 Account.Status.ACTIVE, faker.address().country(), "RD", faker.address().city(), faker.address().zipCode(), faker.address().streetAddress(), faker.address().streetAddressNumber(),
                 faker.idNumber().valid());
         return accountRepository.save(company);
     }
 
-    public BankAccount createAndSaveBankAccount(Account account){
+    public BankAccount createAndSaveBankAccount(Account account) {
         Currency currency = Currency.getInstance(faker.currency().code());
         BankAccount bankAccount = new BankAccount(account, creditCardNumberGenerator.generate(BIN_BOK, 15), faker.funnyName().name(), faker.lorem().paragraph(), currency, new Money(BigDecimal.ZERO, currency), new Money(BigDecimal.valueOf(100), currency), BankAccount.Status.ACTIVE);
         return bankAccountRepository.save(bankAccount);
     }
-    public BankAccount createAndSaveBankAccount(Account account, Currency currency){
+
+    public BankAccount createAndSaveBankAccount(Account account, Currency currency) {
         BankAccount bankAccount = new BankAccount(account, creditCardNumberGenerator.generate(BIN_BOK, 15), faker.funnyName().name(), faker.lorem().paragraph(), currency, new Money(BigDecimal.ZERO, currency), new Money(BigDecimal.valueOf(100), currency), BankAccount.Status.ACTIVE);
         return bankAccountRepository.save(bankAccount);
     }

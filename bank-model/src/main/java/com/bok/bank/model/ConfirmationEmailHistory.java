@@ -120,7 +120,7 @@ public class ConfirmationEmailHistory implements Serializable {
                 .toString();
     }
 
-    public enum ResourceType{
+    public enum ResourceType {
         BANK_ACCOUNT, CARD, TRANSACTION
     }
 

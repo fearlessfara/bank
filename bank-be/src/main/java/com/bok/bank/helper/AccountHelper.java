@@ -6,8 +6,8 @@ import com.bok.bank.model.Company;
 import com.bok.bank.model.User;
 import com.bok.bank.repository.AccountRepository;
 import com.bok.bank.repository.AccountRepository.Projection.AccountInfo;
-import com.bok.integration.AccountCreationMessage;
 import com.google.common.base.Preconditions;
+import com.bok.parent.integration.message.AccountCreationMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,22 +19,22 @@ public class AccountHelper {
     @Autowired
     AccountRepository accountRepository;
 
-    public AccountInfoDTO getAccountInfo(Long accountId){
+    public AccountInfoDTO getAccountInfo(Long accountId) {
         AccountInfo accountInfo = accountRepository.findAccountInfoByAccountId(accountId)
-                .orElseThrow(() -> new IllegalArgumentException("Account not found for accountId "+ accountId));
+                .orElseThrow(() -> new IllegalArgumentException("Account not found for accountId " + accountId));
         String fullName;
         log.info(accountInfo.toString());
-        if(accountInfo.getType().equals(Account.Type.INDIVIDUAL_USER)) {
-               fullName = accountInfo.getName() + ((accountInfo.getMiddleName() != null) ? " " + accountInfo.getMiddleName() : "") + " " + accountInfo.getSurname();
-        } else{
+        if (accountInfo.getType().equals(Account.Type.INDIVIDUAL_USER)) {
+            fullName = accountInfo.getName() + ((accountInfo.getMiddleName() != null) ? " " + accountInfo.getMiddleName() : "") + " " + accountInfo.getSurname();
+        } else {
             fullName = accountInfo.getName();
         }
         return new AccountInfoDTO(accountInfo.getEmail(), accountInfo.getIcc(), accountInfo.getMobile(), accountInfo.getStatus().name(), accountInfo.getType().name(), fullName);
     }
 
-    public void createAccount(AccountCreationMessage message){
+    public void createAccount(AccountCreationMessage message) {
         Preconditions.checkNotNull(message, "Message of user creation is null: {}", message);
-        if(message.business){
+        if (message.business) {
             Company company = new Company(message.accountId, message.name, message.email, message.mobile, message.icc, Account.Status.PENDING, message.country, message.county, message.city,
                     message.postalCode, message.street, message.houseNumber, message.vatNumber);
             accountRepository.save(company);

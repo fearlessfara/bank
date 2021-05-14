@@ -29,12 +29,12 @@ public class AccountControllerTest {
     AccountController accountController;
 
     @Before
-    public void init(){
+    public void init() {
         modelTestUtil.clearAll();
     }
 
     @Test
-    public void profileInfoUserTest(){
+    public void profileInfoUserTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
         log.info(user.toString());
 
@@ -46,8 +46,9 @@ public class AccountControllerTest {
         assertEquals(accountInfoDTO.type, user.getType().name());
         assertEquals(accountInfoDTO.fullName, user.getName() + " " + user.getMiddleName() + " " + user.getSurname());
     }
+
     @Test
-    public void profileInfoCompanyTest(){
+    public void profileInfoCompanyTest() {
         Company company = modelTestUtil.createAndSaveCompany(17L);
         log.info(company.toString());
 
@@ -61,11 +62,12 @@ public class AccountControllerTest {
     }
 
     @Test
-    public void profileInfoWithIdNotPresentTest(){
+    public void profileInfoWithIdNotPresentTest() {
         assertThrows(IllegalArgumentException.class, () -> accountController.profileInfo(17L));
     }
+
     @Test
-    public void profileInfoWithIdNotPassedTest(){
+    public void profileInfoWithIdNotPassedTest() {
         assertThrows(NullPointerException.class, () -> accountController.profileInfo(null));
     }
 

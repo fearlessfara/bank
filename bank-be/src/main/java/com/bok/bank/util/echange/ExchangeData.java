@@ -70,7 +70,7 @@ public class ExchangeData {
      */
     @Scheduled(fixedDelay = 21600000, initialDelay = 1000)
     public void updateDatabaseCurrenciesExchange() {
-        if(scheduledFor.equals("test")){
+        if (scheduledFor.equals("test")) {
             log.info("We are in test");
             return;
         }
