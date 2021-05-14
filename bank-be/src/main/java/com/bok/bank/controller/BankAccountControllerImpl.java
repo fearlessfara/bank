@@ -13,6 +13,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.Currency;
+
 
 @Service
 @Slf4j
@@ -26,7 +29,9 @@ public class BankAccountControllerImpl implements BankAccountController {
         log.info(request.amount.toString() + " " + request.currency);
         Preconditions.checkNotNull(accountId, "accountId is null");
         Preconditions.checkNotNull(request.amount, "Amount passed is null");
+        Preconditions.checkArgument(request.amount.intValue() > 0, "Amount passed is ZERO or negative");
         Preconditions.checkNotNull(request.currency, "Currency passed is null");
+        Preconditions.checkArgument(Currency.getAvailableCurrencies().contains(request.currency), "Currency passed is not valid");
         return bankAccountHelper.isAmountAvailable(accountId, Money.money(request.amount, request.currency));
     }
 
