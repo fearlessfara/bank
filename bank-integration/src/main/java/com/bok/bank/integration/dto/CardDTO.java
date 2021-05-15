@@ -2,8 +2,6 @@ package com.bok.bank.integration.dto;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.util.Currency;
-
 public class CardDTO {
     public String name;
     public String type;

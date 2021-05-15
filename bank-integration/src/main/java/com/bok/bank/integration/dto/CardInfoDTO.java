@@ -3,8 +3,6 @@ package com.bok.bank.integration.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.util.Currency;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CardInfoDTO {
     public Long cardId;
