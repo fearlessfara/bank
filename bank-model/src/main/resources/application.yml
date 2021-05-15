@@ -6,30 +6,6 @@ spring:
   jpa:
     open-in-view: false
     show-sql: false
-  profiles:
-    active: "external"
-exchange-currency:
-  endpoint: https://v6.exchangerate-api.com/v6/
-  api-key: ceb94d443f6398dd5e640cd1
-  base-currency: USD
-bank-info:
-  bank-bin: "593796"
-  bank-code: "59379"
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://eureka:8761/eureka
-  instance:
-    lease-renewal-interval-in-seconds: 30
-
----
-#External DB
-active-mq:
-  bank-users: bank-accounts
-  broker-url: tcp://dev.faraone.ovh:61616
-  emails: emails
-spring:
-  jpa:
     hibernate:
       ddl-auto: update
     properties:
@@ -40,32 +16,20 @@ spring:
     url: jdbc:mariadb://dev.faraone.ovh:3307/bank
     username: developer
     password: password4testing
-  config:
-    activate:
-      on-profile: external
-
----
-##local mySQL config
+exchange-currency:
+  endpoint: https://v6.exchangerate-api.com/v6/
+  api-key: ceb94d443f6398dd5e640cd1
+  base-currency: USD
+bank-info:
+  bank-bin: "593796"
+  bank-code: "59379"
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://dev.faraone.ovh:8761/eureka
+  instance:
+    lease-renewal-interval-in-seconds: 30
 active-mq:
   bank-users: bank-accounts
-  broker-url: tcp://localhost:61616
+  broker-url: tcp://dev.faraone.ovh:61616
   emails: emails
-spring:
-  datasource:
-    password: root
-    url: jdbc:mysql://localhost:3306/bank?serverTimezone=UTC&createDatabaseIfNotExist=true
-    username: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-
-    show-sql: true
-    database: mysql
-    generate-ddl: true
-  config:
-    activate:
-      on-profile: mysql
