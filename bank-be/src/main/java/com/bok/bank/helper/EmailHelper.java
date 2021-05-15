@@ -1,10 +1,10 @@
 package com.bok.bank.helper;
 
+import com.bok.bank.messaging.EmailMQProducer;
 import com.bok.bank.model.Account;
 import com.bok.bank.model.BankAccount;
 import com.bok.bank.model.Card;
 import com.bok.bank.model.ConfirmationEmailHistory;
-import com.bok.bank.messaging.EmailMQProducer;
 import com.bok.parent.integration.message.EmailMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

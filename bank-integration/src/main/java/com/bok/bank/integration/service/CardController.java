@@ -1,7 +1,7 @@
 package com.bok.bank.integration.service;
 
-import com.bok.bank.integration.dto.CardInfoDTO;
 import com.bok.bank.integration.dto.CardDTO;
+import com.bok.bank.integration.dto.CardInfoDTO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

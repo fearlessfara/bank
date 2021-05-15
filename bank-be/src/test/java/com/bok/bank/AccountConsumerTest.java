@@ -1,14 +1,14 @@
 package com.bok.bank;
 
-import com.bok.bank.messaging.AccountConsumer;
 import com.bok.bank.helper.AccountHelper;
+import com.bok.bank.messaging.AccountConsumer;
 import com.bok.bank.model.User;
 import com.bok.bank.producer.Producer;
 import com.bok.bank.repository.CardRepository;
 import com.bok.parent.integration.message.AccountCreationMessage;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
