@@ -2,9 +2,9 @@ package com.bok.bank;
 
 import com.bok.bank.repository.CardRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.runner.RunWith;
-import org.junit.Test;
 import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;

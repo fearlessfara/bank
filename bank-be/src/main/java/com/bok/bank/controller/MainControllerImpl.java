@@ -1,7 +1,6 @@
 package com.bok.bank.controller;
 
-import com.bok.bank.util.Constants;
-import com.bok.bank.util.CreditCardNumberGenerator;
+import com.bok.bank.integration.service.MainController;
 import com.bok.bank.model.Account;
 import com.bok.bank.model.BankAccount;
 import com.bok.bank.model.Card;
@@ -10,7 +9,8 @@ import com.bok.bank.model.User;
 import com.bok.bank.repository.AccountRepository;
 import com.bok.bank.repository.BankAccountRepository;
 import com.bok.bank.repository.CardRepository;
-import com.bok.bank.integration.service.MainController;
+import com.bok.bank.util.Constants;
+import com.bok.bank.util.CreditCardNumberGenerator;
 import com.bok.bank.util.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

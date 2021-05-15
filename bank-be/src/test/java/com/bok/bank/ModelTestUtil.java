@@ -1,7 +1,5 @@
 package com.bok.bank;
 
-import com.bok.bank.util.Constants;
-import com.bok.bank.util.CreditCardNumberGenerator;
 import com.bok.bank.model.Account;
 import com.bok.bank.model.BankAccount;
 import com.bok.bank.model.Card;
@@ -14,6 +12,8 @@ import com.bok.bank.repository.BankAccountRepository;
 import com.bok.bank.repository.CardRepository;
 import com.bok.bank.repository.ExchangeCurrencyValueHistoryRepository;
 import com.bok.bank.repository.ExchangeCurrencyValueRepository;
+import com.bok.bank.util.Constants;
+import com.bok.bank.util.CreditCardNumberGenerator;
 import com.bok.bank.util.Money;
 import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
