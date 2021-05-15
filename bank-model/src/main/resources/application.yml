@@ -33,3 +33,5 @@ active-mq:
   bank-users: bank-accounts
   broker-url: tcp://dev.faraone.ovh:61616
   emails: emails
+  bank-deposit: bank-deposit
+  bank-withdrawal: bank-withdrawal
