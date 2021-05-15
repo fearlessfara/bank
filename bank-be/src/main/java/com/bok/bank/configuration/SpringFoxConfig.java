@@ -1,4 +1,4 @@
-package com.bok.bank.util;
+package com.bok.bank.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
