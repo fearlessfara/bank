@@ -35,3 +35,4 @@ active-mq:
   emails: emails
   bank-deposit: bank-deposit
   bank-withdrawal: bank-withdrawal
+  bank-account-deletion: bank-account-deletion

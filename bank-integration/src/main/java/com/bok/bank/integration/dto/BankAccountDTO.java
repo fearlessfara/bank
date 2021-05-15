@@ -1,31 +1,23 @@
 package com.bok.bank.integration.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Currency;
 
+@ToString
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BankAccountDTO {
     public String name;
     public String label;
     public Currency currency;
-
-    public BankAccountDTO() {
-    }
-
-    public BankAccountDTO(String name, String label, Currency currency) {
-        this.name = name;
-        this.label = label;
-        this.currency = currency;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("name", name)
-                .append("label", label)
-                .append("currency", currency)
-                .toString();
-    }
 }

@@ -1,8 +1,18 @@
 package com.bok.bank.integration.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+@ToString
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AccountInfoDTO {
     public String email;
@@ -12,27 +22,4 @@ public class AccountInfoDTO {
     public String type;
     public String fullName;
 
-    public AccountInfoDTO() {
-    }
-
-    public AccountInfoDTO(String email, String icc, String mobile, String status, String type, String fullName) {
-        this.email = email;
-        this.icc = icc;
-        this.mobile = mobile;
-        this.status = status;
-        this.type = type;
-        this.fullName = fullName;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("email", email)
-                .append("icc", icc)
-                .append("mobile", mobile)
-                .append("status", status)
-                .append("type", type)
-                .append("fullName", fullName)
-                .toString();
-    }
 }

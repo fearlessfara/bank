@@ -18,5 +18,6 @@ public class BankDepositMessage implements Serializable {
     public BigDecimal amount;
     public String currency;
     public Long accountId;
+    public String fromMarket;
 
 }

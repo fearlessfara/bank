@@ -1,4 +1,4 @@
-package com.bok.bank.integration.message;
+package com.bok.bank.integration.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BankWithdrawalMessage implements Serializable {
+public class TransactionDTO implements Serializable {
     public BigDecimal amount;
     public String currency;
     public Long accountId;

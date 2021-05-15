@@ -27,10 +27,14 @@ public class Transaction implements Serializable {
     private Long id;
     @Column
     @Enumerated(EnumType.STRING)
-    public Type type;
+    private Type type;
     @Column
     @Enumerated(EnumType.STRING)
-    public Status status;
+    private Status status;
+    @Column
+    private String fromMarket;
+    @Column
+    private String fromIban;
     @ManyToOne
     private BankAccount fromBankAccount;
     @ManyToOne
@@ -50,6 +54,14 @@ public class Transaction implements Serializable {
     public Transaction() {
     }
 
+    public Transaction(Type type, Status status, String fromMarket, BankAccount toBankAccount, Money amount) {
+        this.type = type;
+        this.status = status;
+        this.fromMarket = fromMarket;
+        this.toBankAccount = toBankAccount;
+        this.amount = amount;
+    }
+
     public Long getId() {
         return id;
     }
@@ -58,19 +70,35 @@ public class Transaction implements Serializable {
         this.id = id;
     }
 
-    public BankAccount getFromWallet() {
+    public String getFromMarket() {
+        return fromMarket;
+    }
+
+    public void setFromMarket(String fromMarket) {
+        this.fromMarket = fromMarket;
+    }
+
+    public String getFromIban() {
+        return fromIban;
+    }
+
+    public void setFromIban(String fromIban) {
+        this.fromIban = fromIban;
+    }
+
+    public BankAccount getFromBankAccount() {
         return fromBankAccount;
     }
 
-    public void setFromWallet(BankAccount fromBankAccount) {
+    public void setFromBankAccount(BankAccount fromBankAccount) {
         this.fromBankAccount = fromBankAccount;
     }
 
-    public BankAccount getToWallet() {
+    public BankAccount getToBankAccount() {
         return toBankAccount;
     }
 
-    public void setToWallet(BankAccount toBankAccount) {
+    public void setToBankAccount(BankAccount toBankAccount) {
         this.toBankAccount = toBankAccount;
     }
 
@@ -166,7 +194,7 @@ public class Transaction implements Serializable {
         PAYMENT,
         REFUND,
         LOAD,
-        LOAD_REVERSAL,
+        DEPOSIT,
         TRANSFER,
         CONVERSION,
         WIRE_TRANSFER,
