@@ -3,6 +3,8 @@ server:
   base-url: http://dev.faraone.ovh:82
 scheduledFor: execution
 spring:
+  application:
+    name: bank
   jpa:
     open-in-view: false
     show-sql: false
