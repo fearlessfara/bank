@@ -50,14 +50,14 @@ public class TransactionHelper {
 
         Money amount = new Money(transactionDTO.amount, Currency.getInstance(transactionDTO.currency.trim().toUpperCase()));
         BankAccount toBankAccount = bankAccountRepository.findByAccount_Id(transactionDTO.accountId).orElseThrow(BankAccountException::new);
-        if(!bankAccountHelper.isAmountAvailable(transactionDTO.accountId, amount).available) {
+        if (!bankAccountHelper.isAmountAvailable(transactionDTO.accountId, amount).available) {
             throw new TransactionException();
         }
         Transaction transaction = new Transaction(type, Transaction.Status.SETTLED, transactionDTO.fromMarket, toBankAccount, amount);
         executeTransaction(transaction);
     }
 
-    private void executeTransaction(Transaction transaction){
+    private void executeTransaction(Transaction transaction) {
         BankAccount toBankAccount = transaction.getToBankAccount();
         switch (transaction.getType()) {
             case DEPOSIT:
