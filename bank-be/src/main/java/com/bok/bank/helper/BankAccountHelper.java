@@ -80,7 +80,7 @@ public class BankAccountHelper {
     public String createBankAccount(Long accountId, BankAccountDTO bankAccountDTO) {
         log.info("creation bank account");
         BankAccount bankAccount = new BankAccount(new Account(accountId), generator.generateIBAN(), bankAccountDTO.name, bankAccountDTO.label, bankAccountDTO.currency, new Money(BigDecimal.ZERO, bankAccountDTO.currency), new Money(BigDecimal.ZERO, bankAccountDTO.currency), BankAccount.Status.ACTIVE);
-        bankAccount = bankAccountRepository.save(bankAccount);
+        bankAccount = bankAccountRepository.saveAndFlush(bankAccount);
         Account account = accountRepository.findById(accountId).orElseThrow(AccountException::new);
         account.setBankAccount(bankAccount);
         account = accountRepository.save(account);

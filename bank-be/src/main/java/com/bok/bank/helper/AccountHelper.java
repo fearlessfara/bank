@@ -53,7 +53,7 @@ public class AccountHelper {
         User user = new User(message.accountId, message.name, message.email, message.mobile, message.icc, Account.Status.ACTIVE, message.country, message.county, message.city, message.postalCode, message.street, message.houseNumber,
                 message.middleName, message.surname, User.Gender.valueOf(message.gender), message.fiscalCode, message.birthCity, message.birthCountry, message.birthdate.toInstant());
         log.info("User saved, with mail: {} and id: {}", message.email, message.accountId);
-        accountRepository.save(user);
+        accountRepository.saveAndFlush(user);
         bankAccountController.createBankAccount(message.accountId, new BankAccountDTO(Constants.BOK_BASE_BANK_ACCOUNT, Constants.BASIC_LABEL_BANK_ACCOUNT, Currency.getInstance("EUR")));
     }
 
