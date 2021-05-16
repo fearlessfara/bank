@@ -16,6 +16,7 @@ import com.bok.bank.util.exception.AccountException;
 import com.bok.bank.util.exception.BankAccountException;
 import com.bok.bank.util.exception.ErrorCode;
 import com.google.common.base.Preconditions;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 @Component
+@Slf4j
 public class BankAccountHelper {
 
 
@@ -76,12 +78,13 @@ public class BankAccountHelper {
     }
 
     public String createBankAccount(Long accountId, BankAccountDTO bankAccountDTO) {
-        BankAccount bankAccount = new BankAccount(new Account(accountId), generator.generateIBAN(), bankAccountDTO.name, bankAccountDTO.label, bankAccountDTO.currency, new Money(BigDecimal.ZERO, bankAccountDTO.currency), new Money(BigDecimal.ZERO, bankAccountDTO.currency), BankAccount.Status.PENDING);
+        log.info("creation bank account");
+        BankAccount bankAccount = new BankAccount(new Account(accountId), generator.generateIBAN(), bankAccountDTO.name, bankAccountDTO.label, bankAccountDTO.currency, new Money(BigDecimal.ZERO, bankAccountDTO.currency), new Money(BigDecimal.ZERO, bankAccountDTO.currency), BankAccount.Status.ACTIVE);
         bankAccount = bankAccountRepository.save(bankAccount);
         Account account = accountRepository.findById(accountId).orElseThrow(AccountException::new);
         account.setBankAccount(bankAccount);
         account = accountRepository.save(account);
-        emailHelper.sendBankAccountConfirmationEmail(account, bankAccount);
+//        emailHelper.sendBankAccountConfirmationEmail(account, bankAccount);
         return "Please check your mail and confirm bank account creation";
     }
 
