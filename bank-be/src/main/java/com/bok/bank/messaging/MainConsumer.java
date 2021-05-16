@@ -1,6 +1,5 @@
 package com.bok.bank.messaging;
 
-import com.bok.bank.helper.AccountHelper;
 import com.bok.bank.model.Account;
 import com.bok.bank.model.BankAccount;
 import com.bok.bank.repository.AccountRepository;
@@ -10,7 +9,6 @@ import com.bok.bank.repository.ConfirmationEmailHistoryRepository;
 import com.bok.bank.repository.TransactionRepository;
 import com.bok.bank.util.exception.AccountException;
 import com.bok.bank.util.exception.BankAccountException;
-import com.bok.parent.integration.message.AccountCreationMessage;
 import com.bok.parent.integration.message.AccountDeletionMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

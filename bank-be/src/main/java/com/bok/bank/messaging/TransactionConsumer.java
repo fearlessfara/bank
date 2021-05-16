@@ -1,6 +1,5 @@
 package com.bok.bank.messaging;
 
-import com.bok.bank.helper.AccountHelper;
 import com.bok.bank.helper.TransactionHelper;
 import com.bok.bank.integration.dto.TransactionDTO;
 import com.bok.bank.integration.message.BankWithdrawalMessage;
