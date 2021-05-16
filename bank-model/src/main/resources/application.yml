@@ -1,6 +1,6 @@
 server:
   port: 8080
-  base-url: http://dev.faraone.ovh:82
+  base-url: http://dev.faraone.ovh:81
 scheduledFor: execution
 spring:
   application:
