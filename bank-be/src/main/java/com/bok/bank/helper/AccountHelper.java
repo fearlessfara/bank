@@ -1,6 +1,7 @@
 package com.bok.bank.helper;
 
 import com.bok.bank.integration.dto.AccountInfoDTO;
+import com.bok.bank.integration.dto.BankCheckRequestDTO;
 import com.bok.bank.model.Account;
 import com.bok.bank.model.Company;
 import com.bok.bank.model.User;
@@ -44,5 +45,10 @@ public class AccountHelper {
                 message.middleName, message.surname, User.Gender.valueOf(message.gender), message.fiscalCode, message.birthCity, message.birthCountry, message.birthdate.toInstant());
         log.info("User saved, with mail: {} and id: {}", message.email, message.accountId);
         accountRepository.save(user);
+    }
+
+    public Boolean canCreate(BankCheckRequestDTO bankCheckRequestDTO){
+        String code = bankCheckRequestDTO.business ? bankCheckRequestDTO.vatNumber : bankCheckRequestDTO.fiscalCode;
+        return !accountRepository.existsByVatNumberOrTaxCode(code);
     }
 }
