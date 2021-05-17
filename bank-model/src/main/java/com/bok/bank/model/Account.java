@@ -37,6 +37,7 @@ public class Account implements Serializable {
     private String name;
 
     @Column
+    @Enumerated(value = EnumType.STRING)
     private Type type;
 
     @Column(nullable = false, unique = true)

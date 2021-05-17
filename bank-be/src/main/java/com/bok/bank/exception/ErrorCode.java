@@ -1,4 +1,4 @@
-package com.bok.bank.util.exception;
+package com.bok.bank.exception;
 
 public enum ErrorCode {
     CONFIRMATION_TOKEN_NOT_VALID,

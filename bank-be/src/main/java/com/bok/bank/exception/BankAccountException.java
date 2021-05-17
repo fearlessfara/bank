@@ -1,4 +1,4 @@
-package com.bok.bank.util.exception;
+package com.bok.bank.exception;
 
 public class BankAccountException extends RuntimeException {
 

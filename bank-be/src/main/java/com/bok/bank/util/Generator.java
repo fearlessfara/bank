@@ -26,7 +26,7 @@ public class Generator {
                 .countryCode(CountryCode.IT)
                 .bankCode(BANK_CODE)
                 .buildRandom();
-        return bankAccountRepository.existsByIBAN(iban.toFormattedString()) ? generateIBAN() : iban.toFormattedString();
+        return bankAccountRepository.existsByIBAN(iban.toFormattedString()) ? generateIBAN() : iban.toString();
     }
 
     public String generateConfirmationToken() {

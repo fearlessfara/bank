@@ -1,16 +1,22 @@
 package com.bok.bank.helper;
 
 import com.bok.bank.integration.dto.AccountInfoDTO;
+import com.bok.bank.integration.dto.BankAccountDTO;
 import com.bok.bank.integration.dto.BankCheckRequestDTO;
+import com.bok.bank.integration.service.BankAccountController;
 import com.bok.bank.model.Account;
 import com.bok.bank.model.Company;
 import com.bok.bank.model.User;
 import com.bok.bank.repository.AccountRepository;
+import com.bok.bank.util.Constants;
 import com.bok.parent.integration.message.AccountCreationMessage;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.transaction.Transactional;
+import java.util.Currency;
 
 @Component
 @Slf4j
@@ -18,6 +24,8 @@ public class AccountHelper {
 
     @Autowired
     AccountRepository accountRepository;
+    @Autowired
+    BankAccountHelper bankAccountHelper;
 
     public AccountInfoDTO getAccountInfo(Long accountId) {
         AccountRepository.Projection.AccountInfo accountInfo = accountRepository.findAccountInfoByAccountId(accountId)
@@ -32,19 +40,22 @@ public class AccountHelper {
         return new AccountInfoDTO(accountInfo.getEmail(), accountInfo.getIcc(), accountInfo.getMobile(), accountInfo.getStatus().name(), accountInfo.getType().name(), fullName);
     }
 
+    @Transactional
     public void createAccount(AccountCreationMessage message) {
         Preconditions.checkNotNull(message, "Message of user creation is null: {}", message);
         if (message.business) {
             Company company = new Company(message.accountId, message.name, message.email, message.mobile, message.icc, Account.Status.PENDING, message.country, message.county, message.city,
                     message.postalCode, message.street, message.houseNumber, message.vatNumber);
-            accountRepository.save(company);
+            accountRepository.saveAndFlush(company);
             log.info("Company saved, with mail: {} and id: {}", message.email, message.accountId);
+            bankAccountHelper.createFirstBankAccount(message.accountId, new BankAccountDTO(Constants.BOK_COMPANY_BANK_ACCOUNT, Constants.BASIC_LABEL_BANK_ACCOUNT, Currency.getInstance("EUR")));
             return;
         }
         User user = new User(message.accountId, message.name, message.email, message.mobile, message.icc, Account.Status.ACTIVE, message.country, message.county, message.city, message.postalCode, message.street, message.houseNumber,
                 message.middleName, message.surname, User.Gender.valueOf(message.gender), message.fiscalCode, message.birthCity, message.birthCountry, message.birthdate.toInstant());
+        accountRepository.saveAndFlush(user);
         log.info("User saved, with mail: {} and id: {}", message.email, message.accountId);
-        accountRepository.save(user);
+        bankAccountHelper.createFirstBankAccount(message.accountId, new BankAccountDTO(Constants.BOK_BASE_BANK_ACCOUNT, Constants.BASIC_LABEL_BANK_ACCOUNT, Currency.getInstance("EUR")));
     }
 
     public Boolean canCreate(BankCheckRequestDTO bankCheckRequestDTO){
