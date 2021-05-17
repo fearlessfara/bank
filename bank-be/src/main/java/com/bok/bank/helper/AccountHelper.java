@@ -25,7 +25,7 @@ public class AccountHelper {
     @Autowired
     AccountRepository accountRepository;
     @Autowired
-    BankAccountController bankAccountController;
+    BankAccountHelper bankAccountHelper;
 
     public AccountInfoDTO getAccountInfo(Long accountId) {
         AccountRepository.Projection.AccountInfo accountInfo = accountRepository.findAccountInfoByAccountId(accountId)
@@ -46,15 +46,16 @@ public class AccountHelper {
         if (message.business) {
             Company company = new Company(message.accountId, message.name, message.email, message.mobile, message.icc, Account.Status.PENDING, message.country, message.county, message.city,
                     message.postalCode, message.street, message.houseNumber, message.vatNumber);
-            accountRepository.save(company);
+            accountRepository.saveAndFlush(company);
             log.info("Company saved, with mail: {} and id: {}", message.email, message.accountId);
+            bankAccountHelper.createFirstBankAccount(message.accountId, new BankAccountDTO(Constants.BOK_COMPANY_BANK_ACCOUNT, Constants.BASIC_LABEL_BANK_ACCOUNT, Currency.getInstance("EUR")));
             return;
         }
         User user = new User(message.accountId, message.name, message.email, message.mobile, message.icc, Account.Status.ACTIVE, message.country, message.county, message.city, message.postalCode, message.street, message.houseNumber,
                 message.middleName, message.surname, User.Gender.valueOf(message.gender), message.fiscalCode, message.birthCity, message.birthCountry, message.birthdate.toInstant());
-        log.info("User saved, with mail: {} and id: {}", message.email, message.accountId);
         accountRepository.saveAndFlush(user);
-        bankAccountController.createBankAccount(message.accountId, new BankAccountDTO(Constants.BOK_BASE_BANK_ACCOUNT, Constants.BASIC_LABEL_BANK_ACCOUNT, Currency.getInstance("EUR")));
+        log.info("User saved, with mail: {} and id: {}", message.email, message.accountId);
+        bankAccountHelper.createFirstBankAccount(message.accountId, new BankAccountDTO(Constants.BOK_BASE_BANK_ACCOUNT, Constants.BASIC_LABEL_BANK_ACCOUNT, Currency.getInstance("EUR")));
     }
 
     public Boolean canCreate(BankCheckRequestDTO bankCheckRequestDTO){

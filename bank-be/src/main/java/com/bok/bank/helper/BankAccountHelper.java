@@ -79,13 +79,21 @@ public class BankAccountHelper {
 
     public String createBankAccount(Long accountId, BankAccountDTO bankAccountDTO) {
         log.info("creation bank account");
-        BankAccount bankAccount = new BankAccount(new Account(accountId), generator.generateIBAN(), bankAccountDTO.name, bankAccountDTO.label, bankAccountDTO.currency, new Money(BigDecimal.ZERO, bankAccountDTO.currency), new Money(BigDecimal.ZERO, bankAccountDTO.currency), BankAccount.Status.ACTIVE);
+        BankAccount bankAccount = new BankAccount(new Account(accountId), generator.generateIBAN(), bankAccountDTO.name, bankAccountDTO.label, bankAccountDTO.currency, new Money(BigDecimal.ZERO, bankAccountDTO.currency), new Money(BigDecimal.ZERO, bankAccountDTO.currency), BankAccount.Status.PENDING);
         bankAccount = bankAccountRepository.saveAndFlush(bankAccount);
         Account account = accountRepository.findById(accountId).orElseThrow(AccountException::new);
         account.setBankAccount(bankAccount);
         account = accountRepository.save(account);
-//        emailHelper.sendBankAccountConfirmationEmail(account, bankAccount);
+        emailHelper.sendBankAccountConfirmationEmail(account, bankAccount);
         return "Please check your mail and confirm bank account creation";
+    }
+    public void createFirstBankAccount(Long accountId, BankAccountDTO bankAccountDTO) {
+        log.info("creation bank account");
+        BankAccount bankAccount = new BankAccount(new Account(accountId), generator.generateIBAN(), bankAccountDTO.name, bankAccountDTO.label, bankAccountDTO.currency, new Money(BigDecimal.ZERO, bankAccountDTO.currency), new Money(BigDecimal.ZERO, bankAccountDTO.currency), BankAccount.Status.ACTIVE);
+        bankAccount = bankAccountRepository.saveAndFlush(bankAccount);
+        Account account = accountRepository.findById(accountId).orElseThrow(AccountException::new);
+        account.setBankAccount(bankAccount);
+        accountRepository.save(account);
     }
 
     public BankAccountInfoDTO verifyBankAccount(Long accountId, String confirmationToken) {
