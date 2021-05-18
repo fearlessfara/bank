@@ -2,7 +2,6 @@ package com.bok.bank.integration.service;
 
 import com.bok.bank.integration.dto.AccountInfoDTO;
 import com.bok.bank.integration.dto.BankCheckRequestDTO;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
