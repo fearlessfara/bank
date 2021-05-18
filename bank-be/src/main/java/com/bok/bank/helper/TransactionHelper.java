@@ -5,7 +5,6 @@ import com.bok.bank.exception.ErrorCode;
 import com.bok.bank.exception.TransactionException;
 import com.bok.bank.integration.dto.AuthorizationResponseDTO;
 import com.bok.bank.integration.dto.TransactionDTO;
-import com.bok.bank.model.Account;
 import com.bok.bank.model.BankAccount;
 import com.bok.bank.model.Transaction;
 import com.bok.bank.repository.BankAccountRepository;
@@ -19,10 +18,8 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
-import java.util.Currency;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 @Slf4j
@@ -50,15 +47,16 @@ public class TransactionHelper {
         } else {
             isImportAvailable = availableBalance.isGreaterOrEqualsThan(exchangeCurrencyAmountHelper.convertAmount(amount, availableBalance));
         }
-        Long transactionId = -1L;
         if(isImportAvailable){
             bankAccount.setBlockedAmount(amount);
             bankAccount = bankAccountRepository.saveAndFlush(bankAccount);
             Transaction transaction = new Transaction(Transaction.Type.WITHDRAWAL, Transaction.Status.AUTHORISED, fromMarket, bankAccount, amount);
             transaction = transactionRepository.saveAndFlush(transaction);
-            transactionId = transaction.getId();
+            return new AuthorizationResponseDTO(true, "", transaction.getId());
         }
-        return isImportAvailable ? new AuthorizationResponseDTO(true, "", transactionId) : new AuthorizationResponseDTO(false, "Amount not available", -1L);
+        Transaction transaction = new Transaction(Transaction.Type.WITHDRAWAL, Transaction.Status.DECLINED, fromMarket, bankAccount, amount);
+        transaction = transactionRepository.saveAndFlush(transaction);
+        return new AuthorizationResponseDTO(false, "Amount not available", transaction.getId());
 
     }
 
@@ -90,6 +88,9 @@ public class TransactionHelper {
                 toBankAccount.setAvailableAmount(toBankAccount.getAvailableAmount().plus(transaction.getAmount()));
                 break;
             case WITHDRAWAL:
+                if(transaction.getStatus().equals(Transaction.Status.DECLINED) || transaction.getStatus().equals(Transaction.Status.CANCELLED)){
+                    break;
+                }
                 toBankAccount.setAvailableAmount(toBankAccount.getAvailableAmount().subtract(transaction.getAmount()));
                 toBankAccount.setBlockedAmount(toBankAccount.getBlockedAmount().subtract(transaction.getAmount()));
                 transaction.setStatus(Transaction.Status.SETTLED);
