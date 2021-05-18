@@ -3,8 +3,8 @@ package com.bok.bank.controller;
 import com.bok.bank.helper.BankAccountHelper;
 import com.bok.bank.integration.dto.BankAccountDTO;
 import com.bok.bank.integration.dto.BankAccountInfoDTO;
-import com.bok.bank.integration.dto.CheckPaymentAmountRequestDTO;
-import com.bok.bank.integration.dto.CheckPaymentAmountResponseDTO;
+import com.bok.bank.integration.dto.AuthorizationRequestDTO;
+import com.bok.bank.integration.dto.AuthorizationResponseDTO;
 import com.bok.bank.integration.service.BankAccountController;
 import com.bok.bank.util.Money;
 import com.google.common.base.Preconditions;
@@ -23,8 +23,8 @@ public class BankAccountControllerImpl implements BankAccountController {
     @Autowired
     BankAccountHelper bankAccountHelper;
 
-    @Override
-    public CheckPaymentAmountResponseDTO checkPaymentAmount(Long accountId, CheckPaymentAmountRequestDTO request) {
+    @Override //TODO please add authorizationId to the response
+    public AuthorizationResponseDTO authorize(Long accountId, AuthorizationRequestDTO request) {
         log.info(request.amount.toString() + " " + request.currency);
         Preconditions.checkNotNull(accountId, "accountId is null");
         Preconditions.checkNotNull(request.amount, "Amount passed is null");

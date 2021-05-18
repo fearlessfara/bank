@@ -2,8 +2,8 @@ package com.bok.bank.integration.service;
 
 import com.bok.bank.integration.dto.BankAccountDTO;
 import com.bok.bank.integration.dto.BankAccountInfoDTO;
-import com.bok.bank.integration.dto.CheckPaymentAmountRequestDTO;
-import com.bok.bank.integration.dto.CheckPaymentAmountResponseDTO;
+import com.bok.bank.integration.dto.AuthorizationRequestDTO;
+import com.bok.bank.integration.dto.AuthorizationResponseDTO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/bankAccount")
 public interface BankAccountController {
 
-    @PostMapping("/checkPaymentAmount")
-    CheckPaymentAmountResponseDTO checkPaymentAmount(@RequestParam("accountId") Long accountId, @RequestBody CheckPaymentAmountRequestDTO checkPaymentAmountRequestDTO);
+    @PostMapping("/authorize")
+    AuthorizationResponseDTO authorize(@RequestParam("accountId") Long accountId, @RequestBody AuthorizationRequestDTO authorizationRequestDTO);
 
     @GetMapping("/bankAccountInfo")
     BankAccountInfoDTO bankAccountInfo(@RequestParam("accountId") Long accountId);

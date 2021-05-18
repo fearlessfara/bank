@@ -1,8 +1,8 @@
 package com.bok.bank;
 
 import com.bok.bank.integration.dto.BankAccountInfoDTO;
-import com.bok.bank.integration.dto.CheckPaymentAmountRequestDTO;
-import com.bok.bank.integration.dto.CheckPaymentAmountResponseDTO;
+import com.bok.bank.integration.dto.AuthorizationRequestDTO;
+import com.bok.bank.integration.dto.AuthorizationResponseDTO;
 import com.bok.bank.integration.service.BankAccountController;
 import com.bok.bank.model.BankAccount;
 import com.bok.bank.model.User;
@@ -71,44 +71,44 @@ public class BankAccountControllerTest {
     public void checkPaymentAmountTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user);
-        CheckPaymentAmountResponseDTO checkPaymentAmount = bankAccountController.checkPaymentAmount(user.getId(), new CheckPaymentAmountRequestDTO(bankAccount.getCurrency(), BigDecimal.valueOf(50)));
+        AuthorizationResponseDTO checkPaymentAmount = bankAccountController.authorize(user.getId(), new AuthorizationRequestDTO(bankAccount.getCurrency(), BigDecimal.valueOf(50)));
         assertEquals(checkPaymentAmount.reason, "");
-        assertTrue(checkPaymentAmount.available);
+        assertTrue(checkPaymentAmount.authorized);
     }
 
     @Test
     public void checkPaymentAmountFailTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
-        CheckPaymentAmountResponseDTO checkPaymentAmount = bankAccountController.checkPaymentAmount(user.getId(), new CheckPaymentAmountRequestDTO(Currency.getInstance("EUR"), BigDecimal.valueOf(50)));
+        AuthorizationResponseDTO checkPaymentAmount = bankAccountController.authorize(user.getId(), new AuthorizationRequestDTO(Currency.getInstance("EUR"), BigDecimal.valueOf(50)));
         assertEquals(checkPaymentAmount.reason, "User not have a bank account or is bank account not is active");
-        assertFalse(checkPaymentAmount.available);
+        assertFalse(checkPaymentAmount.authorized);
     }
 
     @Test
     public void checkPaymentAmountAnotherCurrencyTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
-        CheckPaymentAmountResponseDTO checkPaymentAmount = bankAccountController.checkPaymentAmount(user.getId(), new CheckPaymentAmountRequestDTO(Currency.getInstance("USD"), BigDecimal.valueOf(121)));
+        AuthorizationResponseDTO checkPaymentAmount = bankAccountController.authorize(user.getId(), new AuthorizationRequestDTO(Currency.getInstance("USD"), BigDecimal.valueOf(121)));
         assertEquals(checkPaymentAmount.reason, "");
-        assertTrue(checkPaymentAmount.available);
+        assertTrue(checkPaymentAmount.authorized);
     }
 
     @Test
     public void checkPaymentAmountGreaterWithAnotherCurrencyTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
-        CheckPaymentAmountResponseDTO checkPaymentAmount = bankAccountController.checkPaymentAmount(user.getId(), new CheckPaymentAmountRequestDTO(Currency.getInstance("USD"), BigDecimal.valueOf(123)));
+        AuthorizationResponseDTO checkPaymentAmount = bankAccountController.authorize(user.getId(), new AuthorizationRequestDTO(Currency.getInstance("USD"), BigDecimal.valueOf(123)));
         assertEquals(checkPaymentAmount.reason, "Amount not available");
-        assertFalse(checkPaymentAmount.available);
+        assertFalse(checkPaymentAmount.authorized);
     }
 
     @Test
     public void checkPaymentAmountWithNotCommonCurrencyTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
-        CheckPaymentAmountResponseDTO checkPaymentAmount = bankAccountController.checkPaymentAmount(user.getId(), new CheckPaymentAmountRequestDTO(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)));
+        AuthorizationResponseDTO checkPaymentAmount = bankAccountController.authorize(user.getId(), new AuthorizationRequestDTO(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)));
         assertEquals(checkPaymentAmount.reason, "Amount not available");
-        assertFalse(checkPaymentAmount.available);
+        assertFalse(checkPaymentAmount.authorized);
     }
 
 }

@@ -2,18 +2,15 @@ package com.bok.bank.integration.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@ToString
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CheckPaymentAmountResponseDTO {
-    public Boolean available;
+public class AuthorizationResponseDTO {
+    public Boolean authorized = Boolean.FALSE;
     public String reason;
+    public Long authorizationId;
 }

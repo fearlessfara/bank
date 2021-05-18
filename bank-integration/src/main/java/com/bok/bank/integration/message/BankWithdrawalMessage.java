@@ -1,5 +1,6 @@
 package com.bok.bank.integration.message;
 
+import com.bok.bank.integration.Money;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 @ToString
 @Getter
@@ -15,8 +15,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BankWithdrawalMessage implements Serializable {
-    public BigDecimal amount;
-    public String currency;
+    public Money money;
     public Long accountId;
     public String fromMarket;
 }

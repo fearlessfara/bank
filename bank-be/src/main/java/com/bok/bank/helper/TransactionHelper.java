@@ -50,7 +50,7 @@ public class TransactionHelper {
 
         Money amount = new Money(transactionDTO.amount, Currency.getInstance(transactionDTO.currency.trim().toUpperCase()));
         BankAccount toBankAccount = bankAccountRepository.findByAccount_Id(transactionDTO.accountId).orElseThrow(BankAccountException::new);
-        if (!bankAccountHelper.isAmountAvailable(transactionDTO.accountId, amount).available) {
+        if (!bankAccountHelper.isAmountAvailable(transactionDTO.accountId, amount).authorized) {
             throw new TransactionException();
         }
         Transaction transaction = new Transaction(type, Transaction.Status.SETTLED, transactionDTO.fromMarket, toBankAccount, amount);
