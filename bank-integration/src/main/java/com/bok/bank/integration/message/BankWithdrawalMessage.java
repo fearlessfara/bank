@@ -19,5 +19,5 @@ public class BankWithdrawalMessage implements Serializable {
     public Money money;
     public Long accountId;
     public String fromMarket;
-    public UUID transactionId;
+    public UUID extTransactionId;
 }

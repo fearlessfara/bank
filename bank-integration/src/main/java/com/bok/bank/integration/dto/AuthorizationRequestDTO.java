@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.UUID;
+
 @ToString
 @Getter
 @Setter
@@ -16,6 +18,7 @@ import lombok.ToString;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AuthorizationRequestDTO {
     public Long accountId;
+    public UUID extTransactionId;
     public Money money;
     public String fromMarket;
 }
