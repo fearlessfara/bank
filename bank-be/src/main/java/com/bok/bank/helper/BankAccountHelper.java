@@ -23,6 +23,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 @Slf4j
@@ -67,7 +68,7 @@ public class BankAccountHelper {
         } else {
             isImportAvailable = availableBalance.isGreaterOrEqualsThan(exchangeCurrencyAmountHelper.convertAmount(amount, availableBalance));
         }
-        return (isImportAvailable) ? new AuthorizationResponseDTO(true, "") : new AuthorizationResponseDTO(false, "Amount not available");
+        return (isImportAvailable) ? new AuthorizationResponseDTO(true, "", UUID.randomUUID().toString()) : new AuthorizationResponseDTO(false, "Amount not available");
     }
 
     public BankAccountInfoDTO getBankAccountInfo(Long accountId) {

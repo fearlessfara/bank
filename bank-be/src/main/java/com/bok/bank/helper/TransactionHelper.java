@@ -46,9 +46,9 @@ public class TransactionHelper {
     public void performTransaction(TransactionDTO transactionDTO, Transaction.Type type) {
         Preconditions.checkArgument(Objects.nonNull(transactionDTO), "withdrawalDTO passed is null");
         Preconditions.checkArgument(StringUtils.isNotBlank(transactionDTO.fromMarket), "fromMarket passed is blank");
-        Preconditions.checkArgument(Objects.nonNull(transactionDTO.amount) && transactionDTO.amount.compareTo(BigDecimal.ZERO) == 1, "amount not valid");
+        Preconditions.checkArgument(Objects.nonNull(transactionDTO.transactionAmount) && transactionDTO.transactionAmount.amount.compareTo(BigDecimal.ZERO) == 1, "amount not valid");
 
-        Money amount = new Money(transactionDTO.amount, Currency.getInstance(transactionDTO.currency.trim().toUpperCase()));
+        Money amount = new Money(transactionDTO.transactionAmount.amount, transactionDTO.transactionAmount.currency);
         BankAccount toBankAccount = bankAccountRepository.findByAccount_Id(transactionDTO.accountId).orElseThrow(BankAccountException::new);
         if (!bankAccountHelper.isAmountAvailable(transactionDTO.accountId, amount).authorized) {
             throw new TransactionException();

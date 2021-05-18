@@ -12,5 +12,10 @@ import lombok.NoArgsConstructor;
 public class AuthorizationResponseDTO {
     public Boolean authorized = Boolean.FALSE;
     public String reason;
-    public Long authorizationId;
+    public String authorizationId;
+
+    public AuthorizationResponseDTO(Boolean authorized, String reason) {
+        this.authorized = authorized;
+        this.reason = reason;
+    }
 }

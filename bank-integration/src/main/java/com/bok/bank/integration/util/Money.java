@@ -1,4 +1,4 @@
-package com.bok.bank.integration;
+package com.bok.bank.integration.util;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

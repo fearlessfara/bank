@@ -1,6 +1,6 @@
 package com.bok.bank.integration.dto;
 
-import com.bok.bank.integration.Money;
+import com.bok.bank.integration.util.Money;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

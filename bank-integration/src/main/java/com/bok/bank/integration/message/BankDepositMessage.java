@@ -1,6 +1,6 @@
 package com.bok.bank.integration.message;
 
-import com.bok.bank.integration.Money;
+import com.bok.bank.integration.util.Money;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

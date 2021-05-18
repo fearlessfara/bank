@@ -1,4 +1,4 @@
-package com.bok.bank.integration;
+package com.bok.bank.integration.util;
 
 public class AuthorizationException extends RuntimeException {
 }
