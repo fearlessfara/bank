@@ -18,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 public class Transaction implements Serializable {
@@ -25,6 +26,9 @@ public class Transaction implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column
+    @GeneratedValue
+    private UUID publicId;
     @Column
     @Enumerated(EnumType.STRING)
     private Type type;
