@@ -53,6 +53,10 @@ public class ModelTestUtil {
     @Autowired
     CardRepository cardRepository;
 
+    public static final Currency EUR = Currency.getInstance("EUR");
+    public static final Currency GBP = Currency.getInstance("GBP");
+    public static final Currency USD = Currency.getInstance("USD");
+
 
     public void populateDB() {
         List<Account> accounts = Arrays.asList(
@@ -159,6 +163,7 @@ public class ModelTestUtil {
         BankAccount bankAccount = new BankAccount(account, creditCardNumberGenerator.generate(Constants.BIN_BOK, 15), faker.funnyName().name(), faker.lorem().paragraph(), currency, new Money(BigDecimal.ZERO, currency), new Money(BigDecimal.valueOf(100), currency), BankAccount.Status.ACTIVE);
         return bankAccountRepository.save(bankAccount);
     }
+
 
 
 }
