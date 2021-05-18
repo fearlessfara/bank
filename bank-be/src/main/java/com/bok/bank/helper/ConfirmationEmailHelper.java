@@ -1,10 +1,10 @@
 package com.bok.bank.helper;
 
+import com.bok.bank.exception.ConfirmationTokenException;
 import com.bok.bank.model.Account;
 import com.bok.bank.model.ConfirmationEmailHistory;
 import com.bok.bank.repository.ConfirmationEmailHistoryRepository;
 import com.bok.bank.util.Generator;
-import com.bok.bank.exception.ConfirmationTokenException;
 import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

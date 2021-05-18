@@ -16,7 +16,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Query("SELECT a.type FROM Account a where a.id = :accountId")
     Account.Type findAccountTypeById(Long accountId);
 
-   @Query("select count(a) > 0 from Account a where a.taxCode = :code or a.vatNumber = :code")
+    @Query("select count(a) > 0 from Account a where a.taxCode = :code or a.vatNumber = :code")
     boolean existsByVatNumberOrTaxCode(String code);
 
     public class Projection {

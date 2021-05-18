@@ -1,10 +1,10 @@
 package com.bok.bank.controller;
 
 import com.bok.bank.helper.BankAccountHelper;
-import com.bok.bank.integration.dto.BankAccountDTO;
-import com.bok.bank.integration.dto.BankAccountInfoDTO;
 import com.bok.bank.integration.dto.AuthorizationRequestDTO;
 import com.bok.bank.integration.dto.AuthorizationResponseDTO;
+import com.bok.bank.integration.dto.BankAccountDTO;
+import com.bok.bank.integration.dto.BankAccountInfoDTO;
 import com.bok.bank.integration.service.BankAccountController;
 import com.bok.bank.util.Money;
 import com.google.common.base.Preconditions;
@@ -25,13 +25,13 @@ public class BankAccountControllerImpl implements BankAccountController {
 
     @Override //TODO please add authorizationId to the response
     public AuthorizationResponseDTO authorize(Long accountId, AuthorizationRequestDTO request) {
-        log.info(request.amount.toString() + " " + request.currency);
+        log.info("{} {}", request.money.amount.toString(), request.money.currency);
         Preconditions.checkNotNull(accountId, "accountId is null");
-        Preconditions.checkNotNull(request.amount, "Amount passed is null");
-        Preconditions.checkArgument(request.amount.intValue() > 0, "Amount passed is ZERO or negative");
-        Preconditions.checkNotNull(request.currency, "Currency passed is null");
-        Preconditions.checkArgument(Currency.getAvailableCurrencies().contains(request.currency), "Currency passed is not valid");
-        return bankAccountHelper.isAmountAvailable(accountId, Money.money(request.amount, request.currency));
+        Preconditions.checkNotNull(request.money.amount, "Amount passed is null");
+        Preconditions.checkArgument(request.money.amount.intValue() > 0, "Amount passed is ZERO or negative");
+        Preconditions.checkNotNull(request.money.currency, "Currency passed is null");
+        Preconditions.checkArgument(Currency.getAvailableCurrencies().contains(request.money.currency), "Currency passed is not valid");
+        return bankAccountHelper.isAmountAvailable(accountId, Money.money(request.money.amount, request.money.currency));
     }
 
     @Override

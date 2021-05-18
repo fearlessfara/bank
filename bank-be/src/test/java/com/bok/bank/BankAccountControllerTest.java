@@ -1,8 +1,8 @@
 package com.bok.bank;
 
-import com.bok.bank.integration.dto.BankAccountInfoDTO;
 import com.bok.bank.integration.dto.AuthorizationRequestDTO;
 import com.bok.bank.integration.dto.AuthorizationResponseDTO;
+import com.bok.bank.integration.dto.BankAccountInfoDTO;
 import com.bok.bank.integration.service.BankAccountController;
 import com.bok.bank.model.BankAccount;
 import com.bok.bank.model.User;

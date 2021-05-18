@@ -1,8 +1,11 @@
 package com.bok.bank.helper;
 
+import com.bok.bank.exception.AccountException;
+import com.bok.bank.exception.BankAccountException;
+import com.bok.bank.exception.ErrorCode;
+import com.bok.bank.integration.dto.AuthorizationResponseDTO;
 import com.bok.bank.integration.dto.BankAccountDTO;
 import com.bok.bank.integration.dto.BankAccountInfoDTO;
-import com.bok.bank.integration.dto.AuthorizationResponseDTO;
 import com.bok.bank.model.Account;
 import com.bok.bank.model.BankAccount;
 import com.bok.bank.model.ConfirmationEmailHistory;
@@ -12,9 +15,6 @@ import com.bok.bank.repository.ConfirmationEmailHistoryRepository;
 import com.bok.bank.util.CreditCardNumberGenerator;
 import com.bok.bank.util.Generator;
 import com.bok.bank.util.Money;
-import com.bok.bank.exception.AccountException;
-import com.bok.bank.exception.BankAccountException;
-import com.bok.bank.exception.ErrorCode;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +87,7 @@ public class BankAccountHelper {
         emailHelper.sendBankAccountConfirmationEmail(account, bankAccount);
         return "Please check your mail and confirm bank account creation";
     }
+
     public void createFirstBankAccount(Long accountId, BankAccountDTO bankAccountDTO) {
         log.info("creation bank account");
         BankAccount bankAccount = new BankAccount(new Account(accountId), generator.generateIBAN(), bankAccountDTO.name, bankAccountDTO.label, bankAccountDTO.currency, new Money(BigDecimal.ZERO, bankAccountDTO.currency), new Money(BigDecimal.valueOf(100), bankAccountDTO.currency), BankAccount.Status.ACTIVE);

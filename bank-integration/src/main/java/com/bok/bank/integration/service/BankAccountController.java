@@ -1,9 +1,9 @@
 package com.bok.bank.integration.service;
 
-import com.bok.bank.integration.dto.BankAccountDTO;
-import com.bok.bank.integration.dto.BankAccountInfoDTO;
 import com.bok.bank.integration.dto.AuthorizationRequestDTO;
 import com.bok.bank.integration.dto.AuthorizationResponseDTO;
+import com.bok.bank.integration.dto.BankAccountDTO;
+import com.bok.bank.integration.dto.BankAccountInfoDTO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
