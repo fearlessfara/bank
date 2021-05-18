@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @ToString
 @Getter
@@ -18,5 +19,5 @@ public class BankWithdrawalMessage implements Serializable {
     public Money money;
     public Long accountId;
     public String fromMarket;
-    public Long transactionId;
+    public UUID transactionId;
 }
