@@ -8,7 +8,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 @ToString
 @Getter
@@ -19,6 +18,5 @@ public class BankDepositMessage implements Serializable {
     public Money money;
     public Long accountId;
     public String fromMarket;
-    public UUID extTransactionId;
 
 }

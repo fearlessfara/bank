@@ -19,7 +19,7 @@ public class TransactionDTO implements Serializable {
     public Money transactionAmount;
     public Long accountId;
     public String fromMarket;
-    public UUID transactionId;
+    public UUID extTransactionId;
     public String type;
 
     public TransactionDTO(Money transactionAmount, Long accountId, String fromMarket, String type) {

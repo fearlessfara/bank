@@ -154,6 +154,13 @@ public class Transaction implements Serializable {
         this.status = status;
     }
 
+    public UUID getPublicId() {
+        return publicId;
+    }
+
+    public void setPublicId(UUID publicId) {
+        this.publicId = publicId;
+    }
 
     @Override
     public boolean equals(Object o) {

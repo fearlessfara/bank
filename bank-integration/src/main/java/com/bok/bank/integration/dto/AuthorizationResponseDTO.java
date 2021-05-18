@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,5 +14,5 @@ import lombok.NoArgsConstructor;
 public class AuthorizationResponseDTO {
     public Boolean authorized = Boolean.FALSE;
     public String reason;
-    public Long transactionId;
+    public UUID extTransactionId;
 }
