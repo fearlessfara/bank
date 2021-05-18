@@ -17,4 +17,5 @@ import lombok.ToString;
 public class AuthorizationRequestDTO {
     public Long accountId;
     public Money money;
+    public String fromMarket;
 }

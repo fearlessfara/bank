@@ -1,6 +1,7 @@
 package com.bok.bank.controller;
 
 import com.bok.bank.helper.BankAccountHelper;
+import com.bok.bank.helper.TransactionHelper;
 import com.bok.bank.integration.dto.AuthorizationRequestDTO;
 import com.bok.bank.integration.dto.AuthorizationResponseDTO;
 import com.bok.bank.integration.dto.BankAccountDTO;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Currency;
 
+import static com.bok.bank.util.Constants.UNKNOWN_MARKET;
+
 
 @Service
 @Slf4j
@@ -22,16 +25,19 @@ public class BankAccountControllerImpl implements BankAccountController {
 
     @Autowired
     BankAccountHelper bankAccountHelper;
+    @Autowired
+    TransactionHelper transactionHelper;
 
-    @Override //TODO please add authorizationId to the response
+    @Override
     public AuthorizationResponseDTO authorize(Long accountId, AuthorizationRequestDTO request) {
         log.info("{} {}", request.money.amount.toString(), request.money.currency);
         Preconditions.checkNotNull(accountId, "accountId is null");
+        Preconditions.checkNotNull(request.money, "Money passed is null");
         Preconditions.checkNotNull(request.money.amount, "Amount passed is null");
         Preconditions.checkArgument(request.money.amount.intValue() > 0, "Amount passed is ZERO or negative");
         Preconditions.checkNotNull(request.money.currency, "Currency passed is null");
-        Preconditions.checkArgument(Currency.getAvailableCurrencies().contains(request.money.currency), "Currency passed is not valid");
-        return bankAccountHelper.isAmountAvailable(accountId, Money.money(request.money.amount, request.money.currency));
+        request.fromMarket = StringUtils.isBlank(request.fromMarket) ? UNKNOWN_MARKET : request.fromMarket;
+        return transactionHelper.authorizeTransaction(accountId, Money.money(request.money.amount, request.money.currency), request.fromMarket);
     }
 
     @Override

@@ -56,21 +56,6 @@ public class BankAccountHelper {
     @Value("${bank-info.bank-code}")
     private String BANK_CODE;
 
-    public AuthorizationResponseDTO isAmountAvailable(Long accountId, Money amount) {
-        Optional<BankAccount> bankAccountOptional = bankAccountRepository.findByAccount_IdAndStatus(accountId, BankAccount.Status.ACTIVE);
-        if (!bankAccountOptional.isPresent())
-            return new AuthorizationResponseDTO(false, "User not have a bank account or is bank account not is active");
-        BankAccount bankAccount = bankAccountOptional.get();
-        Money availableBalance = bankAccount.getAvailableAmount().subtract(bankAccount.getBlockedAmount());
-        boolean isImportAvailable;
-        if (bankAccount.getCurrency().equals(amount.getCurrency())) {
-            isImportAvailable = availableBalance.isGreaterOrEqualsThan(amount);
-        } else {
-            isImportAvailable = availableBalance.isGreaterOrEqualsThan(exchangeCurrencyAmountHelper.convertAmount(amount, availableBalance));
-        }
-        return (isImportAvailable) ? new AuthorizationResponseDTO(true, "", UUID.randomUUID().toString()) : new AuthorizationResponseDTO(false, "Amount not available");
-    }
-
     public BankAccountInfoDTO getBankAccountInfo(Long accountId) {
         BankAccount bankAccount = bankAccountRepository.findByAccount_Id(accountId).orElseThrow(BankAccountException::new);
 

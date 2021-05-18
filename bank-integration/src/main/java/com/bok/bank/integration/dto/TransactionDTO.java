@@ -19,4 +19,13 @@ public class TransactionDTO implements Serializable {
     public Money transactionAmount;
     public Long accountId;
     public String fromMarket;
+    public Long transactionId;
+    public String type;
+
+    public TransactionDTO(Money transactionAmount, Long accountId, String fromMarket, String type) {
+        this.transactionAmount = transactionAmount;
+        this.accountId = accountId;
+        this.fromMarket = fromMarket;
+        this.type = type;
+    }
 }
