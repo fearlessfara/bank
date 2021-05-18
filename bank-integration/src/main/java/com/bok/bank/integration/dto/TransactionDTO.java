@@ -8,7 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Currency;
+import java.util.UUID;
 
 @ToString
 @Getter
@@ -19,7 +19,7 @@ public class TransactionDTO implements Serializable {
     public Money transactionAmount;
     public Long accountId;
     public String fromMarket;
-    public Long transactionId;
+    public UUID transactionId;
     public String type;
 
     public TransactionDTO(Money transactionAmount, Long accountId, String fromMarket, String type) {
