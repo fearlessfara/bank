@@ -31,7 +31,7 @@ public class EmailHelper {
         EmailMessage emailMessage = new EmailMessage();
         emailMessage.to = account.getEmail();
         emailMessage.subject = "BOK - Bank Account activation";
-        emailMessage.text = "Dear " + account.getName() + ",\nClick on the following link to complete creation of the bank account named " + bankAccount.getName() + "\n" +
+        emailMessage.body = "Dear " + account.getName() + ",\nClick on the following link to complete creation of the bank account named " + bankAccount.getName() + "\n" +
                 baseUrl + "/bankAccount/verify?accountId=" + account.getId() + "&verificationToken=" + confirmationEmailHistory.getConfirmationToken() +
                 "\n\nThe BOK Team.";
 
@@ -44,7 +44,7 @@ public class EmailHelper {
         EmailMessage emailMessage = new EmailMessage();
         emailMessage.to = account.getEmail();
         emailMessage.subject = "BOK - Card activation";
-        emailMessage.text = "Dear " + account.getName() + ",\nClick on the following link to complete creation of the card named " + card.getName() + "\n" +
+        emailMessage.body = "Dear " + account.getName() + ",\nClick on the following link to complete creation of the card named " + card.getName() + "\n" +
                 baseUrl + "/card/verify?accountId=" + account.getId() + "&verificationToken=" + confirmationEmailHistory.getConfirmationToken() +
                 "\n\nThe BOK Team.";
 
