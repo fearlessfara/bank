@@ -2,6 +2,9 @@ server:
   port: 8080
   base-url: http://dev.faraone.ovh:81
 scheduledFor: execution
+grpc:
+  server:
+    port: 3030
 spring:
   application:
     name: bank

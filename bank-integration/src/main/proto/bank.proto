@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.bok.bank.integration.grpc";
+option java_outer_classname = "BankProto";
+
+service Bank {
+
+  rpc CreateAccount(AccountCreationRequest) returns (AccountCreationResponse);
+  rpc Authorize(AuthorizationRequest) returns (AuthorizationResponse);
+  rpc GetAccountInfo(AccountInfoRequest) returns (AccountInfoResponse);
+
+}
+
+message AccountInfoRequest{
+  uint64 accountId = 1;
+}
+message AccountInfoResponse{
+  string name = 1;
+  string middleName = 2;
+  string surname = 3;
+  string email = 4;
+}
+message AccountCreationResponse {
+  bool created = 1;
+  string error = 2;
+}
+
+message AccountCreationRequest {
+  uint64 accountId = 1;
+  string email = 2;
+}
+
+message AuthorizationRequest{
+  int64 accountId = 1;
+  string extTransactionId = 2;
+  Money money = 3;
+}
+
+message AuthorizationResponse{
+
+}
+
+message Money{
+  string currency = 1;
+  float amount = 2;
+}

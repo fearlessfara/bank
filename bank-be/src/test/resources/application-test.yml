@@ -1,6 +1,9 @@
 spring:
   application:
     name: bank
+grpc:
+  server:
+    port: 3030
 active-mq:
   bank-users: bank-accounts
   broker-url: tcp://localhost:61616
