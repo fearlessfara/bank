@@ -39,4 +39,16 @@ public interface AuthorizationRequestOrBuilder extends
    * <code>.Money money = 3;</code>
    */
   com.bok.bank.integration.grpc.MoneyOrBuilder getMoneyOrBuilder();
+
+  /**
+   * <code>string fromMarket = 4;</code>
+   * @return The fromMarket.
+   */
+  java.lang.String getFromMarket();
+  /**
+   * <code>string fromMarket = 4;</code>
+   * @return The bytes for fromMarket.
+   */
+  com.google.protobuf.ByteString
+      getFromMarketBytes();
 }

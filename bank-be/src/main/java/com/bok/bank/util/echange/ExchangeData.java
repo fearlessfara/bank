@@ -35,22 +35,17 @@ import static com.bok.bank.util.Constants.CURRENCIES_SAVED;
 @Component
 public class ExchangeData {
 
+    private final String LATEST = "/latest/";
     @Autowired
     ExchangeCurrencyValueHistoryRepository exchangeCurrencyValueHistoryRepository;
     @Autowired
     ExchangeCurrencyValueRepository exchangeCurrencyValueRepository;
-
     @Value("${scheduledFor}")
     private String scheduledFor;
-
     @Value("${exchange-currency.api-key}")
     private String apiKey;
-
     @Value("${exchange-currency.endpoint}")
     private String endpoint;
-
-    private final String LATEST = "/latest/";
-
 
     /**
      * API GET https://v6.exchangerate-api.com/v6/ceb94d443f6398dd5e640cd1/latest/USD

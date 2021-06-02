@@ -35,7 +35,7 @@ public class TransactionHelper {
     @Autowired
     ExchangeCurrencyAmountHelper exchangeCurrencyAmountHelper;
 
-    public AuthorizationResponseDTO authorizeTransaction(Long accountId, Money amount, String fromMarket){
+    public AuthorizationResponseDTO authorizeTransaction(Long accountId, Money amount, String fromMarket) {
         Optional<BankAccount> bankAccountOptional = bankAccountRepository.findByAccount_IdAndStatus(accountId, BankAccount.Status.ACTIVE);
         if (!bankAccountOptional.isPresent())
             return new AuthorizationResponseDTO(false, "User not have a bank account or is bank account not is active", null);
@@ -47,7 +47,7 @@ public class TransactionHelper {
         } else {
             isImportAvailable = availableBalance.isGreaterOrEqualsThan(exchangeCurrencyAmountHelper.convertAmount(amount, availableBalance));
         }
-        if(isImportAvailable){
+        if (isImportAvailable) {
             bankAccount.setBlockedAmount(amount);
             bankAccount = bankAccountRepository.saveAndFlush(bankAccount);
             Transaction transaction = new Transaction(Transaction.Type.WITHDRAWAL, Transaction.Status.AUTHORISED, fromMarket, bankAccount, amount);
@@ -78,9 +78,9 @@ public class TransactionHelper {
     private void executeTransaction(TransactionDTO transactionDTO, BankAccount toBankAccount) {
         Optional<Transaction> transactionOptional = transactionRepository.findByPublicId(transactionDTO.extTransactionId);
         Transaction transaction;
-        if(!transactionOptional.isPresent() && transactionDTO.type.equals(Transaction.Type.DEPOSIT.name())){
-            transaction = new Transaction(Transaction.Type.DEPOSIT, Transaction.Status.SETTLED, transactionDTO.fromMarket, toBankAccount,new Money(transactionDTO.transactionAmount.amount, transactionDTO.transactionAmount.currency));
-        }else {
+        if (!transactionOptional.isPresent() && transactionDTO.type.equals(Transaction.Type.DEPOSIT.name())) {
+            transaction = new Transaction(Transaction.Type.DEPOSIT, Transaction.Status.SETTLED, transactionDTO.fromMarket, toBankAccount, new Money(transactionDTO.transactionAmount.amount, transactionDTO.transactionAmount.currency));
+        } else {
             transaction = transactionOptional.orElseThrow(() -> new TransactionException(ErrorCode.TRANSACTION_NOT_VALID.name()));
         }
         switch (transaction.getType()) {
@@ -88,7 +88,7 @@ public class TransactionHelper {
                 toBankAccount.setAvailableAmount(toBankAccount.getAvailableAmount().plus(transaction.getAmount()));
                 break;
             case WITHDRAWAL:
-                if(transaction.getStatus().equals(Transaction.Status.DECLINED) || transaction.getStatus().equals(Transaction.Status.CANCELLED)){
+                if (transaction.getStatus().equals(Transaction.Status.DECLINED) || transaction.getStatus().equals(Transaction.Status.CANCELLED)) {
                     break;
                 }
                 toBankAccount.setAvailableAmount(toBankAccount.getAvailableAmount().subtract(transaction.getAmount()));

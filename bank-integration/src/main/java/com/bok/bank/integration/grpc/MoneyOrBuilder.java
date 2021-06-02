@@ -8,20 +8,19 @@ public interface MoneyOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>string currency = 1;</code>
+   * <code>.Currency currency = 1;</code>
+   * @return The enum numeric value on the wire for currency.
+   */
+  int getCurrencyValue();
+  /**
+   * <code>.Currency currency = 1;</code>
    * @return The currency.
    */
-  java.lang.String getCurrency();
-  /**
-   * <code>string currency = 1;</code>
-   * @return The bytes for currency.
-   */
-  com.google.protobuf.ByteString
-      getCurrencyBytes();
+  com.bok.bank.integration.grpc.Currency getCurrency();
 
   /**
-   * <code>float amount = 2;</code>
+   * <code>double amount = 2;</code>
    * @return The amount.
    */
-  float getAmount();
+  double getAmount();
 }

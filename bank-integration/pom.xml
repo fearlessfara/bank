@@ -33,7 +33,6 @@
     </dependencies>
 
 
-
     <build>
         <plugins>
             <!-- compile proto file into java files. -->

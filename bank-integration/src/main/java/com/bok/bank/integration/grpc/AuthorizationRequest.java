@@ -17,6 +17,7 @@ private static final long serialVersionUID = 0L;
   }
   private AuthorizationRequest() {
     extTransactionId_ = "";
+    fromMarket_ = "";
   }
 
   @java.lang.Override
@@ -71,6 +72,12 @@ private static final long serialVersionUID = 0L;
               money_ = subBuilder.buildPartial();
             }
 
+            break;
+          }
+          case 34: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            fromMarket_ = s;
             break;
           }
           default: {
@@ -174,6 +181,42 @@ private static final long serialVersionUID = 0L;
     return getMoney();
   }
 
+  public static final int FROMMARKET_FIELD_NUMBER = 4;
+  private volatile java.lang.Object fromMarket_;
+  /**
+   * <code>string fromMarket = 4;</code>
+   * @return The fromMarket.
+   */
+  public java.lang.String getFromMarket() {
+    java.lang.Object ref = fromMarket_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      fromMarket_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string fromMarket = 4;</code>
+   * @return The bytes for fromMarket.
+   */
+  public com.google.protobuf.ByteString
+      getFromMarketBytes() {
+    java.lang.Object ref = fromMarket_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      fromMarket_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -197,6 +240,9 @@ private static final long serialVersionUID = 0L;
     if (money_ != null) {
       output.writeMessage(3, getMoney());
     }
+    if (!getFromMarketBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, fromMarket_);
+    }
     unknownFields.writeTo(output);
   }
 
@@ -216,6 +262,9 @@ private static final long serialVersionUID = 0L;
     if (money_ != null) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(3, getMoney());
+    }
+    if (!getFromMarketBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, fromMarket_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -241,6 +290,8 @@ private static final long serialVersionUID = 0L;
       if (!getMoney()
           .equals(other.getMoney())) return false;
     }
+    if (!getFromMarket()
+        .equals(other.getFromMarket())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -261,6 +312,8 @@ private static final long serialVersionUID = 0L;
       hash = (37 * hash) + MONEY_FIELD_NUMBER;
       hash = (53 * hash) + getMoney().hashCode();
     }
+    hash = (37 * hash) + FROMMARKET_FIELD_NUMBER;
+    hash = (53 * hash) + getFromMarket().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -404,6 +457,8 @@ private static final long serialVersionUID = 0L;
         money_ = null;
         moneyBuilder_ = null;
       }
+      fromMarket_ = "";
+
       return this;
     }
 
@@ -437,6 +492,7 @@ private static final long serialVersionUID = 0L;
       } else {
         result.money_ = moneyBuilder_.build();
       }
+      result.fromMarket_ = fromMarket_;
       onBuilt();
       return result;
     }
@@ -494,6 +550,10 @@ private static final long serialVersionUID = 0L;
       }
       if (other.hasMoney()) {
         mergeMoney(other.getMoney());
+      }
+      if (!other.getFromMarket().isEmpty()) {
+        fromMarket_ = other.fromMarket_;
+        onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -747,6 +807,82 @@ private static final long serialVersionUID = 0L;
         money_ = null;
       }
       return moneyBuilder_;
+    }
+
+    private java.lang.Object fromMarket_ = "";
+    /**
+     * <code>string fromMarket = 4;</code>
+     * @return The fromMarket.
+     */
+    public java.lang.String getFromMarket() {
+      java.lang.Object ref = fromMarket_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        fromMarket_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string fromMarket = 4;</code>
+     * @return The bytes for fromMarket.
+     */
+    public com.google.protobuf.ByteString
+        getFromMarketBytes() {
+      java.lang.Object ref = fromMarket_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        fromMarket_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string fromMarket = 4;</code>
+     * @param value The fromMarket to set.
+     * @return This builder for chaining.
+     */
+    public Builder setFromMarket(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      fromMarket_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string fromMarket = 4;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearFromMarket() {
+      
+      fromMarket_ = getDefaultInstance().getFromMarket();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string fromMarket = 4;</code>
+     * @param value The bytes for fromMarket to set.
+     * @return This builder for chaining.
+     */
+    public Builder setFromMarketBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      fromMarket_ = value;
+      onChanged();
+      return this;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

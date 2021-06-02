@@ -6,4 +6,22 @@ package com.bok.bank.integration.grpc;
 public interface AuthorizationResponseOrBuilder extends
     // @@protoc_insertion_point(interface_extends:AuthorizationResponse)
     com.google.protobuf.MessageOrBuilder {
+
+  /**
+   * <code>bool authorized = 1;</code>
+   * @return The authorized.
+   */
+  boolean getAuthorized();
+
+  /**
+   * <code>string authorizationId = 2;</code>
+   * @return The authorizationId.
+   */
+  java.lang.String getAuthorizationId();
+  /**
+   * <code>string authorizationId = 2;</code>
+   * @return The bytes for authorizationId.
+   */
+  com.google.protobuf.ByteString
+      getAuthorizationIdBytes();
 }

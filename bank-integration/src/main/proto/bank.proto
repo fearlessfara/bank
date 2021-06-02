@@ -35,13 +35,21 @@ message AuthorizationRequest{
   int64 accountId = 1;
   string extTransactionId = 2;
   Money money = 3;
+  string fromMarket = 4;
 }
 
 message AuthorizationResponse{
-
+  bool authorized = 1;
+  string authorizationId = 2;
 }
 
 message Money{
-  string currency = 1;
-  float amount = 2;
+  Currency currency = 1;
+  double amount = 2;
+}
+
+enum Currency{
+  USD = 0;
+  EUR = 1;
+  AUD = 2;
 }

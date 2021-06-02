@@ -15,10 +15,10 @@ import java.sql.Types;
 import java.util.Properties;
 
 public class JsonType implements UserType, ParameterizedType {
-    private static final int[] SQL_TYPES = {Types.LONGVARCHAR};
     public static final String CLASSNAME = "classname";
-    private Class clazz;
+    private static final int[] SQL_TYPES = {Types.LONGVARCHAR};
     private final ObjectMapper mapper;
+    private Class clazz;
 
 
     public JsonType() {

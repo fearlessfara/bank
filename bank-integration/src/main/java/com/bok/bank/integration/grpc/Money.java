@@ -16,7 +16,7 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private Money() {
-    currency_ = "";
+    currency_ = 0;
   }
 
   @java.lang.Override
@@ -49,15 +49,15 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
-          case 10: {
-            java.lang.String s = input.readStringRequireUtf8();
+          case 8: {
+            int rawValue = input.readEnum();
 
-            currency_ = s;
+            currency_ = rawValue;
             break;
           }
-          case 21: {
+          case 17: {
 
-            amount_ = input.readFloat();
+            amount_ = input.readDouble();
             break;
           }
           default: {
@@ -93,48 +93,31 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int CURRENCY_FIELD_NUMBER = 1;
-  private volatile java.lang.Object currency_;
+  private int currency_;
   /**
-   * <code>string currency = 1;</code>
-   * @return The currency.
+   * <code>.Currency currency = 1;</code>
+   * @return The enum numeric value on the wire for currency.
    */
-  public java.lang.String getCurrency() {
-    java.lang.Object ref = currency_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      currency_ = s;
-      return s;
-    }
+  public int getCurrencyValue() {
+    return currency_;
   }
   /**
-   * <code>string currency = 1;</code>
-   * @return The bytes for currency.
+   * <code>.Currency currency = 1;</code>
+   * @return The currency.
    */
-  public com.google.protobuf.ByteString
-      getCurrencyBytes() {
-    java.lang.Object ref = currency_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      currency_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
+  public com.bok.bank.integration.grpc.Currency getCurrency() {
+    @SuppressWarnings("deprecation")
+    com.bok.bank.integration.grpc.Currency result = com.bok.bank.integration.grpc.Currency.valueOf(currency_);
+    return result == null ? com.bok.bank.integration.grpc.Currency.UNRECOGNIZED : result;
   }
 
   public static final int AMOUNT_FIELD_NUMBER = 2;
-  private float amount_;
+  private double amount_;
   /**
-   * <code>float amount = 2;</code>
+   * <code>double amount = 2;</code>
    * @return The amount.
    */
-  public float getAmount() {
+  public double getAmount() {
     return amount_;
   }
 
@@ -152,11 +135,11 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (!getCurrencyBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, currency_);
+    if (currency_ != com.bok.bank.integration.grpc.Currency.USD.getNumber()) {
+      output.writeEnum(1, currency_);
     }
-    if (amount_ != 0F) {
-      output.writeFloat(2, amount_);
+    if (amount_ != 0D) {
+      output.writeDouble(2, amount_);
     }
     unknownFields.writeTo(output);
   }
@@ -167,12 +150,13 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (!getCurrencyBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, currency_);
-    }
-    if (amount_ != 0F) {
+    if (currency_ != com.bok.bank.integration.grpc.Currency.USD.getNumber()) {
       size += com.google.protobuf.CodedOutputStream
-        .computeFloatSize(2, amount_);
+        .computeEnumSize(1, currency_);
+    }
+    if (amount_ != 0D) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeDoubleSize(2, amount_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -189,10 +173,9 @@ private static final long serialVersionUID = 0L;
     }
     com.bok.bank.integration.grpc.Money other = (com.bok.bank.integration.grpc.Money) obj;
 
-    if (!getCurrency()
-        .equals(other.getCurrency())) return false;
-    if (java.lang.Float.floatToIntBits(getAmount())
-        != java.lang.Float.floatToIntBits(
+    if (currency_ != other.currency_) return false;
+    if (java.lang.Double.doubleToLongBits(getAmount())
+        != java.lang.Double.doubleToLongBits(
             other.getAmount())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
@@ -206,10 +189,10 @@ private static final long serialVersionUID = 0L;
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + CURRENCY_FIELD_NUMBER;
-    hash = (53 * hash) + getCurrency().hashCode();
+    hash = (53 * hash) + currency_;
     hash = (37 * hash) + AMOUNT_FIELD_NUMBER;
-    hash = (53 * hash) + java.lang.Float.floatToIntBits(
-        getAmount());
+    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+        java.lang.Double.doubleToLongBits(getAmount()));
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -343,9 +326,9 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      currency_ = "";
+      currency_ = 0;
 
-      amount_ = 0F;
+      amount_ = 0D;
 
       return this;
     }
@@ -423,11 +406,10 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(com.bok.bank.integration.grpc.Money other) {
       if (other == com.bok.bank.integration.grpc.Money.getDefaultInstance()) return this;
-      if (!other.getCurrency().isEmpty()) {
-        currency_ = other.currency_;
-        onChanged();
+      if (other.currency_ != 0) {
+        setCurrencyValue(other.getCurrencyValue());
       }
-      if (other.getAmount() != 0F) {
+      if (other.getAmount() != 0D) {
         setAmount(other.getAmount());
       }
       this.mergeUnknownFields(other.unknownFields);
@@ -459,108 +441,84 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.lang.Object currency_ = "";
+    private int currency_ = 0;
     /**
-     * <code>string currency = 1;</code>
-     * @return The currency.
+     * <code>.Currency currency = 1;</code>
+     * @return The enum numeric value on the wire for currency.
      */
-    public java.lang.String getCurrency() {
-      java.lang.Object ref = currency_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        currency_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
+    public int getCurrencyValue() {
+      return currency_;
     }
     /**
-     * <code>string currency = 1;</code>
-     * @return The bytes for currency.
-     */
-    public com.google.protobuf.ByteString
-        getCurrencyBytes() {
-      java.lang.Object ref = currency_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        currency_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>string currency = 1;</code>
-     * @param value The currency to set.
+     * <code>.Currency currency = 1;</code>
+     * @param value The enum numeric value on the wire for currency to set.
      * @return This builder for chaining.
      */
-    public Builder setCurrency(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
+    public Builder setCurrencyValue(int value) {
       currency_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string currency = 1;</code>
+     * <code>.Currency currency = 1;</code>
+     * @return The currency.
+     */
+    public com.bok.bank.integration.grpc.Currency getCurrency() {
+      @SuppressWarnings("deprecation")
+      com.bok.bank.integration.grpc.Currency result = com.bok.bank.integration.grpc.Currency.valueOf(currency_);
+      return result == null ? com.bok.bank.integration.grpc.Currency.UNRECOGNIZED : result;
+    }
+    /**
+     * <code>.Currency currency = 1;</code>
+     * @param value The currency to set.
+     * @return This builder for chaining.
+     */
+    public Builder setCurrency(com.bok.bank.integration.grpc.Currency value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      
+      currency_ = value.getNumber();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>.Currency currency = 1;</code>
      * @return This builder for chaining.
      */
     public Builder clearCurrency() {
       
-      currency_ = getDefaultInstance().getCurrency();
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string currency = 1;</code>
-     * @param value The bytes for currency to set.
-     * @return This builder for chaining.
-     */
-    public Builder setCurrencyBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      
-      currency_ = value;
+      currency_ = 0;
       onChanged();
       return this;
     }
 
-    private float amount_ ;
+    private double amount_ ;
     /**
-     * <code>float amount = 2;</code>
+     * <code>double amount = 2;</code>
      * @return The amount.
      */
-    public float getAmount() {
+    public double getAmount() {
       return amount_;
     }
     /**
-     * <code>float amount = 2;</code>
+     * <code>double amount = 2;</code>
      * @param value The amount to set.
      * @return This builder for chaining.
      */
-    public Builder setAmount(float value) {
+    public Builder setAmount(double value) {
       
       amount_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>float amount = 2;</code>
+     * <code>double amount = 2;</code>
      * @return This builder for chaining.
      */
     public Builder clearAmount() {
       
-      amount_ = 0F;
+      amount_ = 0D;
       onChanged();
       return this;
     }

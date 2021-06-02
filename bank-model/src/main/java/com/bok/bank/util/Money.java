@@ -53,13 +53,54 @@ public class Money implements Comparable<Money>, Serializable {
         this.value = value;
     }
 
+    public static Money money(Money copy) {
+        return new Money(copy);
+    }
+
+    public static Money money(long value, Scale scale, Currency currency) {
+        return new Money(value, scale, currency);
+    }
+
+    public static Money money(long value, Scale scale) {
+        return new Money(value, scale);
+    }
+
+    public static Money money(BigDecimal bigDecimal, Currency currency) {
+        return new Money(bigDecimal, currency);
+    }
+
+    public static Money zero(Currency currency) {
+        return new Money(BigDecimal.ZERO, currency);
+    }
+
+    public static Money max(final Money m1, final Money m2) {
+        if (m1.isLessThan(m2)) {
+            return m2;
+        }
+        return m1;
+    }
+
+    public static Money min(final Money m1, final Money m2) {
+        if (m1.isGreaterThan(m2)) {
+            return m2;
+        }
+        return m1;
+    }
 
     public BigDecimal getValue() {
         return value;
     }
 
+    public void setValue(BigDecimal value) {
+        this.value = value;
+    }
+
     public Currency getCurrency() {
         return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 
     public Money plus(Money other) {
@@ -155,53 +196,10 @@ public class Money implements Comparable<Money>, Serializable {
         return compareTo(other) <= 0;
     }
 
-    public static Money money(Money copy) {
-        return new Money(copy);
-    }
-
-    public static Money money(long value, Scale scale, Currency currency) {
-        return new Money(value, scale, currency);
-    }
-
-    public static Money money(long value, Scale scale) {
-        return new Money(value, scale);
-    }
-
-
-    public static Money money(BigDecimal bigDecimal, Currency currency) {
-        return new Money(bigDecimal, currency);
-    }
-
-    public static Money zero(Currency currency) {
-        return new Money(BigDecimal.ZERO, currency);
-    }
-
-    public static Money max(final Money m1, final Money m2) {
-        if (m1.isLessThan(m2)) {
-            return m2;
-        }
-        return m1;
-    }
-
-    public static Money min(final Money m1, final Money m2) {
-        if (m1.isGreaterThan(m2)) {
-            return m2;
-        }
-        return m1;
-    }
-
     private void checkCurrency(Currency currency) {
         if (!this.currency.equals(currency))
             throw new IllegalStateException("Currency mismatch");
 
-    }
-
-    public void setValue(BigDecimal value) {
-        this.value = value;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
     }
 
     @Override

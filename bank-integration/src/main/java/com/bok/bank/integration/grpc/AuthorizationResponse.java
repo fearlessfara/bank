@@ -16,6 +16,7 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private AuthorizationResponse() {
+    authorizationId_ = "";
   }
 
   @java.lang.Override
@@ -48,6 +49,17 @@ private static final long serialVersionUID = 0L;
           case 0:
             done = true;
             break;
+          case 8: {
+
+            authorized_ = input.readBool();
+            break;
+          }
+          case 18: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            authorizationId_ = s;
+            break;
+          }
           default: {
             if (!parseUnknownField(
                 input, unknownFields, extensionRegistry, tag)) {
@@ -80,6 +92,52 @@ private static final long serialVersionUID = 0L;
             com.bok.bank.integration.grpc.AuthorizationResponse.class, com.bok.bank.integration.grpc.AuthorizationResponse.Builder.class);
   }
 
+  public static final int AUTHORIZED_FIELD_NUMBER = 1;
+  private boolean authorized_;
+  /**
+   * <code>bool authorized = 1;</code>
+   * @return The authorized.
+   */
+  public boolean getAuthorized() {
+    return authorized_;
+  }
+
+  public static final int AUTHORIZATIONID_FIELD_NUMBER = 2;
+  private volatile java.lang.Object authorizationId_;
+  /**
+   * <code>string authorizationId = 2;</code>
+   * @return The authorizationId.
+   */
+  public java.lang.String getAuthorizationId() {
+    java.lang.Object ref = authorizationId_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      authorizationId_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string authorizationId = 2;</code>
+   * @return The bytes for authorizationId.
+   */
+  public com.google.protobuf.ByteString
+      getAuthorizationIdBytes() {
+    java.lang.Object ref = authorizationId_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      authorizationId_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -94,6 +152,12 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
+    if (authorized_ != false) {
+      output.writeBool(1, authorized_);
+    }
+    if (!getAuthorizationIdBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, authorizationId_);
+    }
     unknownFields.writeTo(output);
   }
 
@@ -103,6 +167,13 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
+    if (authorized_ != false) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeBoolSize(1, authorized_);
+    }
+    if (!getAuthorizationIdBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, authorizationId_);
+    }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
     return size;
@@ -118,6 +189,10 @@ private static final long serialVersionUID = 0L;
     }
     com.bok.bank.integration.grpc.AuthorizationResponse other = (com.bok.bank.integration.grpc.AuthorizationResponse) obj;
 
+    if (getAuthorized()
+        != other.getAuthorized()) return false;
+    if (!getAuthorizationId()
+        .equals(other.getAuthorizationId())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -129,6 +204,11 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
+    hash = (37 * hash) + AUTHORIZED_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+        getAuthorized());
+    hash = (37 * hash) + AUTHORIZATIONID_FIELD_NUMBER;
+    hash = (53 * hash) + getAuthorizationId().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -262,6 +342,10 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public Builder clear() {
       super.clear();
+      authorized_ = false;
+
+      authorizationId_ = "";
+
       return this;
     }
 
@@ -288,6 +372,8 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.bok.bank.integration.grpc.AuthorizationResponse buildPartial() {
       com.bok.bank.integration.grpc.AuthorizationResponse result = new com.bok.bank.integration.grpc.AuthorizationResponse(this);
+      result.authorized_ = authorized_;
+      result.authorizationId_ = authorizationId_;
       onBuilt();
       return result;
     }
@@ -336,6 +422,13 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(com.bok.bank.integration.grpc.AuthorizationResponse other) {
       if (other == com.bok.bank.integration.grpc.AuthorizationResponse.getDefaultInstance()) return this;
+      if (other.getAuthorized() != false) {
+        setAuthorized(other.getAuthorized());
+      }
+      if (!other.getAuthorizationId().isEmpty()) {
+        authorizationId_ = other.authorizationId_;
+        onChanged();
+      }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
       return this;
@@ -362,6 +455,112 @@ private static final long serialVersionUID = 0L;
           mergeFrom(parsedMessage);
         }
       }
+      return this;
+    }
+
+    private boolean authorized_ ;
+    /**
+     * <code>bool authorized = 1;</code>
+     * @return The authorized.
+     */
+    public boolean getAuthorized() {
+      return authorized_;
+    }
+    /**
+     * <code>bool authorized = 1;</code>
+     * @param value The authorized to set.
+     * @return This builder for chaining.
+     */
+    public Builder setAuthorized(boolean value) {
+      
+      authorized_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>bool authorized = 1;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearAuthorized() {
+      
+      authorized_ = false;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object authorizationId_ = "";
+    /**
+     * <code>string authorizationId = 2;</code>
+     * @return The authorizationId.
+     */
+    public java.lang.String getAuthorizationId() {
+      java.lang.Object ref = authorizationId_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        authorizationId_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string authorizationId = 2;</code>
+     * @return The bytes for authorizationId.
+     */
+    public com.google.protobuf.ByteString
+        getAuthorizationIdBytes() {
+      java.lang.Object ref = authorizationId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        authorizationId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string authorizationId = 2;</code>
+     * @param value The authorizationId to set.
+     * @return This builder for chaining.
+     */
+    public Builder setAuthorizationId(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      authorizationId_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string authorizationId = 2;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearAuthorizationId() {
+      
+      authorizationId_ = getDefaultInstance().getAuthorizationId();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string authorizationId = 2;</code>
+     * @param value The bytes for authorizationId to set.
+     * @return This builder for chaining.
+     */
+    public Builder setAuthorizationIdBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      authorizationId_ = value;
+      onChanged();
       return this;
     }
     @java.lang.Override

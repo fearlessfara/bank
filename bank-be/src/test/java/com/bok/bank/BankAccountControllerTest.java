@@ -84,7 +84,7 @@ public class BankAccountControllerTest {
     @Test
     public void checkPaymentAmountFailTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
-        AuthorizationResponseDTO checkPaymentAmount = bankAccountController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(),new Money(EUR, BigDecimal.valueOf(50)), "MARKET"));
+        AuthorizationResponseDTO checkPaymentAmount = bankAccountController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new Money(EUR, BigDecimal.valueOf(50)), "MARKET"));
         assertEquals(checkPaymentAmount.reason, "User not have a bank account or is bank account not is active");
         assertFalse(checkPaymentAmount.authorized);
     }
@@ -93,7 +93,7 @@ public class BankAccountControllerTest {
     public void checkPaymentAmountAnotherCurrencyTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
-        AuthorizationResponseDTO checkPaymentAmount = bankAccountController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(),UUID.randomUUID(), new Money(USD, BigDecimal.valueOf(121)), "MARKET"));
+        AuthorizationResponseDTO checkPaymentAmount = bankAccountController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new Money(USD, BigDecimal.valueOf(121)), "MARKET"));
         assertEquals(checkPaymentAmount.reason, "");
         assertTrue(checkPaymentAmount.authorized);
     }
@@ -102,7 +102,7 @@ public class BankAccountControllerTest {
     public void checkPaymentAmountGreaterWithAnotherCurrencyTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
-        AuthorizationResponseDTO checkPaymentAmount = bankAccountController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(),UUID.randomUUID(), new Money(USD, BigDecimal.valueOf(123)), "MARKET"));
+        AuthorizationResponseDTO checkPaymentAmount = bankAccountController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new Money(USD, BigDecimal.valueOf(123)), "MARKET"));
         assertEquals(checkPaymentAmount.reason, "Amount not available");
         assertFalse(checkPaymentAmount.authorized);
     }
@@ -111,7 +111,7 @@ public class BankAccountControllerTest {
     public void checkPaymentAmountWithNotCommonCurrencyTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
-        AuthorizationResponseDTO checkPaymentAmount = bankAccountController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(),UUID.randomUUID(), new Money(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)), "MARKET"));
+        AuthorizationResponseDTO checkPaymentAmount = bankAccountController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new Money(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)), "MARKET"));
         assertEquals(checkPaymentAmount.reason, "Amount not available");
         assertFalse(checkPaymentAmount.authorized);
     }

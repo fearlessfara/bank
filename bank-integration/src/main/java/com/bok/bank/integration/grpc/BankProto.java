@@ -64,17 +64,20 @@ public final class BankProto {
       "e\030\003 \001(\t\022\r\n\005email\030\004 \001(\t\"9\n\027AccountCreatio" +
       "nResponse\022\017\n\007created\030\001 \001(\010\022\r\n\005error\030\002 \001(" +
       "\t\":\n\026AccountCreationRequest\022\021\n\taccountId" +
-      "\030\001 \001(\004\022\r\n\005email\030\002 \001(\t\"Z\n\024AuthorizationRe" +
+      "\030\001 \001(\004\022\r\n\005email\030\002 \001(\t\"n\n\024AuthorizationRe" +
       "quest\022\021\n\taccountId\030\001 \001(\003\022\030\n\020extTransacti" +
-      "onId\030\002 \001(\t\022\025\n\005money\030\003 \001(\0132\006.Money\"\027\n\025Aut" +
-      "horizationResponse\")\n\005Money\022\020\n\010currency\030" +
-      "\001 \001(\t\022\016\n\006amount\030\002 \001(\0022\303\001\n\004Bank\022B\n\rCreate" +
-      "Account\022\027.AccountCreationRequest\032\030.Accou" +
-      "ntCreationResponse\022:\n\tAuthorize\022\025.Author" +
-      "izationRequest\032\026.AuthorizationResponse\022;" +
-      "\n\016GetAccountInfo\022\023.AccountInfoRequest\032\024." +
-      "AccountInfoResponseB,\n\035com.bok.bank.inte" +
-      "gration.grpcB\tBankProtoP\001b\006proto3"
+      "onId\030\002 \001(\t\022\025\n\005money\030\003 \001(\0132\006.Money\022\022\n\nfro" +
+      "mMarket\030\004 \001(\t\"D\n\025AuthorizationResponse\022\022" +
+      "\n\nauthorized\030\001 \001(\010\022\027\n\017authorizationId\030\002 " +
+      "\001(\t\"4\n\005Money\022\033\n\010currency\030\001 \001(\0162\t.Currenc" +
+      "y\022\016\n\006amount\030\002 \001(\001*%\n\010Currency\022\007\n\003USD\020\000\022\007" +
+      "\n\003EUR\020\001\022\007\n\003AUD\020\0032\303\001\n\004Bank\022B\n\rCreateAccou" +
+      "nt\022\027.AccountCreationRequest\032\030.AccountCre" +
+      "ationResponse\022:\n\tAuthorize\022\025.Authorizati" +
+      "onRequest\032\026.AuthorizationResponse\022;\n\016Get" +
+      "AccountInfo\022\023.AccountInfoRequest\032\024.Accou" +
+      "ntInfoResponseB,\n\035com.bok.bank.integrati" +
+      "on.grpcB\tBankProtoP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -109,13 +112,13 @@ public final class BankProto {
     internal_static_AuthorizationRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_AuthorizationRequest_descriptor,
-        new java.lang.String[] { "AccountId", "ExtTransactionId", "Money", });
+        new java.lang.String[] { "AccountId", "ExtTransactionId", "Money", "FromMarket", });
     internal_static_AuthorizationResponse_descriptor =
       getDescriptor().getMessageTypes().get(5);
     internal_static_AuthorizationResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_AuthorizationResponse_descriptor,
-        new java.lang.String[] { });
+        new java.lang.String[] { "Authorized", "AuthorizationId", });
     internal_static_Money_descriptor =
       getDescriptor().getMessageTypes().get(6);
     internal_static_Money_fieldAccessorTable = new

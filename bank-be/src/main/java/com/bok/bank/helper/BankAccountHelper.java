@@ -3,7 +3,6 @@ package com.bok.bank.helper;
 import com.bok.bank.exception.AccountException;
 import com.bok.bank.exception.BankAccountException;
 import com.bok.bank.exception.ErrorCode;
-import com.bok.bank.integration.dto.AuthorizationResponseDTO;
 import com.bok.bank.integration.dto.BankAccountDTO;
 import com.bok.bank.integration.dto.BankAccountInfoDTO;
 import com.bok.bank.model.Account;
@@ -22,8 +21,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.Optional;
-import java.util.UUID;
 
 @Component
 @Slf4j
