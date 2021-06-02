@@ -1,6 +1,9 @@
 server:
   port: 8080
   base-url: http://dev.faraone.ovh:81
+  error:
+    whitelabel:
+      enabled: false
 scheduledFor: execution
 grpc:
   server:
