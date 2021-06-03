@@ -16,7 +16,4 @@ public interface AccountController {
     @GetMapping("/profileInfo")
     AccountInfoDTO profileInfo(@RequestParam("accountId") Long accountId);
 
-    @PostMapping("/checkCreation")
-    Boolean checkCreation(@RequestBody BankCheckRequestDTO bankCheckRequestDTO);
-
 }

@@ -4,26 +4,27 @@
 package com.bok.bank.integration.grpc;
 
 /**
- * Protobuf type {@code AccountCreationRequest}
+ * Protobuf type {@code AccountCreationCheckRequest}
  */
-public  final class AccountCreationRequest extends
+public  final class AccountCreationCheckRequest extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:AccountCreationRequest)
-    AccountCreationRequestOrBuilder {
+    // @@protoc_insertion_point(message_implements:AccountCreationCheckRequest)
+    AccountCreationCheckRequestOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use AccountCreationRequest.newBuilder() to construct.
-  private AccountCreationRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use AccountCreationCheckRequest.newBuilder() to construct.
+  private AccountCreationCheckRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private AccountCreationRequest() {
-    email_ = "";
+  private AccountCreationCheckRequest() {
+    fiscalCode_ = "";
+    vatNumber_ = "";
   }
 
   @java.lang.Override
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new AccountCreationRequest();
+    return new AccountCreationCheckRequest();
   }
 
   @java.lang.Override
@@ -31,7 +32,7 @@ private static final long serialVersionUID = 0L;
   getUnknownFields() {
     return this.unknownFields;
   }
-  private AccountCreationRequest(
+  private AccountCreationCheckRequest(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
@@ -57,7 +58,18 @@ private static final long serialVersionUID = 0L;
           case 18: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            email_ = s;
+            fiscalCode_ = s;
+            break;
+          }
+          case 26: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            vatNumber_ = s;
+            break;
+          }
+          case 32: {
+
+            business_ = input.readBool();
             break;
           }
           default: {
@@ -81,15 +93,15 @@ private static final long serialVersionUID = 0L;
   }
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return com.bok.bank.integration.grpc.BankProto.internal_static_AccountCreationRequest_descriptor;
+    return com.bok.bank.integration.grpc.BankProto.internal_static_AccountCreationCheckRequest_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return com.bok.bank.integration.grpc.BankProto.internal_static_AccountCreationRequest_fieldAccessorTable
+    return com.bok.bank.integration.grpc.BankProto.internal_static_AccountCreationCheckRequest_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            com.bok.bank.integration.grpc.AccountCreationRequest.class, com.bok.bank.integration.grpc.AccountCreationRequest.Builder.class);
+            com.bok.bank.integration.grpc.AccountCreationCheckRequest.class, com.bok.bank.integration.grpc.AccountCreationCheckRequest.Builder.class);
   }
 
   public static final int ACCOUNTID_FIELD_NUMBER = 1;
@@ -102,40 +114,86 @@ private static final long serialVersionUID = 0L;
     return accountId_;
   }
 
-  public static final int EMAIL_FIELD_NUMBER = 2;
-  private volatile java.lang.Object email_;
+  public static final int FISCALCODE_FIELD_NUMBER = 2;
+  private volatile java.lang.Object fiscalCode_;
   /**
-   * <code>string email = 2;</code>
-   * @return The email.
+   * <code>string fiscalCode = 2;</code>
+   * @return The fiscalCode.
    */
-  public java.lang.String getEmail() {
-    java.lang.Object ref = email_;
+  public java.lang.String getFiscalCode() {
+    java.lang.Object ref = fiscalCode_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = 
           (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      email_ = s;
+      fiscalCode_ = s;
       return s;
     }
   }
   /**
-   * <code>string email = 2;</code>
-   * @return The bytes for email.
+   * <code>string fiscalCode = 2;</code>
+   * @return The bytes for fiscalCode.
    */
   public com.google.protobuf.ByteString
-      getEmailBytes() {
-    java.lang.Object ref = email_;
+      getFiscalCodeBytes() {
+    java.lang.Object ref = fiscalCode_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b = 
           com.google.protobuf.ByteString.copyFromUtf8(
               (java.lang.String) ref);
-      email_ = b;
+      fiscalCode_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
     }
+  }
+
+  public static final int VATNUMBER_FIELD_NUMBER = 3;
+  private volatile java.lang.Object vatNumber_;
+  /**
+   * <code>string vatNumber = 3;</code>
+   * @return The vatNumber.
+   */
+  public java.lang.String getVatNumber() {
+    java.lang.Object ref = vatNumber_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      vatNumber_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string vatNumber = 3;</code>
+   * @return The bytes for vatNumber.
+   */
+  public com.google.protobuf.ByteString
+      getVatNumberBytes() {
+    java.lang.Object ref = vatNumber_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      vatNumber_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int BUSINESS_FIELD_NUMBER = 4;
+  private boolean business_;
+  /**
+   * <code>bool business = 4;</code>
+   * @return The business.
+   */
+  public boolean getBusiness() {
+    return business_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -155,8 +213,14 @@ private static final long serialVersionUID = 0L;
     if (accountId_ != 0L) {
       output.writeUInt64(1, accountId_);
     }
-    if (!getEmailBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, email_);
+    if (!getFiscalCodeBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, fiscalCode_);
+    }
+    if (!getVatNumberBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, vatNumber_);
+    }
+    if (business_ != false) {
+      output.writeBool(4, business_);
     }
     unknownFields.writeTo(output);
   }
@@ -171,8 +235,15 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeUInt64Size(1, accountId_);
     }
-    if (!getEmailBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, email_);
+    if (!getFiscalCodeBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, fiscalCode_);
+    }
+    if (!getVatNumberBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, vatNumber_);
+    }
+    if (business_ != false) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeBoolSize(4, business_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -184,15 +255,19 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof com.bok.bank.integration.grpc.AccountCreationRequest)) {
+    if (!(obj instanceof com.bok.bank.integration.grpc.AccountCreationCheckRequest)) {
       return super.equals(obj);
     }
-    com.bok.bank.integration.grpc.AccountCreationRequest other = (com.bok.bank.integration.grpc.AccountCreationRequest) obj;
+    com.bok.bank.integration.grpc.AccountCreationCheckRequest other = (com.bok.bank.integration.grpc.AccountCreationCheckRequest) obj;
 
     if (getAccountId()
         != other.getAccountId()) return false;
-    if (!getEmail()
-        .equals(other.getEmail())) return false;
+    if (!getFiscalCode()
+        .equals(other.getFiscalCode())) return false;
+    if (!getVatNumber()
+        .equals(other.getVatNumber())) return false;
+    if (getBusiness()
+        != other.getBusiness()) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -207,76 +282,81 @@ private static final long serialVersionUID = 0L;
     hash = (37 * hash) + ACCOUNTID_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getAccountId());
-    hash = (37 * hash) + EMAIL_FIELD_NUMBER;
-    hash = (53 * hash) + getEmail().hashCode();
+    hash = (37 * hash) + FISCALCODE_FIELD_NUMBER;
+    hash = (53 * hash) + getFiscalCode().hashCode();
+    hash = (37 * hash) + VATNUMBER_FIELD_NUMBER;
+    hash = (53 * hash) + getVatNumber().hashCode();
+    hash = (37 * hash) + BUSINESS_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+        getBusiness());
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static com.bok.bank.integration.grpc.AccountCreationRequest parseFrom(
+  public static com.bok.bank.integration.grpc.AccountCreationCheckRequest parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.bok.bank.integration.grpc.AccountCreationRequest parseFrom(
+  public static com.bok.bank.integration.grpc.AccountCreationCheckRequest parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.bok.bank.integration.grpc.AccountCreationRequest parseFrom(
+  public static com.bok.bank.integration.grpc.AccountCreationCheckRequest parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.bok.bank.integration.grpc.AccountCreationRequest parseFrom(
+  public static com.bok.bank.integration.grpc.AccountCreationCheckRequest parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.bok.bank.integration.grpc.AccountCreationRequest parseFrom(byte[] data)
+  public static com.bok.bank.integration.grpc.AccountCreationCheckRequest parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static com.bok.bank.integration.grpc.AccountCreationRequest parseFrom(
+  public static com.bok.bank.integration.grpc.AccountCreationCheckRequest parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static com.bok.bank.integration.grpc.AccountCreationRequest parseFrom(java.io.InputStream input)
+  public static com.bok.bank.integration.grpc.AccountCreationCheckRequest parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static com.bok.bank.integration.grpc.AccountCreationRequest parseFrom(
+  public static com.bok.bank.integration.grpc.AccountCreationCheckRequest parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
-  public static com.bok.bank.integration.grpc.AccountCreationRequest parseDelimitedFrom(java.io.InputStream input)
+  public static com.bok.bank.integration.grpc.AccountCreationCheckRequest parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
-  public static com.bok.bank.integration.grpc.AccountCreationRequest parseDelimitedFrom(
+  public static com.bok.bank.integration.grpc.AccountCreationCheckRequest parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static com.bok.bank.integration.grpc.AccountCreationRequest parseFrom(
+  public static com.bok.bank.integration.grpc.AccountCreationCheckRequest parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static com.bok.bank.integration.grpc.AccountCreationRequest parseFrom(
+  public static com.bok.bank.integration.grpc.AccountCreationCheckRequest parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -289,7 +369,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(com.bok.bank.integration.grpc.AccountCreationRequest prototype) {
+  public static Builder newBuilder(com.bok.bank.integration.grpc.AccountCreationCheckRequest prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -305,26 +385,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code AccountCreationRequest}
+   * Protobuf type {@code AccountCreationCheckRequest}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:AccountCreationRequest)
-      com.bok.bank.integration.grpc.AccountCreationRequestOrBuilder {
+      // @@protoc_insertion_point(builder_implements:AccountCreationCheckRequest)
+      com.bok.bank.integration.grpc.AccountCreationCheckRequestOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.bok.bank.integration.grpc.BankProto.internal_static_AccountCreationRequest_descriptor;
+      return com.bok.bank.integration.grpc.BankProto.internal_static_AccountCreationCheckRequest_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.bok.bank.integration.grpc.BankProto.internal_static_AccountCreationRequest_fieldAccessorTable
+      return com.bok.bank.integration.grpc.BankProto.internal_static_AccountCreationCheckRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.bok.bank.integration.grpc.AccountCreationRequest.class, com.bok.bank.integration.grpc.AccountCreationRequest.Builder.class);
+              com.bok.bank.integration.grpc.AccountCreationCheckRequest.class, com.bok.bank.integration.grpc.AccountCreationCheckRequest.Builder.class);
     }
 
-    // Construct using com.bok.bank.integration.grpc.AccountCreationRequest.newBuilder()
+    // Construct using com.bok.bank.integration.grpc.AccountCreationCheckRequest.newBuilder()
     private Builder() {
       maybeForceBuilderInitialization();
     }
@@ -344,7 +424,11 @@ private static final long serialVersionUID = 0L;
       super.clear();
       accountId_ = 0L;
 
-      email_ = "";
+      fiscalCode_ = "";
+
+      vatNumber_ = "";
+
+      business_ = false;
 
       return this;
     }
@@ -352,17 +436,17 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return com.bok.bank.integration.grpc.BankProto.internal_static_AccountCreationRequest_descriptor;
+      return com.bok.bank.integration.grpc.BankProto.internal_static_AccountCreationCheckRequest_descriptor;
     }
 
     @java.lang.Override
-    public com.bok.bank.integration.grpc.AccountCreationRequest getDefaultInstanceForType() {
-      return com.bok.bank.integration.grpc.AccountCreationRequest.getDefaultInstance();
+    public com.bok.bank.integration.grpc.AccountCreationCheckRequest getDefaultInstanceForType() {
+      return com.bok.bank.integration.grpc.AccountCreationCheckRequest.getDefaultInstance();
     }
 
     @java.lang.Override
-    public com.bok.bank.integration.grpc.AccountCreationRequest build() {
-      com.bok.bank.integration.grpc.AccountCreationRequest result = buildPartial();
+    public com.bok.bank.integration.grpc.AccountCreationCheckRequest build() {
+      com.bok.bank.integration.grpc.AccountCreationCheckRequest result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -370,10 +454,12 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public com.bok.bank.integration.grpc.AccountCreationRequest buildPartial() {
-      com.bok.bank.integration.grpc.AccountCreationRequest result = new com.bok.bank.integration.grpc.AccountCreationRequest(this);
+    public com.bok.bank.integration.grpc.AccountCreationCheckRequest buildPartial() {
+      com.bok.bank.integration.grpc.AccountCreationCheckRequest result = new com.bok.bank.integration.grpc.AccountCreationCheckRequest(this);
       result.accountId_ = accountId_;
-      result.email_ = email_;
+      result.fiscalCode_ = fiscalCode_;
+      result.vatNumber_ = vatNumber_;
+      result.business_ = business_;
       onBuilt();
       return result;
     }
@@ -412,22 +498,29 @@ private static final long serialVersionUID = 0L;
     }
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof com.bok.bank.integration.grpc.AccountCreationRequest) {
-        return mergeFrom((com.bok.bank.integration.grpc.AccountCreationRequest)other);
+      if (other instanceof com.bok.bank.integration.grpc.AccountCreationCheckRequest) {
+        return mergeFrom((com.bok.bank.integration.grpc.AccountCreationCheckRequest)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(com.bok.bank.integration.grpc.AccountCreationRequest other) {
-      if (other == com.bok.bank.integration.grpc.AccountCreationRequest.getDefaultInstance()) return this;
+    public Builder mergeFrom(com.bok.bank.integration.grpc.AccountCreationCheckRequest other) {
+      if (other == com.bok.bank.integration.grpc.AccountCreationCheckRequest.getDefaultInstance()) return this;
       if (other.getAccountId() != 0L) {
         setAccountId(other.getAccountId());
       }
-      if (!other.getEmail().isEmpty()) {
-        email_ = other.email_;
+      if (!other.getFiscalCode().isEmpty()) {
+        fiscalCode_ = other.fiscalCode_;
         onChanged();
+      }
+      if (!other.getVatNumber().isEmpty()) {
+        vatNumber_ = other.vatNumber_;
+        onChanged();
+      }
+      if (other.getBusiness() != false) {
+        setBusiness(other.getBusiness());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -444,11 +537,11 @@ private static final long serialVersionUID = 0L;
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      com.bok.bank.integration.grpc.AccountCreationRequest parsedMessage = null;
+      com.bok.bank.integration.grpc.AccountCreationCheckRequest parsedMessage = null;
       try {
         parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        parsedMessage = (com.bok.bank.integration.grpc.AccountCreationRequest) e.getUnfinishedMessage();
+        parsedMessage = (com.bok.bank.integration.grpc.AccountCreationCheckRequest) e.getUnfinishedMessage();
         throw e.unwrapIOException();
       } finally {
         if (parsedMessage != null) {
@@ -488,78 +581,184 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private java.lang.Object email_ = "";
+    private java.lang.Object fiscalCode_ = "";
     /**
-     * <code>string email = 2;</code>
-     * @return The email.
+     * <code>string fiscalCode = 2;</code>
+     * @return The fiscalCode.
      */
-    public java.lang.String getEmail() {
-      java.lang.Object ref = email_;
+    public java.lang.String getFiscalCode() {
+      java.lang.Object ref = fiscalCode_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        email_ = s;
+        fiscalCode_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <code>string email = 2;</code>
-     * @return The bytes for email.
+     * <code>string fiscalCode = 2;</code>
+     * @return The bytes for fiscalCode.
      */
     public com.google.protobuf.ByteString
-        getEmailBytes() {
-      java.lang.Object ref = email_;
+        getFiscalCodeBytes() {
+      java.lang.Object ref = fiscalCode_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        email_ = b;
+        fiscalCode_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>string email = 2;</code>
-     * @param value The email to set.
+     * <code>string fiscalCode = 2;</code>
+     * @param value The fiscalCode to set.
      * @return This builder for chaining.
      */
-    public Builder setEmail(
+    public Builder setFiscalCode(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
   
-      email_ = value;
+      fiscalCode_ = value;
       onChanged();
       return this;
     }
     /**
-     * <code>string email = 2;</code>
+     * <code>string fiscalCode = 2;</code>
      * @return This builder for chaining.
      */
-    public Builder clearEmail() {
+    public Builder clearFiscalCode() {
       
-      email_ = getDefaultInstance().getEmail();
+      fiscalCode_ = getDefaultInstance().getFiscalCode();
       onChanged();
       return this;
     }
     /**
-     * <code>string email = 2;</code>
-     * @param value The bytes for email to set.
+     * <code>string fiscalCode = 2;</code>
+     * @param value The bytes for fiscalCode to set.
      * @return This builder for chaining.
      */
-    public Builder setEmailBytes(
+    public Builder setFiscalCodeBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
       
-      email_ = value;
+      fiscalCode_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object vatNumber_ = "";
+    /**
+     * <code>string vatNumber = 3;</code>
+     * @return The vatNumber.
+     */
+    public java.lang.String getVatNumber() {
+      java.lang.Object ref = vatNumber_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        vatNumber_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string vatNumber = 3;</code>
+     * @return The bytes for vatNumber.
+     */
+    public com.google.protobuf.ByteString
+        getVatNumberBytes() {
+      java.lang.Object ref = vatNumber_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        vatNumber_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string vatNumber = 3;</code>
+     * @param value The vatNumber to set.
+     * @return This builder for chaining.
+     */
+    public Builder setVatNumber(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      vatNumber_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string vatNumber = 3;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearVatNumber() {
+      
+      vatNumber_ = getDefaultInstance().getVatNumber();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string vatNumber = 3;</code>
+     * @param value The bytes for vatNumber to set.
+     * @return This builder for chaining.
+     */
+    public Builder setVatNumberBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      vatNumber_ = value;
+      onChanged();
+      return this;
+    }
+
+    private boolean business_ ;
+    /**
+     * <code>bool business = 4;</code>
+     * @return The business.
+     */
+    public boolean getBusiness() {
+      return business_;
+    }
+    /**
+     * <code>bool business = 4;</code>
+     * @param value The business to set.
+     * @return This builder for chaining.
+     */
+    public Builder setBusiness(boolean value) {
+      
+      business_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>bool business = 4;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearBusiness() {
+      
+      business_ = false;
       onChanged();
       return this;
     }
@@ -576,41 +775,41 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:AccountCreationRequest)
+    // @@protoc_insertion_point(builder_scope:AccountCreationCheckRequest)
   }
 
-  // @@protoc_insertion_point(class_scope:AccountCreationRequest)
-  private static final com.bok.bank.integration.grpc.AccountCreationRequest DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:AccountCreationCheckRequest)
+  private static final com.bok.bank.integration.grpc.AccountCreationCheckRequest DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new com.bok.bank.integration.grpc.AccountCreationRequest();
+    DEFAULT_INSTANCE = new com.bok.bank.integration.grpc.AccountCreationCheckRequest();
   }
 
-  public static com.bok.bank.integration.grpc.AccountCreationRequest getDefaultInstance() {
+  public static com.bok.bank.integration.grpc.AccountCreationCheckRequest getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<AccountCreationRequest>
-      PARSER = new com.google.protobuf.AbstractParser<AccountCreationRequest>() {
+  private static final com.google.protobuf.Parser<AccountCreationCheckRequest>
+      PARSER = new com.google.protobuf.AbstractParser<AccountCreationCheckRequest>() {
     @java.lang.Override
-    public AccountCreationRequest parsePartialFrom(
+    public AccountCreationCheckRequest parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return new AccountCreationRequest(input, extensionRegistry);
+      return new AccountCreationCheckRequest(input, extensionRegistry);
     }
   };
 
-  public static com.google.protobuf.Parser<AccountCreationRequest> parser() {
+  public static com.google.protobuf.Parser<AccountCreationCheckRequest> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<AccountCreationRequest> getParserForType() {
+  public com.google.protobuf.Parser<AccountCreationCheckRequest> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.bok.bank.integration.grpc.AccountCreationRequest getDefaultInstanceForType() {
+  public com.bok.bank.integration.grpc.AccountCreationCheckRequest getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

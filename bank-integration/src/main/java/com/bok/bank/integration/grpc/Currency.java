@@ -17,9 +17,9 @@ public enum Currency
    */
   EUR(1),
   /**
-   * <code>AUD = 3;</code>
+   * <code>AUD = 2;</code>
    */
-  AUD(3),
+  AUD(2),
   UNRECOGNIZED(-1),
   ;
 
@@ -32,9 +32,9 @@ public enum Currency
    */
   public static final int EUR_VALUE = 1;
   /**
-   * <code>AUD = 3;</code>
+   * <code>AUD = 2;</code>
    */
-  public static final int AUD_VALUE = 3;
+  public static final int AUD_VALUE = 2;
 
 
   public final int getNumber() {
@@ -63,7 +63,7 @@ public enum Currency
     switch (value) {
       case 0: return USD;
       case 1: return EUR;
-      case 3: return AUD;
+      case 2: return AUD;
       default: return null;
     }
   }

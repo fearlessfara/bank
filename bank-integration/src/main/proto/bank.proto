@@ -6,9 +6,9 @@ option java_outer_classname = "BankProto";
 
 service Bank {
 
-  rpc CreateAccount(AccountCreationRequest) returns (AccountCreationResponse);
   rpc Authorize(AuthorizationRequest) returns (AuthorizationResponse);
   rpc GetAccountInfo(AccountInfoRequest) returns (AccountInfoResponse);
+  rpc AccountCreationCheck(AccountCreationCheckRequest) returns (AccountCreationCheckResponse);
 
 }
 
@@ -21,15 +21,18 @@ message AccountInfoResponse{
   string surname = 3;
   string email = 4;
 }
-message AccountCreationResponse {
-  bool created = 1;
-  string error = 2;
+
+message AccountCreationCheckRequest{
+  uint64 accountId = 1;
+  string fiscalCode = 2;
+  string vatNumber = 3;
+  bool business = 4;
 }
 
-message AccountCreationRequest {
-  uint64 accountId = 1;
-  string email = 2;
+message AccountCreationCheckResponse {
+  bool permitted = 1;
 }
+
 
 message AuthorizationRequest{
   int64 accountId = 1;

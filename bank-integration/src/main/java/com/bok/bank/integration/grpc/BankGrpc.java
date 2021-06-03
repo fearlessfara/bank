@@ -27,38 +27,6 @@ public final class BankGrpc {
   public static final String SERVICE_NAME = "Bank";
 
   // Static method descriptors that strictly reflect the proto.
-  private static volatile io.grpc.MethodDescriptor<com.bok.bank.integration.grpc.AccountCreationRequest,
-      com.bok.bank.integration.grpc.AccountCreationResponse> getCreateAccountMethod;
-
-  @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "CreateAccount",
-      requestType = com.bok.bank.integration.grpc.AccountCreationRequest.class,
-      responseType = com.bok.bank.integration.grpc.AccountCreationResponse.class,
-      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<com.bok.bank.integration.grpc.AccountCreationRequest,
-      com.bok.bank.integration.grpc.AccountCreationResponse> getCreateAccountMethod() {
-    io.grpc.MethodDescriptor<com.bok.bank.integration.grpc.AccountCreationRequest, com.bok.bank.integration.grpc.AccountCreationResponse> getCreateAccountMethod;
-    if ((getCreateAccountMethod = BankGrpc.getCreateAccountMethod) == null) {
-      synchronized (BankGrpc.class) {
-        if ((getCreateAccountMethod = BankGrpc.getCreateAccountMethod) == null) {
-          BankGrpc.getCreateAccountMethod = getCreateAccountMethod = 
-              io.grpc.MethodDescriptor.<com.bok.bank.integration.grpc.AccountCreationRequest, com.bok.bank.integration.grpc.AccountCreationResponse>newBuilder()
-              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName(generateFullMethodName(
-                  "Bank", "CreateAccount"))
-              .setSampledToLocalTracing(true)
-              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.bok.bank.integration.grpc.AccountCreationRequest.getDefaultInstance()))
-              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.bok.bank.integration.grpc.AccountCreationResponse.getDefaultInstance()))
-                  .setSchemaDescriptor(new BankMethodDescriptorSupplier("CreateAccount"))
-                  .build();
-          }
-        }
-     }
-     return getCreateAccountMethod;
-  }
-
   private static volatile io.grpc.MethodDescriptor<com.bok.bank.integration.grpc.AuthorizationRequest,
       com.bok.bank.integration.grpc.AuthorizationResponse> getAuthorizeMethod;
 
@@ -123,6 +91,38 @@ public final class BankGrpc {
      return getGetAccountInfoMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.bok.bank.integration.grpc.AccountCreationCheckRequest,
+      com.bok.bank.integration.grpc.AccountCreationCheckResponse> getAccountCreationCheckMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "AccountCreationCheck",
+      requestType = com.bok.bank.integration.grpc.AccountCreationCheckRequest.class,
+      responseType = com.bok.bank.integration.grpc.AccountCreationCheckResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.bok.bank.integration.grpc.AccountCreationCheckRequest,
+      com.bok.bank.integration.grpc.AccountCreationCheckResponse> getAccountCreationCheckMethod() {
+    io.grpc.MethodDescriptor<com.bok.bank.integration.grpc.AccountCreationCheckRequest, com.bok.bank.integration.grpc.AccountCreationCheckResponse> getAccountCreationCheckMethod;
+    if ((getAccountCreationCheckMethod = BankGrpc.getAccountCreationCheckMethod) == null) {
+      synchronized (BankGrpc.class) {
+        if ((getAccountCreationCheckMethod = BankGrpc.getAccountCreationCheckMethod) == null) {
+          BankGrpc.getAccountCreationCheckMethod = getAccountCreationCheckMethod = 
+              io.grpc.MethodDescriptor.<com.bok.bank.integration.grpc.AccountCreationCheckRequest, com.bok.bank.integration.grpc.AccountCreationCheckResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "Bank", "AccountCreationCheck"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.bok.bank.integration.grpc.AccountCreationCheckRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.bok.bank.integration.grpc.AccountCreationCheckResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new BankMethodDescriptorSupplier("AccountCreationCheck"))
+                  .build();
+          }
+        }
+     }
+     return getAccountCreationCheckMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -152,13 +152,6 @@ public final class BankGrpc {
 
     /**
      */
-    public void createAccount(com.bok.bank.integration.grpc.AccountCreationRequest request,
-        io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.AccountCreationResponse> responseObserver) {
-      asyncUnimplementedUnaryCall(getCreateAccountMethod(), responseObserver);
-    }
-
-    /**
-     */
     public void authorize(com.bok.bank.integration.grpc.AuthorizationRequest request,
         io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.AuthorizationResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getAuthorizeMethod(), responseObserver);
@@ -171,15 +164,15 @@ public final class BankGrpc {
       asyncUnimplementedUnaryCall(getGetAccountInfoMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void accountCreationCheck(com.bok.bank.integration.grpc.AccountCreationCheckRequest request,
+        io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.AccountCreationCheckResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getAccountCreationCheckMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
-          .addMethod(
-            getCreateAccountMethod(),
-            asyncUnaryCall(
-              new MethodHandlers<
-                com.bok.bank.integration.grpc.AccountCreationRequest,
-                com.bok.bank.integration.grpc.AccountCreationResponse>(
-                  this, METHODID_CREATE_ACCOUNT)))
           .addMethod(
             getAuthorizeMethod(),
             asyncUnaryCall(
@@ -194,6 +187,13 @@ public final class BankGrpc {
                 com.bok.bank.integration.grpc.AccountInfoRequest,
                 com.bok.bank.integration.grpc.AccountInfoResponse>(
                   this, METHODID_GET_ACCOUNT_INFO)))
+          .addMethod(
+            getAccountCreationCheckMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.bok.bank.integration.grpc.AccountCreationCheckRequest,
+                com.bok.bank.integration.grpc.AccountCreationCheckResponse>(
+                  this, METHODID_ACCOUNT_CREATION_CHECK)))
           .build();
     }
   }
@@ -218,14 +218,6 @@ public final class BankGrpc {
 
     /**
      */
-    public void createAccount(com.bok.bank.integration.grpc.AccountCreationRequest request,
-        io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.AccountCreationResponse> responseObserver) {
-      asyncUnaryCall(
-          getChannel().newCall(getCreateAccountMethod(), getCallOptions()), request, responseObserver);
-    }
-
-    /**
-     */
     public void authorize(com.bok.bank.integration.grpc.AuthorizationRequest request,
         io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.AuthorizationResponse> responseObserver) {
       asyncUnaryCall(
@@ -238,6 +230,14 @@ public final class BankGrpc {
         io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.AccountInfoResponse> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getGetAccountInfoMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void accountCreationCheck(com.bok.bank.integration.grpc.AccountCreationCheckRequest request,
+        io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.AccountCreationCheckResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getAccountCreationCheckMethod(), getCallOptions()), request, responseObserver);
     }
   }
 
@@ -261,13 +261,6 @@ public final class BankGrpc {
 
     /**
      */
-    public com.bok.bank.integration.grpc.AccountCreationResponse createAccount(com.bok.bank.integration.grpc.AccountCreationRequest request) {
-      return blockingUnaryCall(
-          getChannel(), getCreateAccountMethod(), getCallOptions(), request);
-    }
-
-    /**
-     */
     public com.bok.bank.integration.grpc.AuthorizationResponse authorize(com.bok.bank.integration.grpc.AuthorizationRequest request) {
       return blockingUnaryCall(
           getChannel(), getAuthorizeMethod(), getCallOptions(), request);
@@ -278,6 +271,13 @@ public final class BankGrpc {
     public com.bok.bank.integration.grpc.AccountInfoResponse getAccountInfo(com.bok.bank.integration.grpc.AccountInfoRequest request) {
       return blockingUnaryCall(
           getChannel(), getGetAccountInfoMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public com.bok.bank.integration.grpc.AccountCreationCheckResponse accountCreationCheck(com.bok.bank.integration.grpc.AccountCreationCheckRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getAccountCreationCheckMethod(), getCallOptions(), request);
     }
   }
 
@@ -301,14 +301,6 @@ public final class BankGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<com.bok.bank.integration.grpc.AccountCreationResponse> createAccount(
-        com.bok.bank.integration.grpc.AccountCreationRequest request) {
-      return futureUnaryCall(
-          getChannel().newCall(getCreateAccountMethod(), getCallOptions()), request);
-    }
-
-    /**
-     */
     public com.google.common.util.concurrent.ListenableFuture<com.bok.bank.integration.grpc.AuthorizationResponse> authorize(
         com.bok.bank.integration.grpc.AuthorizationRequest request) {
       return futureUnaryCall(
@@ -322,11 +314,19 @@ public final class BankGrpc {
       return futureUnaryCall(
           getChannel().newCall(getGetAccountInfoMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.bok.bank.integration.grpc.AccountCreationCheckResponse> accountCreationCheck(
+        com.bok.bank.integration.grpc.AccountCreationCheckRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getAccountCreationCheckMethod(), getCallOptions()), request);
+    }
   }
 
-  private static final int METHODID_CREATE_ACCOUNT = 0;
-  private static final int METHODID_AUTHORIZE = 1;
-  private static final int METHODID_GET_ACCOUNT_INFO = 2;
+  private static final int METHODID_AUTHORIZE = 0;
+  private static final int METHODID_GET_ACCOUNT_INFO = 1;
+  private static final int METHODID_ACCOUNT_CREATION_CHECK = 2;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -345,10 +345,6 @@ public final class BankGrpc {
     @java.lang.SuppressWarnings("unchecked")
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
-        case METHODID_CREATE_ACCOUNT:
-          serviceImpl.createAccount((com.bok.bank.integration.grpc.AccountCreationRequest) request,
-              (io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.AccountCreationResponse>) responseObserver);
-          break;
         case METHODID_AUTHORIZE:
           serviceImpl.authorize((com.bok.bank.integration.grpc.AuthorizationRequest) request,
               (io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.AuthorizationResponse>) responseObserver);
@@ -356,6 +352,10 @@ public final class BankGrpc {
         case METHODID_GET_ACCOUNT_INFO:
           serviceImpl.getAccountInfo((com.bok.bank.integration.grpc.AccountInfoRequest) request,
               (io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.AccountInfoResponse>) responseObserver);
+          break;
+        case METHODID_ACCOUNT_CREATION_CHECK:
+          serviceImpl.accountCreationCheck((com.bok.bank.integration.grpc.AccountCreationCheckRequest) request,
+              (io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.AccountCreationCheckResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -418,9 +418,9 @@ public final class BankGrpc {
         if (result == null) {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new BankFileDescriptorSupplier())
-              .addMethod(getCreateAccountMethod())
               .addMethod(getAuthorizeMethod())
               .addMethod(getGetAccountInfoMethod())
+              .addMethod(getAccountCreationCheckMethod())
               .build();
         }
       }

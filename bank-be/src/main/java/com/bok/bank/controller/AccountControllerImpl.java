@@ -21,11 +21,4 @@ public class AccountControllerImpl implements AccountController {
         return accountHelper.getAccountInfo(accountId);
     }
 
-    @Override
-    public Boolean checkCreation(BankCheckRequestDTO bankCheckRequestDTO) {
-        Preconditions.checkNotNull(bankCheckRequestDTO.business, "business field is null");
-        Preconditions.checkArgument(StringUtils.isNotBlank(bankCheckRequestDTO.fiscalCode) || StringUtils.isNotBlank(bankCheckRequestDTO.vatNumber), "fiscalCode and VatNumber fields are blank");
-        return accountHelper.canCreate(bankCheckRequestDTO);
-    }
-
 }

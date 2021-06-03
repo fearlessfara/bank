@@ -2,7 +2,7 @@ package com.bok.bank.helper;
 
 import com.bok.bank.integration.dto.AccountInfoDTO;
 import com.bok.bank.integration.dto.BankAccountDTO;
-import com.bok.bank.integration.dto.BankCheckRequestDTO;
+import com.bok.bank.integration.grpc.AccountCreationCheckRequest;
 import com.bok.bank.model.Account;
 import com.bok.bank.model.Company;
 import com.bok.bank.model.User;
@@ -57,8 +57,8 @@ public class AccountHelper {
         bankAccountHelper.createFirstBankAccount(message.accountId, new BankAccountDTO(Constants.BOK_BASE_BANK_ACCOUNT, Constants.BASIC_LABEL_BANK_ACCOUNT, Currency.getInstance("EUR")));
     }
 
-    public Boolean canCreate(BankCheckRequestDTO bankCheckRequestDTO) {
-        String code = bankCheckRequestDTO.business ? bankCheckRequestDTO.vatNumber : bankCheckRequestDTO.fiscalCode;
+    public Boolean canCreate(AccountCreationCheckRequest bankCheckRequest) {
+        String code = bankCheckRequest.getBusiness() ? bankCheckRequest.getVatNumber() : bankCheckRequest.getFiscalCode();
         return !accountRepository.existsByVatNumberOrTaxCode(code);
     }
 }
