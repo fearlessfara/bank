@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class KryptoGrpcClient {
 
-    @GrpcClient("krypto:3030")
+    @GrpcClient("krypto")
     KryptoGrpc.KryptoBlockingStub kryptoBlockingStub;
 
-    @GrpcClient("krypto:3030")
+    @GrpcClient("krypto")
     KryptoGrpc.KryptoFutureStub kryptoFutureStub;
 
     public void exampleBlockingRPC() {
