@@ -8,6 +8,13 @@ scheduledFor: execution
 grpc:
   server:
     port: 3030
+  client:
+    krypto:
+      address: dns:///krypto:3030
+      negotiationType: PLAINTEXT
+    parent:
+      address: dns:///parent:3030
+      negotiationType: PLAINTEXT
 spring:
   application:
     name: bank
