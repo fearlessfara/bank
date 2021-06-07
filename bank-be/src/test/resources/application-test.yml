@@ -24,12 +24,15 @@ bank-info:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: false
+
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka
+    enabled: false
   instance:
     lease-renewal-interval-in-seconds: 30
+
 exchange-currency:
   endpoint: https://v6.exchangerate-api.com/v6/
   api-key: ceb94d443f6398dd5e640cd1
