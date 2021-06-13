@@ -16,7 +16,7 @@
     </parent>
     <groupId>com.bok</groupId>
     <artifactId>bank</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>bank</name>
     <description>bank project for bok</description>
     <properties>
