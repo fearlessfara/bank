@@ -25,10 +25,10 @@ spring:
         - com.bok.krypto
         - com.bok.bank
         - java.lang
-    broker-url: tcp://activemq:61616
-    in-memory: false
     user: developer
     password: password4testing
+    broker-url: tcp://activemq:61616
+
   jpa:
     open-in-view: false
     show-sql: false
