@@ -1,6 +1,18 @@
 spring:
   application:
     name: bank
+  activemq:
+    packages:
+      trusted:
+        - com.bok.parent.integration
+        - com.bok.krypto.integration
+        - com.bok.bank.integration
+        - com.bok.krypto.messaging
+        - java.math
+        - java.util
+        - java.lang
+    in-memory: true
+
 grpc:
   server:
     port: 3030
