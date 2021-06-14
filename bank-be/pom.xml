@@ -5,10 +5,10 @@
     <parent>
         <artifactId>bank</artifactId>
         <groupId>com.bok</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <version>1.0</version>
     <artifactId>bank-be</artifactId>
     <packaging>jar</packaging>
     <properties>
@@ -19,13 +19,13 @@
         <dependency>
             <groupId>com.bok</groupId>
             <artifactId>bank-integration</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.bok</groupId>
             <artifactId>bank-model</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -57,7 +57,7 @@
         <dependency>
             <groupId>com.bok.krypto</groupId>
             <artifactId>krypto-integration</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
 
     </dependencies>
