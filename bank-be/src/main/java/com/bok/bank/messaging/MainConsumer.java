@@ -38,7 +38,6 @@ public class MainConsumer {
         confirmationEmailHistoryRepository.deleteByAccount(account);
         transactionRepository.deleteByFromBankAccount(bankAccount);
         cardRepository.deleteByAccount(account);
-        bankAccountRepository.deleteById(bankAccount.getId());
         accountRepository.deleteById(account.getId());
     }
 }

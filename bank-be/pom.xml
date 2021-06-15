@@ -44,12 +44,6 @@
             <version>3.2.1</version>
         </dependency>
         <dependency>
-            <groupId>com.bok</groupId>
-            <artifactId>parent-integration</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
@@ -57,7 +51,13 @@
         <dependency>
             <groupId>com.bok.krypto</groupId>
             <artifactId>krypto-integration</artifactId>
-            <version>1.0</version>
+            <version>${parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bok</groupId>
+            <artifactId>parent-integration</artifactId>
+            <version>${parent.version}</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>
