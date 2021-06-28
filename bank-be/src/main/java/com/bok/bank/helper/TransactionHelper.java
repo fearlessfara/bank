@@ -5,6 +5,7 @@ import com.bok.bank.exception.ErrorCode;
 import com.bok.bank.exception.TransactionException;
 import com.bok.bank.integration.dto.AuthorizationResponseDTO;
 import com.bok.bank.integration.dto.TransactionDTO;
+import com.bok.bank.integration.dto.TransactionResponseDTO;
 import com.bok.bank.model.BankAccount;
 import com.bok.bank.model.Transaction;
 import com.bok.bank.repository.BankAccountRepository;
@@ -18,8 +19,10 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -73,6 +76,24 @@ public class TransactionHelper {
             throw new TransactionException();
         }
         executeTransaction(transactionDTO, toBankAccount);
+    }
+
+    public List<TransactionResponseDTO> findTransactionsByAccountId(Long accountId){
+        List<Transaction> transactions = transactionRepository.findByAccountId(accountId);
+        if(transactions.isEmpty()){
+            return null;
+        }
+        return transactions.stream().map(t -> toTransactionResponseDTO(t, accountId)).collect(Collectors.toList());
+    }
+
+    private TransactionResponseDTO toTransactionResponseDTO(Transaction transaction, Long accountId) {
+        TransactionResponseDTO transactionResponseDTO = new TransactionResponseDTO(transaction.getPublicId().toString(), transaction.getType().name(), transaction.getStatus().name(), transaction.getTimestamp());
+        Money amount = transaction.getAmount();
+        if(transaction.getFromBankAccount().getAccount().getId().equals(accountId)){
+            amount.subtract(amount.multiply(2));
+        }
+        transactionResponseDTO.amount = new com.bok.bank.integration.util.Money(amount.getCurrency(), amount.getValue());
+        return transactionResponseDTO;
     }
 
     private void executeTransaction(TransactionDTO transactionDTO, BankAccount toBankAccount) {

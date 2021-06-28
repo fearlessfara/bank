@@ -125,8 +125,8 @@ public class ModelTestUtil {
 
     public void clearAll() {
         cardRepository.deleteAll();
-        bankAccountRepository.deleteAll();
         accountRepository.deleteAll();
+        bankAccountRepository.deleteAll();
         exchangeCurrencyValueHistoryRepository.deleteAll();
         exchangeCurrencyValueRepository.deleteAll();
     }
