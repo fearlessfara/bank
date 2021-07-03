@@ -40,7 +40,7 @@ spring:
         dialect: org.hibernate.dialect.MariaDBDialect
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://dev.faraone.ovh:3307/bank
+    url: jdbc:mariadb://bok.faraone.ovh:3307/bank
     username: developer
     password: password4testing
 exchange-currency:
