@@ -78,9 +78,9 @@ public class TransactionHelper {
         executeTransaction(transactionDTO, toBankAccount);
     }
 
-    public List<TransactionResponseDTO> findTransactionsByAccountId(Long accountId){
+    public List<TransactionResponseDTO> findTransactionsByAccountId(Long accountId) {
         List<Transaction> transactions = transactionRepository.findByAccountId(accountId);
-        if(transactions.isEmpty()){
+        if (transactions.isEmpty()) {
             return null;
         }
         return transactions.stream().map(t -> toTransactionResponseDTO(t, accountId)).collect(Collectors.toList());
@@ -89,7 +89,7 @@ public class TransactionHelper {
     private TransactionResponseDTO toTransactionResponseDTO(Transaction transaction, Long accountId) {
         TransactionResponseDTO transactionResponseDTO = new TransactionResponseDTO(transaction.getPublicId().toString(), transaction.getType().name(), transaction.getStatus().name(), transaction.getTimestamp());
         Money amount = transaction.getAmount();
-        if(transaction.getFromBankAccount().getAccount().getId().equals(accountId)){
+        if (transaction.getFromBankAccount().getAccount().getId().equals(accountId)) {
             amount.subtract(amount.multiply(2));
         }
         transactionResponseDTO.amount = new com.bok.bank.integration.util.Money(amount.getCurrency(), amount.getValue());
