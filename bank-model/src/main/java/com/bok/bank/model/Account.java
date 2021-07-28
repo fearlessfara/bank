@@ -80,8 +80,8 @@ public class Account implements Serializable {
     @OneToMany(mappedBy = "id", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.MERGE)
     private List<Card> cards = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.REMOVE)
-    private BankAccount bankAccount;
+    @Column(unique = true)
+    private Long bankAccountId;
 
     @OneToMany(mappedBy = "id", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.MERGE)
     private List<Transaction> transactions = new ArrayList<>();
@@ -224,12 +224,12 @@ public class Account implements Serializable {
         this.cards = cards;
     }
 
-    public BankAccount getBankAccount() {
-        return bankAccount;
+    public Long getBankAccountId() {
+        return bankAccountId;
     }
 
-    public void setBankAccount(BankAccount bankAccount) {
-        this.bankAccount = bankAccount;
+    public void setBankAccountId(Long bankAccountId) {
+        this.bankAccountId = bankAccountId;
     }
 
     public List<Transaction> getTransactions() {
@@ -267,12 +267,12 @@ public class Account implements Serializable {
 
         Account account = (Account) o;
 
-        return new EqualsBuilder().append(id, account.id).append(name, account.name).append(type, account.type).append(email, account.email).append(mobile, account.mobile).append(icc, account.icc).append(status, account.status).append(country, account.country).append(county, account.county).append(city, account.city).append(postCode, account.postCode).append(addLine, account.addLine).append(civicNumber, account.civicNumber).append(cards, account.cards).append(bankAccount, account.bankAccount).append(transactions, account.transactions).isEquals();
+        return new EqualsBuilder().append(id, account.id).append(name, account.name).append(type, account.type).append(email, account.email).append(mobile, account.mobile).append(icc, account.icc).append(status, account.status).append(country, account.country).append(county, account.county).append(city, account.city).append(postCode, account.postCode).append(addLine, account.addLine).append(civicNumber, account.civicNumber).append(cards, account.cards).append(bankAccountId, account.bankAccountId).append(transactions, account.transactions).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(id).append(name).append(type).append(email).append(mobile).append(icc).append(status).append(country).append(county).append(city).append(postCode).append(addLine).append(civicNumber).append(cards).append(bankAccount).append(transactions).toHashCode();
+        return new HashCodeBuilder(17, 37).append(id).append(name).append(type).append(email).append(mobile).append(icc).append(status).append(country).append(county).append(city).append(postCode).append(addLine).append(civicNumber).append(cards).append(bankAccountId).append(transactions).toHashCode();
     }
 
     public enum Status {

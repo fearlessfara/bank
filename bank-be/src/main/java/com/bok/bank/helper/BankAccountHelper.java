@@ -54,18 +54,19 @@ public class BankAccountHelper {
     private String BANK_CODE;
 
     public BankAccountInfoDTO getBankAccountInfo(Long accountId) {
-        BankAccount bankAccount = bankAccountRepository.findByAccount_Id(accountId).orElseThrow(BankAccountException::new);
+        Account account = accountRepository.findById(accountId).orElseThrow(AccountException::new);
+        BankAccount bankAccount = bankAccountRepository.findByAccountId(accountId).orElseThrow(BankAccountException::new);
 
-        return new BankAccountInfoDTO(bankAccount.getAccount().getEmail(), bankAccount.getName(), bankAccount.getIBAN(), bankAccount.getLabel(),
+        return new BankAccountInfoDTO(account.getEmail(), bankAccount.getName(), bankAccount.getIBAN(), bankAccount.getLabel(),
                 bankAccount.getCurrency(), bankAccount.getBlockedAmount().getValue(), bankAccount.getAvailableAmount().getValue(), bankAccount.getStatus().name());
     }
 
     public String createBankAccount(Long accountId, BankAccountDTO bankAccountDTO) {
         log.info("creation bank account");
-        BankAccount bankAccount = new BankAccount(new Account(accountId), generator.generateIBAN(), bankAccountDTO.name, bankAccountDTO.label, bankAccountDTO.currency, new Money(BigDecimal.ZERO, bankAccountDTO.currency), new Money(BigDecimal.ZERO, bankAccountDTO.currency), BankAccount.Status.PENDING);
+        BankAccount bankAccount = new BankAccount(accountId, generator.generateIBAN(), bankAccountDTO.name, bankAccountDTO.label, bankAccountDTO.currency, new Money(BigDecimal.ZERO, bankAccountDTO.currency), new Money(BigDecimal.ZERO, bankAccountDTO.currency), BankAccount.Status.PENDING);
         bankAccount = bankAccountRepository.saveAndFlush(bankAccount);
         Account account = accountRepository.findById(accountId).orElseThrow(AccountException::new);
-        account.setBankAccount(bankAccount);
+        account.setBankAccountId(bankAccount.getId());
         account = accountRepository.save(account);
         emailHelper.sendBankAccountConfirmationEmail(account, bankAccount);
         return "Please check your mail and confirm bank account creation";
@@ -73,10 +74,10 @@ public class BankAccountHelper {
 
     public void createFirstBankAccount(Long accountId, BankAccountDTO bankAccountDTO) {
         log.info("creation bank account");
-        BankAccount bankAccount = new BankAccount(new Account(accountId), generator.generateIBAN(), bankAccountDTO.name, bankAccountDTO.label, bankAccountDTO.currency, new Money(BigDecimal.ZERO, bankAccountDTO.currency), new Money(BigDecimal.valueOf(100), bankAccountDTO.currency), BankAccount.Status.ACTIVE);
+        BankAccount bankAccount = new BankAccount(accountId, generator.generateIBAN(), bankAccountDTO.name, bankAccountDTO.label, bankAccountDTO.currency, new Money(BigDecimal.ZERO, bankAccountDTO.currency), new Money(BigDecimal.valueOf(100), bankAccountDTO.currency), BankAccount.Status.ACTIVE);
         bankAccount = bankAccountRepository.saveAndFlush(bankAccount);
         Account account = accountRepository.findById(accountId).orElseThrow(AccountException::new);
-        account.setBankAccount(bankAccount);
+        account.setBankAccountId(bankAccount.getId());
         accountRepository.save(account);
     }
 

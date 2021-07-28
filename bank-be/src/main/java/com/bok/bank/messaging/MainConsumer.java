@@ -34,7 +34,7 @@ public class MainConsumer {
     public void deleteUserListener(AccountDeletionMessage message) {
         log.info("Received Message: " + message.toString());
         Account account = accountRepository.findById(message.accountId).orElseThrow(AccountException::new);
-        BankAccount bankAccount = bankAccountRepository.findByAccount_Id(account.getId()).orElseThrow(BankAccountException::new);
+        BankAccount bankAccount = bankAccountRepository.findByAccountId(account.getId()).orElseThrow(BankAccountException::new);
         confirmationEmailHistoryRepository.deleteByAccount(account);
         transactionRepository.deleteByFromBankAccount(bankAccount);
         cardRepository.deleteByAccount(account);

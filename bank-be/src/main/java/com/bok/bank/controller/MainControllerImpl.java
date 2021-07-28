@@ -58,16 +58,11 @@ public class MainControllerImpl implements MainController {
                         "via le mani dal bell stu sit", "13/c", "123499342")
         );
         List<BankAccount> bankAccounts = Arrays.asList(
-                new BankAccount(accounts.stream().filter(account -> account.getName().equals("Domenico")).findFirst().get(), "1234543212345432123454321234", "firstBankAccount", "universitary", Currency.getInstance("EUR"), new Money(BigDecimal.ZERO), new Money(BigDecimal.valueOf(100)), BankAccount.Status.ACTIVE),
-                new BankAccount(accounts.stream().filter(account -> account.getName().equals("Chris")).findFirst().get(), "1234543212311112123454321234", "AeroBankAccount", "boh", Currency.getInstance("EUR"), new Money(BigDecimal.ZERO), new Money(BigDecimal.valueOf(50)), BankAccount.Status.ACTIVE)
-        );
-        List<Card> cards = Arrays.asList(
-                new Card("firstCard", accounts.stream().filter(account -> account.getName().equals("Domenico")).findFirst().get(), Card.CardStatus.ACTIVE, Card.Type.DEBIT, Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS), creditCardNumberGenerator.generateToken(), "prova", creditCardNumberGenerator.generate(Constants.BIN_BOK, 15), bankAccounts.stream().filter(bankAccount -> bankAccount.getAccount().getName().equals("Domenico")).findFirst().get(), 123),
-                new Card("firstVirtualCard", accounts.stream().filter(account -> account.getName().equals("Chris")).findFirst().get(), Card.CardStatus.ACTIVE, Card.Type.VIRTUAL, Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS), creditCardNumberGenerator.generateToken(), "provaV", creditCardNumberGenerator.generate(Constants.BIN_BOK, 15), bankAccounts.stream().filter(bankAccount -> bankAccount.getAccount().getName().equals("Chris")).findFirst().get(), 371)
+                new BankAccount(accounts.stream().filter(account -> account.getName().equals("Domenico")).findFirst().get().getId(), "1234543212345432123454321234", "firstBankAccount", "universitary", Currency.getInstance("EUR"), new Money(BigDecimal.ZERO), new Money(BigDecimal.valueOf(100)), BankAccount.Status.ACTIVE),
+                new BankAccount(accounts.stream().filter(account -> account.getName().equals("Chris")).findFirst().get().getId(), "1234543212311112123454321234", "AeroBankAccount", "boh", Currency.getInstance("EUR"), new Money(BigDecimal.ZERO), new Money(BigDecimal.valueOf(50)), BankAccount.Status.ACTIVE)
         );
         accountRepository.saveAll(accounts);
         bankAccountRepository.saveAll(bankAccounts);
-        cardRepository.saveAll(cards);
         return "populated";
     }
 

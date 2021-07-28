@@ -7,13 +7,11 @@ import com.bok.bank.producer.Producer;
 import com.bok.bank.repository.CardRepository;
 import com.bok.parent.integration.message.AccountCreationMessage;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -23,7 +21,6 @@ import static junit.framework.TestCase.assertTrue;
 
 @SpringBootTest
 @Slf4j
-@RunWith(SpringRunner.class)
 @ActiveProfiles("test")
 public class AccountConsumerTest {
 
@@ -42,7 +39,7 @@ public class AccountConsumerTest {
     @Autowired
     Producer producer;
 
-    @Before
+    @BeforeEach
     public void configureTests() {
         modelTestUtil.clearAll();
         log.info("DB dropped correctly.");
