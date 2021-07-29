@@ -10,6 +10,7 @@ import com.bok.bank.model.User;
 import com.bok.bank.repository.AccountRepository;
 import com.bok.bank.repository.BankAccountRepository;
 import com.bok.bank.repository.CardRepository;
+import com.bok.bank.repository.ConfirmationEmailHistoryRepository;
 import com.bok.bank.repository.ExchangeCurrencyValueHistoryRepository;
 import com.bok.bank.repository.ExchangeCurrencyValueRepository;
 import com.bok.bank.util.Constants;
@@ -40,6 +41,8 @@ public class ModelTestUtil {
     @Autowired
     CreditCardNumberGenerator creditCardNumberGenerator;
     @Autowired
+    ConfirmationEmailHistoryRepository confirmationEmailHistoryRepository;
+    @Autowired
     ExchangeCurrencyValueHistoryRepository exchangeCurrencyValueHistoryRepository;
     @Autowired
     ExchangeCurrencyValueRepository exchangeCurrencyValueRepository;
@@ -66,8 +69,8 @@ public class ModelTestUtil {
         accountRepository.saveAll(accounts);
 
         List<BankAccount> bankAccounts = Arrays.asList(
-                new BankAccount(accounts.get(0), "1234543212345432123454321234", "firstBankAccount", "universitary", Currency.getInstance("EUR"), new Money(BigDecimal.ZERO), new Money(BigDecimal.valueOf(100)), BankAccount.Status.ACTIVE),
-                new BankAccount(accounts.get(1), "1234543212311112123454321234", "AeroBankAccount", "boh", Currency.getInstance("EUR"), new Money(BigDecimal.ZERO), new Money(BigDecimal.valueOf(50)), BankAccount.Status.ACTIVE)
+                new BankAccount(accounts.get(0).getId(), "1234543212345432123454321234", "firstBankAccount", "universitary", Currency.getInstance("EUR"), new Money(BigDecimal.ZERO), new Money(BigDecimal.valueOf(100)), BankAccount.Status.ACTIVE),
+                new BankAccount(accounts.get(1).getId(), "1234543212311112123454321234", "AeroBankAccount", "boh", Currency.getInstance("EUR"), new Money(BigDecimal.ZERO), new Money(BigDecimal.valueOf(50)), BankAccount.Status.ACTIVE)
         );
         bankAccountRepository.saveAll(bankAccounts);
 
@@ -113,20 +116,14 @@ public class ModelTestUtil {
                 new ExchangeCurrencyValue(Instant.now(), Instant.now(), "GBP", currenciesGBP1));
         exchangeCurrencyValueRepository.saveAll(exchangeCurrencyValues);
 
-        List<Card> cards = Arrays.asList(
-                new Card("firstCard", accounts.stream().filter(account -> account.getName().equals("Domenico")).findFirst().get(), Card.CardStatus.ACTIVE, Card.Type.DEBIT, Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS), "1352462", "prova", "*1234", bankAccounts.stream().filter(bankAccount -> bankAccount.getAccount().getName().equals("Domenico")).findFirst().get(), 123),
-                new Card("firstVirtualCard", accounts.stream().filter(account -> account.getName().equals("Chris")).findFirst().get(), Card.CardStatus.ACTIVE, Card.Type.VIRTUAL, Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS), "1352472", "provaV", "*1235", bankAccounts.stream().filter(bankAccount -> bankAccount.getAccount().getName().equals("Chris")).findFirst().get(), 371)
-        );
-
-        cardRepository.saveAll(cards);
-
 
     }
 
     public void clearAll() {
         cardRepository.deleteAll();
-        accountRepository.deleteAll();
+        confirmationEmailHistoryRepository.deleteAll();
         bankAccountRepository.deleteAll();
+        accountRepository.deleteAll();
         exchangeCurrencyValueHistoryRepository.deleteAll();
         exchangeCurrencyValueRepository.deleteAll();
     }
@@ -147,12 +144,12 @@ public class ModelTestUtil {
 
     public BankAccount createAndSaveBankAccount(Account account) {
         Currency currency = Currency.getInstance(faker.currency().code());
-        BankAccount bankAccount = new BankAccount(account, creditCardNumberGenerator.generate(Constants.BIN_BOK, 15), faker.funnyName().name(), faker.lorem().paragraph(), currency, new Money(BigDecimal.ZERO, currency), new Money(BigDecimal.valueOf(100), currency), BankAccount.Status.ACTIVE);
+        BankAccount bankAccount = new BankAccount(account.getId(), creditCardNumberGenerator.generate(Constants.BIN_BOK, 15), faker.funnyName().name(), faker.lorem().paragraph(), currency, new Money(BigDecimal.ZERO, currency), new Money(BigDecimal.valueOf(100), currency), BankAccount.Status.ACTIVE);
         return bankAccountRepository.save(bankAccount);
     }
 
     public BankAccount createAndSaveBankAccount(Account account, Currency currency) {
-        BankAccount bankAccount = new BankAccount(account, creditCardNumberGenerator.generate(Constants.BIN_BOK, 15), faker.funnyName().name(), faker.lorem().paragraph(), currency, new Money(BigDecimal.ZERO, currency), new Money(BigDecimal.valueOf(100), currency), BankAccount.Status.ACTIVE);
+        BankAccount bankAccount = new BankAccount(account.getId(), creditCardNumberGenerator.generate(Constants.BIN_BOK, 15), faker.funnyName().name(), faker.lorem().paragraph(), currency, new Money(BigDecimal.ZERO, currency), new Money(BigDecimal.valueOf(100), currency), BankAccount.Status.ACTIVE);
         return bankAccountRepository.save(bankAccount);
     }
 

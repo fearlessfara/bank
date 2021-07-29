@@ -22,7 +22,7 @@ public class User extends Account implements Serializable {
     @Column
     private String surname;
 
-    @Column(nullable = false)
+    @Column
     @Enumerated(EnumType.STRING)
     private Gender gender;
 

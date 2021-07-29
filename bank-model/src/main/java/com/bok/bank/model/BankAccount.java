@@ -20,7 +20,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -34,8 +33,8 @@ public class BankAccount implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(optional = false)
-    private Account account;
+    @Column(nullable = false)
+    private Long accountId;
 
     @Column(nullable = false, unique = true)
     private String IBAN;
@@ -46,7 +45,7 @@ public class BankAccount implements Serializable {
     @Column
     private String label;
 
-    @Column(name = "currency", nullable = false, updatable = true)
+    @Column(name = "currency", nullable = false)
     private Currency currency;
 
     @Embedded
@@ -79,8 +78,8 @@ public class BankAccount implements Serializable {
         this.id = id;
     }
 
-    public BankAccount(Account account, String IBAN, String name, String label, Currency currency, Money blockedAmount, Money availableAmount, Status status) {
-        this.account = account;
+    public BankAccount(Long accountId, String IBAN, String name, String label, Currency currency, Money blockedAmount, Money availableAmount, Status status) {
+        this.accountId = accountId;
         this.IBAN = IBAN;
         this.name = name;
         this.label = label;
@@ -98,12 +97,12 @@ public class BankAccount implements Serializable {
         this.id = id;
     }
 
-    public Account getAccount() {
-        return account;
+    public Long getAccountId() {
+        return accountId;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 
     public String getName() {
@@ -191,7 +190,7 @@ public class BankAccount implements Serializable {
     public String toString() {
         return new ToStringBuilder(this)
                 .append("id", id)
-                .append("user", account)
+                .append("accountId", accountId)
                 .append("IBAN", IBAN)
                 .append("name", name)
                 .append("label", label)
@@ -212,12 +211,12 @@ public class BankAccount implements Serializable {
 
         BankAccount that = (BankAccount) o;
 
-        return new EqualsBuilder().append(id, that.id).append(account, that.account).append(IBAN, that.IBAN).append(name, that.name).append(label, that.label).append(currency, that.currency).append(blockedAmount, that.blockedAmount).append(availableAmount, that.availableAmount).append(status, that.status).append(creationTimestamp, that.creationTimestamp).append(updateTimestamp, that.updateTimestamp).append(cards, that.cards).isEquals();
+        return new EqualsBuilder().append(id, that.id).append(accountId, that.accountId).append(IBAN, that.IBAN).append(name, that.name).append(label, that.label).append(currency, that.currency).append(blockedAmount, that.blockedAmount).append(availableAmount, that.availableAmount).append(status, that.status).append(creationTimestamp, that.creationTimestamp).append(updateTimestamp, that.updateTimestamp).append(cards, that.cards).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(id).append(account).append(IBAN).append(name).append(label).append(currency).append(blockedAmount).append(availableAmount).append(status).append(creationTimestamp).append(updateTimestamp).append(cards).toHashCode();
+        return new HashCodeBuilder(17, 37).append(id).append(accountId).append(IBAN).append(name).append(label).append(currency).append(blockedAmount).append(availableAmount).append(status).append(creationTimestamp).append(updateTimestamp).append(cards).toHashCode();
     }
 
     public enum Status {

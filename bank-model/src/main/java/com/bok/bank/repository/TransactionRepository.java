@@ -13,7 +13,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     int deleteByFromBankAccount(BankAccount toBankAccount);
 
-    @Query("select t from Transaction t where t.toBankAccount.account.id = :accountId or t.fromBankAccount.account.id = :accountId")
+    @Query("select t from Transaction t where t.toBankAccount.accountId = :accountId or t.fromBankAccount.accountId = :accountId")
     List<Transaction> findByAccountId(Long accountId);
 
     Optional<Transaction> findByPublicId(UUID publicId);

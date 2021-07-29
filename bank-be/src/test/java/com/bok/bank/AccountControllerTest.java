@@ -5,21 +5,21 @@ import com.bok.bank.integration.service.AccountController;
 import com.bok.bank.model.Company;
 import com.bok.bank.model.User;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 @SpringBootTest
 @Slf4j
-@RunWith(SpringRunner.class)
 @ActiveProfiles("test")
+@PropertySource(ignoreResourceNotFound = true, value = "classpath:resources.application-test.yml")
 public class AccountControllerTest {
 
     @Autowired
@@ -28,7 +28,7 @@ public class AccountControllerTest {
     @Autowired
     AccountController accountController;
 
-    @Before
+    @BeforeEach
     public void init() {
         modelTestUtil.clearAll();
     }
