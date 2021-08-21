@@ -14,4 +14,13 @@ import java.util.Currency;
 public class Money implements Serializable {
     public Currency currency;
     public BigDecimal amount;
+
+    public com.bok.bank.integration.grpc.Money toGrpcMoney() {
+        com.bok.bank.integration.grpc.Money.Builder moneyBuilder = com.bok.bank.integration.grpc.Money.newBuilder();
+        moneyBuilder.setAmount(amount.doubleValue());
+
+        com.bok.bank.integration.grpc.Currency currencyBuilder = com.bok.bank.integration.grpc.Currency.valueOf(currency.getCurrencyCode());
+        moneyBuilder.setCurrency(currencyBuilder);
+        return moneyBuilder.build();
+    }
 }

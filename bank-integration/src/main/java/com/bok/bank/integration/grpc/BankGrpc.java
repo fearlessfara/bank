@@ -123,6 +123,38 @@ public final class BankGrpc {
      return getAccountCreationCheckMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.bok.bank.integration.grpc.ConversionRequest,
+      com.bok.bank.integration.grpc.Money> getConvertMoneyMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "ConvertMoney",
+      requestType = com.bok.bank.integration.grpc.ConversionRequest.class,
+      responseType = com.bok.bank.integration.grpc.Money.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.bok.bank.integration.grpc.ConversionRequest,
+      com.bok.bank.integration.grpc.Money> getConvertMoneyMethod() {
+    io.grpc.MethodDescriptor<com.bok.bank.integration.grpc.ConversionRequest, com.bok.bank.integration.grpc.Money> getConvertMoneyMethod;
+    if ((getConvertMoneyMethod = BankGrpc.getConvertMoneyMethod) == null) {
+      synchronized (BankGrpc.class) {
+        if ((getConvertMoneyMethod = BankGrpc.getConvertMoneyMethod) == null) {
+          BankGrpc.getConvertMoneyMethod = getConvertMoneyMethod = 
+              io.grpc.MethodDescriptor.<com.bok.bank.integration.grpc.ConversionRequest, com.bok.bank.integration.grpc.Money>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "Bank", "ConvertMoney"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.bok.bank.integration.grpc.ConversionRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.bok.bank.integration.grpc.Money.getDefaultInstance()))
+                  .setSchemaDescriptor(new BankMethodDescriptorSupplier("ConvertMoney"))
+                  .build();
+          }
+        }
+     }
+     return getConvertMoneyMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -171,6 +203,13 @@ public final class BankGrpc {
       asyncUnimplementedUnaryCall(getAccountCreationCheckMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void convertMoney(com.bok.bank.integration.grpc.ConversionRequest request,
+        io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.Money> responseObserver) {
+      asyncUnimplementedUnaryCall(getConvertMoneyMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -194,6 +233,13 @@ public final class BankGrpc {
                 com.bok.bank.integration.grpc.AccountCreationCheckRequest,
                 com.bok.bank.integration.grpc.AccountCreationCheckResponse>(
                   this, METHODID_ACCOUNT_CREATION_CHECK)))
+          .addMethod(
+            getConvertMoneyMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.bok.bank.integration.grpc.ConversionRequest,
+                com.bok.bank.integration.grpc.Money>(
+                  this, METHODID_CONVERT_MONEY)))
           .build();
     }
   }
@@ -239,6 +285,14 @@ public final class BankGrpc {
       asyncUnaryCall(
           getChannel().newCall(getAccountCreationCheckMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void convertMoney(com.bok.bank.integration.grpc.ConversionRequest request,
+        io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.Money> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getConvertMoneyMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -278,6 +332,13 @@ public final class BankGrpc {
     public com.bok.bank.integration.grpc.AccountCreationCheckResponse accountCreationCheck(com.bok.bank.integration.grpc.AccountCreationCheckRequest request) {
       return blockingUnaryCall(
           getChannel(), getAccountCreationCheckMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public com.bok.bank.integration.grpc.Money convertMoney(com.bok.bank.integration.grpc.ConversionRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getConvertMoneyMethod(), getCallOptions(), request);
     }
   }
 
@@ -322,11 +383,20 @@ public final class BankGrpc {
       return futureUnaryCall(
           getChannel().newCall(getAccountCreationCheckMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.bok.bank.integration.grpc.Money> convertMoney(
+        com.bok.bank.integration.grpc.ConversionRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getConvertMoneyMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_AUTHORIZE = 0;
   private static final int METHODID_GET_ACCOUNT_INFO = 1;
   private static final int METHODID_ACCOUNT_CREATION_CHECK = 2;
+  private static final int METHODID_CONVERT_MONEY = 3;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -356,6 +426,10 @@ public final class BankGrpc {
         case METHODID_ACCOUNT_CREATION_CHECK:
           serviceImpl.accountCreationCheck((com.bok.bank.integration.grpc.AccountCreationCheckRequest) request,
               (io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.AccountCreationCheckResponse>) responseObserver);
+          break;
+        case METHODID_CONVERT_MONEY:
+          serviceImpl.convertMoney((com.bok.bank.integration.grpc.ConversionRequest) request,
+              (io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.Money>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -421,6 +495,7 @@ public final class BankGrpc {
               .addMethod(getAuthorizeMethod())
               .addMethod(getGetAccountInfoMethod())
               .addMethod(getAccountCreationCheckMethod())
+              .addMethod(getConvertMoneyMethod())
               .build();
         }
       }

@@ -9,7 +9,13 @@ service Bank {
   rpc Authorize(AuthorizationRequest) returns (AuthorizationResponse);
   rpc GetAccountInfo(AccountInfoRequest) returns (AccountInfoResponse);
   rpc AccountCreationCheck(AccountCreationCheckRequest) returns (AccountCreationCheckResponse);
+  rpc ConvertMoney(ConversionRequest) returns (Money);
 
+}
+
+message ConversionRequest {
+  Money from = 1;
+  Currency to = 2;
 }
 
 message AccountInfoRequest{
