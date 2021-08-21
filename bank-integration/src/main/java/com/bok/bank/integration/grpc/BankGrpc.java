@@ -155,6 +155,38 @@ public final class BankGrpc {
      return getConvertMoneyMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.bok.bank.integration.grpc.CardConfirmationRequest,
+      com.bok.bank.integration.grpc.ConfirmationResponse> getConfirmCardMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "ConfirmCard",
+      requestType = com.bok.bank.integration.grpc.CardConfirmationRequest.class,
+      responseType = com.bok.bank.integration.grpc.ConfirmationResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<com.bok.bank.integration.grpc.CardConfirmationRequest,
+      com.bok.bank.integration.grpc.ConfirmationResponse> getConfirmCardMethod() {
+    io.grpc.MethodDescriptor<com.bok.bank.integration.grpc.CardConfirmationRequest, com.bok.bank.integration.grpc.ConfirmationResponse> getConfirmCardMethod;
+    if ((getConfirmCardMethod = BankGrpc.getConfirmCardMethod) == null) {
+      synchronized (BankGrpc.class) {
+        if ((getConfirmCardMethod = BankGrpc.getConfirmCardMethod) == null) {
+          BankGrpc.getConfirmCardMethod = getConfirmCardMethod = 
+              io.grpc.MethodDescriptor.<com.bok.bank.integration.grpc.CardConfirmationRequest, com.bok.bank.integration.grpc.ConfirmationResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(
+                  "Bank", "ConfirmCard"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.bok.bank.integration.grpc.CardConfirmationRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.bok.bank.integration.grpc.ConfirmationResponse.getDefaultInstance()))
+                  .setSchemaDescriptor(new BankMethodDescriptorSupplier("ConfirmCard"))
+                  .build();
+          }
+        }
+     }
+     return getConfirmCardMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -210,6 +242,13 @@ public final class BankGrpc {
       asyncUnimplementedUnaryCall(getConvertMoneyMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void confirmCard(com.bok.bank.integration.grpc.CardConfirmationRequest request,
+        io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.ConfirmationResponse> responseObserver) {
+      asyncUnimplementedUnaryCall(getConfirmCardMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -240,6 +279,13 @@ public final class BankGrpc {
                 com.bok.bank.integration.grpc.ConversionRequest,
                 com.bok.bank.integration.grpc.Money>(
                   this, METHODID_CONVERT_MONEY)))
+          .addMethod(
+            getConfirmCardMethod(),
+            asyncUnaryCall(
+              new MethodHandlers<
+                com.bok.bank.integration.grpc.CardConfirmationRequest,
+                com.bok.bank.integration.grpc.ConfirmationResponse>(
+                  this, METHODID_CONFIRM_CARD)))
           .build();
     }
   }
@@ -293,6 +339,14 @@ public final class BankGrpc {
       asyncUnaryCall(
           getChannel().newCall(getConvertMoneyMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void confirmCard(com.bok.bank.integration.grpc.CardConfirmationRequest request,
+        io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.ConfirmationResponse> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(getConfirmCardMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -339,6 +393,13 @@ public final class BankGrpc {
     public com.bok.bank.integration.grpc.Money convertMoney(com.bok.bank.integration.grpc.ConversionRequest request) {
       return blockingUnaryCall(
           getChannel(), getConvertMoneyMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public com.bok.bank.integration.grpc.ConfirmationResponse confirmCard(com.bok.bank.integration.grpc.CardConfirmationRequest request) {
+      return blockingUnaryCall(
+          getChannel(), getConfirmCardMethod(), getCallOptions(), request);
     }
   }
 
@@ -391,12 +452,21 @@ public final class BankGrpc {
       return futureUnaryCall(
           getChannel().newCall(getConvertMoneyMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.bok.bank.integration.grpc.ConfirmationResponse> confirmCard(
+        com.bok.bank.integration.grpc.CardConfirmationRequest request) {
+      return futureUnaryCall(
+          getChannel().newCall(getConfirmCardMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_AUTHORIZE = 0;
   private static final int METHODID_GET_ACCOUNT_INFO = 1;
   private static final int METHODID_ACCOUNT_CREATION_CHECK = 2;
   private static final int METHODID_CONVERT_MONEY = 3;
+  private static final int METHODID_CONFIRM_CARD = 4;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -430,6 +500,10 @@ public final class BankGrpc {
         case METHODID_CONVERT_MONEY:
           serviceImpl.convertMoney((com.bok.bank.integration.grpc.ConversionRequest) request,
               (io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.Money>) responseObserver);
+          break;
+        case METHODID_CONFIRM_CARD:
+          serviceImpl.confirmCard((com.bok.bank.integration.grpc.CardConfirmationRequest) request,
+              (io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.ConfirmationResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -496,6 +570,7 @@ public final class BankGrpc {
               .addMethod(getGetAccountInfoMethod())
               .addMethod(getAccountCreationCheckMethod())
               .addMethod(getConvertMoneyMethod())
+              .addMethod(getConfirmCardMethod())
               .build();
         }
       }

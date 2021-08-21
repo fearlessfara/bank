@@ -38,6 +38,7 @@ public class EmailHelper {
         emailMQProducer.send(emailMessage);
     }
 
+    //TODO create the grpc listener for this method
     public void sendCardConfirmationEmail(Account account, Card card) {
         ConfirmationEmailHistory confirmationEmailHistory = confirmationEmailHelper.saveConfirmationEmail(account, card.getId(), ConfirmationEmailHistory.ResourceType.CARD);
         log.info("email: {}", account.getEmail());
@@ -45,7 +46,7 @@ public class EmailHelper {
         emailMessage.to = account.getEmail();
         emailMessage.subject = "BOK - Card activation";
         emailMessage.body = "Dear " + account.getName() + ",\nClick on the following link to complete creation of the card named " + card.getName() + "\n" +
-                baseUrl + "/card/verify?accountId=" + account.getId() + "&verificationToken=" + confirmationEmailHistory.getConfirmationToken() +
+                "https://bok.faraone.ovh/cardConfirm?accountId=" + account.getId() + "&confirmationToken=" + confirmationEmailHistory.getConfirmationToken() +
                 "\n\nThe BOK Team.";
 
         emailMQProducer.send(emailMessage);

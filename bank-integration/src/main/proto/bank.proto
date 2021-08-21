@@ -10,7 +10,16 @@ service Bank {
   rpc GetAccountInfo(AccountInfoRequest) returns (AccountInfoResponse);
   rpc AccountCreationCheck(AccountCreationCheckRequest) returns (AccountCreationCheckResponse);
   rpc ConvertMoney(ConversionRequest) returns (Money);
+  rpc ConfirmCard(CardConfirmationRequest) returns (ConfirmationResponse);
 
+}
+
+message CardConfirmationRequest {
+  uint64 accountId = 1;
+  string token = 2;
+}
+message ConfirmationResponse{
+  bool confirmed = 1;
 }
 
 message ConversionRequest {
