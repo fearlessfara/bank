@@ -24,6 +24,10 @@ public interface CardRepository extends JpaRepository<Card, Long> {
             "FROM Card c WHERE c.account.id = :accountId AND c.id = :cardId")
     Optional<String> findPlainPanByAccountIdAndCardId(Long accountId, Long cardId);
 
+    @Query("SELECT c.token " +
+            "FROM Card c WHERE c.account.id = :accountId AND c.id = :cardId")
+    Optional<String> findCardTokenByAccountIdAndCardId(Long accountId, Long cardId);
+
     @Query("SELECT c.cvv " +
             "FROM Card c WHERE c.account.id = :accountId AND c.id = :cardId")
     Optional<Integer> findCvvByAccountIdAndCardId(Long accountId, Long cardId);

@@ -60,6 +60,10 @@ public class CardHelper {
         return cardRepository.findPlainPanByAccountIdAndCardId(accountId, cardId).orElseThrow(() -> new IllegalArgumentException("Card not found for cardId: " + cardId + " and accountId: " + accountId));
     }
 
+    public String getCardToken(Long accountId, Long cardId) {
+        return cardRepository.findCardTokenByAccountIdAndCardId(accountId, cardId).orElseThrow(() -> new IllegalArgumentException("Card not found for cardId: " + cardId + " and accountId: " + accountId));
+    }
+
     public int getCvv(Long accountId, Long cardId) {
         return cardRepository.findCvvByAccountIdAndCardId(accountId, cardId).orElseThrow(() -> new IllegalArgumentException("Card not found for cardId: " + cardId + " and accountId: " + accountId));
     }
