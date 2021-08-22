@@ -94,13 +94,12 @@ public class ExchangeData {
         request.connect();
 
         // Convert to JSON
-        JsonParser jp = new JsonParser();
-        JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent()));
-        JsonObject jsonobj = root.getAsJsonObject();
+        JsonElement root = JsonParser.parseReader(new InputStreamReader((InputStream) request.getContent()));
+        JsonObject jsonObject = root.getAsJsonObject();
 
 
         Gson gson = new Gson();
-        return gson.fromJson(jsonobj, ExchangeCurrencyDTO.class);
+        return gson.fromJson(jsonObject, ExchangeCurrencyDTO.class);
     }
 
     private void updateCurrencyValue(List<ExchangeCurrencyValueHistory> exchangeCurrencyValueHistories) {
