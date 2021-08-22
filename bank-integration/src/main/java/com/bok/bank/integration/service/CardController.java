@@ -25,6 +25,9 @@ public interface CardController {
     @GetMapping("/getPlainPAN/{cardId}")
     public String getPlainPan(@RequestParam Long accountId, @PathVariable Long cardId);
 
+    @GetMapping("/getCardToken/{cardId}")
+    public String getCardToken(@RequestParam Long accountId, @PathVariable Long cardId);
+
     @GetMapping("/getCvv/{cardId}")
     public Integer getCvv(@RequestParam Long accountId, @PathVariable Long cardId);
 

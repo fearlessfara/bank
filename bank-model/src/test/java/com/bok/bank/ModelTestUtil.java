@@ -1,7 +1,17 @@
 package com.bok.bank;
 
-import com.bok.bank.model.*;
-import com.bok.bank.repository.*;
+import com.bok.bank.model.Account;
+import com.bok.bank.model.BankAccount;
+import com.bok.bank.model.Card;
+import com.bok.bank.model.Company;
+import com.bok.bank.model.ExchangeCurrencyValue;
+import com.bok.bank.model.ExchangeCurrencyValueHistory;
+import com.bok.bank.model.User;
+import com.bok.bank.repository.AccountRepository;
+import com.bok.bank.repository.BankAccountRepository;
+import com.bok.bank.repository.CardRepository;
+import com.bok.bank.repository.ExchangeCurrencyValueHistoryRepository;
+import com.bok.bank.repository.ExchangeCurrencyValueRepository;
 import com.bok.bank.util.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +22,11 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Currency;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class ModelTestUtil {

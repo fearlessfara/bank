@@ -35,6 +35,12 @@ public class CardControllerImpl implements CardController {
     }
 
     @Override
+    public String getCardToken(Long accountId, Long cardId) {
+        Preconditions.checkNotNull(cardId, "cardId must not be null");
+        return cardHelper.getCardToken(accountId, cardId);
+    }
+
+    @Override
     public Integer getCvv(Long accountId, Long cardId) {
         Preconditions.checkNotNull(cardId, "cardId must not be null");
         return cardHelper.getCvv(accountId, cardId);
