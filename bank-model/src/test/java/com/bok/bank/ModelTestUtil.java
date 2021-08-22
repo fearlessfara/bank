@@ -1,17 +1,7 @@
 package com.bok.bank;
 
-import com.bok.bank.model.Account;
-import com.bok.bank.model.BankAccount;
-import com.bok.bank.model.Card;
-import com.bok.bank.model.Company;
-import com.bok.bank.model.ExchangeCurrencyValue;
-import com.bok.bank.model.ExchangeCurrencyValueHistory;
-import com.bok.bank.model.User;
-import com.bok.bank.repository.AccountRepository;
-import com.bok.bank.repository.BankAccountRepository;
-import com.bok.bank.repository.CardRepository;
-import com.bok.bank.repository.ExchangeCurrencyValueHistoryRepository;
-import com.bok.bank.repository.ExchangeCurrencyValueRepository;
+import com.bok.bank.model.*;
+import com.bok.bank.repository.*;
 import com.bok.bank.util.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,11 +12,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.Currency;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ModelTestUtil {
@@ -63,8 +49,8 @@ public class ModelTestUtil {
         accountRepository.saveAll(accounts);
 
         List<BankAccount> bankAccounts = Arrays.asList(
-                new BankAccount(accounts.get(0), "1234543212345432123454321234", "firstBankAccount", "universitary", Currency.getInstance("EUR"), new Money(BigDecimal.ZERO), new Money(BigDecimal.valueOf(100)), BankAccount.Status.ACTIVE),
-                new BankAccount(accounts.get(1), "1234543212311112123454321234", "AeroBankAccount", "boh", Currency.getInstance("EUR"), new Money(BigDecimal.ZERO), new Money(BigDecimal.valueOf(50)), BankAccount.Status.ACTIVE)
+                new BankAccount(accounts.get(0).getId(), "1234543212345432123454321234", "firstBankAccount", "universitary", Currency.getInstance("EUR"), new Money(BigDecimal.ZERO), new Money(BigDecimal.valueOf(100)), BankAccount.Status.ACTIVE),
+                new BankAccount(accounts.get(1).getId(), "1234543212311112123454321234", "AeroBankAccount", "boh", Currency.getInstance("EUR"), new Money(BigDecimal.ZERO), new Money(BigDecimal.valueOf(50)), BankAccount.Status.ACTIVE)
         );
         bankAccountRepository.saveAll(bankAccounts);
 
@@ -108,8 +94,8 @@ public class ModelTestUtil {
         exchangeCurrencyValueRepository.saveAll(exchangeCurrencyValues);
 
         List<Card> cards = Arrays.asList(
-                new Card("firstCard", accounts.stream().filter(account -> account.getName().equals("Domenico")).findFirst().get(), Card.CardStatus.ACTIVE, Card.Type.DEBIT, Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS), "1352462", "prova", "*1234", bankAccounts.stream().filter(bankAccount -> bankAccount.getAccount().getName().equals("Domenico")).findFirst().get(), 123),
-                new Card("firstVirtualCard", accounts.stream().filter(account -> account.getName().equals("Chris")).findFirst().get(), Card.CardStatus.ACTIVE, Card.Type.VIRTUAL, Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS), "1352472", "provaV", "*1235", bankAccounts.stream().filter(bankAccount -> bankAccount.getAccount().getName().equals("Chris")).findFirst().get(), 371)
+                new Card("firstCard", accounts.stream().filter(account -> account.getName().equals("Domenico")).findFirst().get(), Card.CardStatus.ACTIVE, Card.Type.DEBIT, Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS), "1352462", "prova", "*1234", bankAccounts.stream().filter(bankAccount -> bankAccount.getName().equals("Domenico")).findFirst().get(), 123),
+                new Card("firstVirtualCard", accounts.stream().filter(account -> account.getName().equals("Chris")).findFirst().get(), Card.CardStatus.ACTIVE, Card.Type.VIRTUAL, Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS), "1352472", "provaV", "*1235", bankAccounts.stream().filter(bankAccount -> bankAccount.getName().equals("Chris")).findFirst().get(), 371)
         );
 
         cardRepository.saveAll(cards);
