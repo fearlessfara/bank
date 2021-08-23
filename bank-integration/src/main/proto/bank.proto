@@ -54,6 +54,7 @@ message AuthorizationRequest{
   string extTransactionId = 2;
   Money money = 3;
   string fromMarket = 4;
+  string cardToken = 5;
 }
 
 message AuthorizationResponse{
