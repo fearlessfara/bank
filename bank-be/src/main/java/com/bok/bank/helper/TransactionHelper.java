@@ -48,7 +48,8 @@ public class TransactionHelper {
         if (bankAccount.getCurrency().equals(amount.getCurrency())) {
             isImportAvailable = availableBalance.isGreaterOrEqualsThan(amount);
         } else {
-            isImportAvailable = availableBalance.isGreaterOrEqualsThan(exchangeCurrencyAmountHelper.convertAmount(amount, availableBalance));
+            amount = exchangeCurrencyAmountHelper.convertCurrencyAmount(amount, bankAccount.getCurrency());
+            isImportAvailable = availableBalance.isGreaterOrEqualsThan(amount);
         }
         if (isImportAvailable) {
             bankAccount.setBlockedAmount(amount);
@@ -104,16 +105,17 @@ public class TransactionHelper {
         } else {
             transaction = transactionOptional.orElseThrow(() -> new TransactionException(ErrorCode.TRANSACTION_NOT_VALID.name()));
         }
+        Money amountWithBankAccountCurrency = exchangeCurrencyAmountHelper.convertCurrencyAmount(transaction.getAmount(), toBankAccount.getCurrency());
         switch (transaction.getType()) {
             case DEPOSIT:
-                toBankAccount.setAvailableAmount(toBankAccount.getAvailableAmount().plus(transaction.getAmount()));
+                toBankAccount.setAvailableAmount(toBankAccount.getAvailableAmount().plus(amountWithBankAccountCurrency));
                 break;
             case WITHDRAWAL:
                 if (transaction.getStatus().equals(Transaction.Status.DECLINED) || transaction.getStatus().equals(Transaction.Status.CANCELLED)) {
                     break;
                 }
-                toBankAccount.setAvailableAmount(toBankAccount.getAvailableAmount().subtract(transaction.getAmount()));
-                toBankAccount.setBlockedAmount(toBankAccount.getBlockedAmount().subtract(transaction.getAmount()));
+                toBankAccount.setAvailableAmount(toBankAccount.getAvailableAmount().subtract(amountWithBankAccountCurrency));
+                toBankAccount.setBlockedAmount(toBankAccount.getBlockedAmount().plus(amountWithBankAccountCurrency));
                 transaction.setStatus(Transaction.Status.SETTLED);
                 break;
             default:
