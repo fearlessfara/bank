@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.util.Currency;
+import java.util.Objects;
 import java.util.UUID;
 
 @GrpcService
@@ -35,7 +36,9 @@ public class BankGrpcServerService extends BankGrpc.BankImplBase {
         AuthorizationResponseDTO authorization = transactionController.authorize(request.getAccountId(), new AuthorizationRequestDTO(request.getAccountId(), UUID.fromString(request.getExtTransactionId()), new Money(Currency.getInstance(request.getMoney().getCurrency().name()), BigDecimal.valueOf(request.getMoney().getAmount())) , request.getFromMarket()));
         AuthorizationResponse.Builder responseBuilder = AuthorizationResponse.newBuilder();
         responseBuilder.setAuthorized(authorization.authorized);
-        responseBuilder.setAuthorizationId(authorization.extTransactionId.toString());
+        if(Objects.nonNull(authorization.extTransactionId)) {
+            responseBuilder.setAuthorizationId(authorization.extTransactionId.toString());
+        }
         responseObserver.onNext(responseBuilder.build());
         responseObserver.onCompleted();
     }
