@@ -27,7 +27,9 @@ public class ExchangeCurrencyAmountHelper {
         }
         ExchangeCurrencyValue exchangeCurrencyValue = exchangeCurrencyValueRepository.findByBaseCurrency(fromCurrencyAmount.getCurrency().getCurrencyCode());
         BigDecimal conversionRate = exchangeCurrencyValue.getConversion_rates().get(toCurrency.getCurrencyCode());
-        fromCurrencyAmount.setCurrency(toCurrency);
-        return fromCurrencyAmount.multiply(conversionRate);
+        Money moneyConverted = new Money(fromCurrencyAmount);
+        moneyConverted.setCurrency(toCurrency);
+        moneyConverted = moneyConverted.multiply(conversionRate);
+        return moneyConverted;
     }
 }

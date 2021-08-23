@@ -13,6 +13,7 @@ import com.bok.bank.repository.CardRepository;
 import com.bok.bank.repository.ConfirmationEmailHistoryRepository;
 import com.bok.bank.repository.ExchangeCurrencyValueHistoryRepository;
 import com.bok.bank.repository.ExchangeCurrencyValueRepository;
+import com.bok.bank.repository.TransactionRepository;
 import com.bok.bank.util.Constants;
 import com.bok.bank.util.CreditCardNumberGenerator;
 import com.bok.bank.util.Money;
@@ -50,6 +51,9 @@ public class ModelTestUtil {
     AccountRepository accountRepository;
     @Autowired
     BankAccountRepository bankAccountRepository;
+
+    @Autowired
+    TransactionRepository transactionRepository;
     @Autowired
     CardRepository cardRepository;
 
@@ -74,6 +78,10 @@ public class ModelTestUtil {
         );
         bankAccountRepository.saveAll(bankAccounts);
 
+        populateCurrency();
+
+    }
+    public void populateCurrency(){
         Map<String, BigDecimal> currenciesEUR = new HashMap<>();
         currenciesEUR.put("USD", BigDecimal.valueOf(1.22));
         currenciesEUR.put("GBP", BigDecimal.valueOf(1.2));
@@ -115,17 +123,17 @@ public class ModelTestUtil {
                 new ExchangeCurrencyValue(Instant.now(), Instant.now(), "USD", currenciesUSD1),
                 new ExchangeCurrencyValue(Instant.now(), Instant.now(), "GBP", currenciesGBP1));
         exchangeCurrencyValueRepository.saveAll(exchangeCurrencyValues);
-
-
     }
 
     public void clearAll() {
         cardRepository.deleteAll();
         confirmationEmailHistoryRepository.deleteAll();
+        transactionRepository.deleteAll();
         bankAccountRepository.deleteAll();
         accountRepository.deleteAll();
         exchangeCurrencyValueHistoryRepository.deleteAll();
         exchangeCurrencyValueRepository.deleteAll();
+        populateCurrency();
     }
 
     public User createAndSaveUser(Long accountId) {
