@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/bankAccount")
 public interface BankAccountController {
 
-    @PostMapping("/authorize")
-    AuthorizationResponseDTO authorize(@RequestParam("accountId") Long accountId, @RequestBody AuthorizationRequestDTO authorizationRequestDTO);
-
     @GetMapping("/bankAccountInfo")
     BankAccountInfoDTO bankAccountInfo(@RequestParam("accountId") Long accountId);
 

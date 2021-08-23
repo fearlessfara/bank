@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -48,16 +49,18 @@ public class TransactionHelper {
         if (bankAccount.getCurrency().equals(amount.getCurrency())) {
             isImportAvailable = availableBalance.isGreaterOrEqualsThan(amount);
         } else {
-            isImportAvailable = availableBalance.isGreaterOrEqualsThan(exchangeCurrencyAmountHelper.convertAmount(amount, availableBalance));
+            amount = exchangeCurrencyAmountHelper.convertCurrencyAmount(amount, bankAccount.getCurrency());
+            isImportAvailable = availableBalance.isGreaterOrEqualsThan(amount);
         }
         if (isImportAvailable) {
-            bankAccount.setBlockedAmount(amount);
+            bankAccount.setBlockedAmount(bankAccount.getBlockedAmount().plus(amount));
+            bankAccount.setAvailableAmount(bankAccount.getAvailableAmount().subtract(amount));
             bankAccount = bankAccountRepository.saveAndFlush(bankAccount);
-            Transaction transaction = new Transaction(Transaction.Type.WITHDRAWAL, Transaction.Status.AUTHORISED, fromMarket, bankAccount, amount);
+            Transaction transaction = new Transaction(Transaction.Type.WITHDRAWAL, Transaction.Status.AUTHORISED, fromMarket, bankAccount, amount, UUID.randomUUID());
             transaction = transactionRepository.saveAndFlush(transaction);
             return new AuthorizationResponseDTO(true, "", transaction.getPublicId());
         }
-        Transaction transaction = new Transaction(Transaction.Type.WITHDRAWAL, Transaction.Status.DECLINED, fromMarket, bankAccount, amount);
+        Transaction transaction = new Transaction(Transaction.Type.WITHDRAWAL, Transaction.Status.DECLINED, fromMarket, bankAccount, amount, UUID.randomUUID());
         transaction = transactionRepository.saveAndFlush(transaction);
         return new AuthorizationResponseDTO(false, "Amount not available", transaction.getPublicId());
 
@@ -100,20 +103,20 @@ public class TransactionHelper {
         Optional<Transaction> transactionOptional = transactionRepository.findByPublicId(transactionDTO.extTransactionId);
         Transaction transaction;
         if (!transactionOptional.isPresent() && transactionDTO.type.equals(Transaction.Type.DEPOSIT.name())) {
-            transaction = new Transaction(Transaction.Type.DEPOSIT, Transaction.Status.SETTLED, transactionDTO.fromMarket, toBankAccount, new Money(transactionDTO.transactionAmount.amount, transactionDTO.transactionAmount.currency));
+            transaction = new Transaction(Transaction.Type.DEPOSIT, Transaction.Status.SETTLED, transactionDTO.fromMarket, toBankAccount, new Money(transactionDTO.transactionAmount.amount, transactionDTO.transactionAmount.currency), UUID.randomUUID());
         } else {
             transaction = transactionOptional.orElseThrow(() -> new TransactionException(ErrorCode.TRANSACTION_NOT_VALID.name()));
         }
+        Money amountWithBankAccountCurrency = exchangeCurrencyAmountHelper.convertCurrencyAmount(transaction.getAmount(), toBankAccount.getCurrency());
         switch (transaction.getType()) {
             case DEPOSIT:
-                toBankAccount.setAvailableAmount(toBankAccount.getAvailableAmount().plus(transaction.getAmount()));
+                toBankAccount.setAvailableAmount(toBankAccount.getAvailableAmount().plus(amountWithBankAccountCurrency));
                 break;
             case WITHDRAWAL:
                 if (transaction.getStatus().equals(Transaction.Status.DECLINED) || transaction.getStatus().equals(Transaction.Status.CANCELLED)) {
                     break;
                 }
-                toBankAccount.setAvailableAmount(toBankAccount.getAvailableAmount().subtract(transaction.getAmount()));
-                toBankAccount.setBlockedAmount(toBankAccount.getBlockedAmount().subtract(transaction.getAmount()));
+                toBankAccount.setBlockedAmount(toBankAccount.getBlockedAmount().subtract(amountWithBankAccountCurrency));
                 transaction.setStatus(Transaction.Status.SETTLED);
                 break;
             default:

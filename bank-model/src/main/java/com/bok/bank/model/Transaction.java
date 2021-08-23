@@ -58,12 +58,13 @@ public class Transaction implements Serializable {
     public Transaction() {
     }
 
-    public Transaction(Type type, Status status, String fromMarket, BankAccount toBankAccount, Money amount) {
+    public Transaction(Type type, Status status, String fromMarket, BankAccount toBankAccount, Money amount, UUID publicId) {
         this.type = type;
         this.status = status;
         this.fromMarket = fromMarket;
         this.toBankAccount = toBankAccount;
         this.amount = amount;
+        this.publicId = publicId;
     }
 
     public Long getId() {

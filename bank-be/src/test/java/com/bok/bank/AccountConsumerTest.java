@@ -67,7 +67,7 @@ public class AccountConsumerTest {
         Assertions.assertEquals(accountInfo.status, ACTIVE.name());
         BankAccount bankAccount = bankAccountRepository.findByAccountId(123L).get();
         Assertions.assertNotNull(bankAccount);
-        Assertions.assertEquals(bankAccount.getAvailableAmount().getValue(), BigDecimal.valueOf(100));
+        Assertions.assertEquals(bankAccount.getAvailableAmount().getValue(), BigDecimal.valueOf(100000));
     }
 
 
