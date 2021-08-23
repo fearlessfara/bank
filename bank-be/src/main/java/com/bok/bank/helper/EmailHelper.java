@@ -46,7 +46,7 @@ public class EmailHelper {
         emailMessage.to = account.getEmail();
         emailMessage.subject = "BOK - Card activation";
         emailMessage.body = "Dear " + account.getName() + ",\nClick on the following link to complete creation of the card named " + card.getName() + "\n" +
-                "https://bok.faraone.ovh/cardConfirm?accountId=" + account.getId() + "&confirmationToken=" + confirmationEmailHistory.getConfirmationToken() +
+                "https://bok.faraone.ovh/cardConfirm/" + account.getId() + "/" + confirmationEmailHistory.getConfirmationToken() +
                 "\n\nThe BOK Team.";
 
         emailMQProducer.send(emailMessage);
