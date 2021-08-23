@@ -75,6 +75,8 @@ public class TransactionControllerTest {
         Transaction transaction = transactionRepository.findByPublicId(checkPaymentAmount.extTransactionId).get();
         Assertions.assertEquals(Transaction.Status.AUTHORISED, transaction.getStatus());
         Assertions.assertEquals(moneyToAuthorize, transaction.getAmount());
+        Assertions.assertEquals(bankAccount.getAvailableAmount().subtract(moneyToAuthorize), bankAccountAfterAmountAuthorization.getAvailableAmount());
+
     }
 
     @Test
@@ -103,6 +105,7 @@ public class TransactionControllerTest {
         Money moneyToAuthorizeExpected = exchangeCurrencyAmountHelper.convertCurrencyAmount(moneyToAuthorize, bankAccount.getCurrency());
         moneyToAuthorizeExpected.setValue(moneyToAuthorizeExpected.getValue().setScale(2, RoundingMode.FLOOR));
         Assertions.assertEquals(moneyToAuthorizeExpected, transaction.getAmount());
+        Assertions.assertEquals(bankAccount.getAvailableAmount().subtract(moneyToAuthorizeExpected), bankAccountAfterAmountAuthorization.getAvailableAmount());
     }
 
     @Test

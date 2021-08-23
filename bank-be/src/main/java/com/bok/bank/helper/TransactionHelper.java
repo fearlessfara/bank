@@ -54,6 +54,7 @@ public class TransactionHelper {
         }
         if (isImportAvailable) {
             bankAccount.setBlockedAmount(bankAccount.getBlockedAmount().plus(amount));
+            bankAccount.setAvailableAmount(bankAccount.getAvailableAmount().subtract(amount));
             bankAccount = bankAccountRepository.saveAndFlush(bankAccount);
             Transaction transaction = new Transaction(Transaction.Type.WITHDRAWAL, Transaction.Status.AUTHORISED, fromMarket, bankAccount, amount, UUID.randomUUID());
             transaction = transactionRepository.saveAndFlush(transaction);
@@ -115,7 +116,6 @@ public class TransactionHelper {
                 if (transaction.getStatus().equals(Transaction.Status.DECLINED) || transaction.getStatus().equals(Transaction.Status.CANCELLED)) {
                     break;
                 }
-                toBankAccount.setAvailableAmount(toBankAccount.getAvailableAmount().subtract(amountWithBankAccountCurrency));
                 toBankAccount.setBlockedAmount(toBankAccount.getBlockedAmount().subtract(amountWithBankAccountCurrency));
                 transaction.setStatus(Transaction.Status.SETTLED);
                 break;
