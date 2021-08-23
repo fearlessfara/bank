@@ -74,7 +74,7 @@ public class BankAccountHelper {
 
     public void createFirstBankAccount(Long accountId, BankAccountDTO bankAccountDTO) {
         log.info("creation bank account");
-        BankAccount bankAccount = new BankAccount(accountId, generator.generateIBAN(), bankAccountDTO.name, bankAccountDTO.label, bankAccountDTO.currency, new Money(new BigDecimal(INIT_BONUS), bankAccountDTO.currency), new Money(BigDecimal.valueOf(100), bankAccountDTO.currency), BankAccount.Status.ACTIVE);
+        BankAccount bankAccount = new BankAccount(accountId, generator.generateIBAN(), bankAccountDTO.name, bankAccountDTO.label, bankAccountDTO.currency, new Money(BigDecimal.ZERO, bankAccountDTO.currency), new Money(new BigDecimal(INIT_BONUS), bankAccountDTO.currency), BankAccount.Status.ACTIVE);
         bankAccount = bankAccountRepository.saveAndFlush(bankAccount);
         Account account = accountRepository.findById(accountId).orElseThrow(AccountException::new);
         account.setBankAccountId(bankAccount.getId());
