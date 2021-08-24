@@ -106,7 +106,7 @@ public class TransactionHelper {
     }
 
     private void executeTransaction(TransactionDTO transactionDTO, BankAccount toBankAccount) {
-        Optional<Transaction> transactionOptional = transactionRepository.findByPublicId(transactionDTO.extTransactionId);
+        Optional<Transaction> transactionOptional = transactionRepository.findByPublicId(transactionDTO.extTransactionId.toString());
         Transaction transaction;
         if (!transactionOptional.isPresent() && transactionDTO.type.equals(Transaction.Type.DEPOSIT.name())) {
             transaction = new Transaction(Transaction.Type.DEPOSIT, Transaction.Status.SETTLED, transactionDTO.fromMarket, toBankAccount, new Money(transactionDTO.transactionAmount.amount, transactionDTO.transactionAmount.currency), UUID.randomUUID());

@@ -84,7 +84,7 @@ public class TransactionControllerTest {
         Money blockedAmountExpected = bankAccount.getBlockedAmount().plus(moneyToAuthorize);
         blockedAmountExpected.setValue(blockedAmountExpected.getValue().setScale(2, RoundingMode.FLOOR));
         Assertions.assertEquals(blockedAmountExpected, bankAccountAfterAmountAuthorization.getBlockedAmount());
-        Transaction transaction = transactionRepository.findByPublicId(checkPaymentAmount.extTransactionId).get();
+        Transaction transaction = transactionRepository.findByPublicId(checkPaymentAmount.extTransactionId.toString()).get();
         Assertions.assertEquals(Transaction.Status.AUTHORISED, transaction.getStatus());
         Assertions.assertEquals(moneyToAuthorize, transaction.getAmount());
         Assertions.assertEquals(bankAccount.getAvailableAmount().subtract(moneyToAuthorize), bankAccountAfterAmountAuthorization.getAvailableAmount());
@@ -117,7 +117,7 @@ public class TransactionControllerTest {
         Money blockedAmountExpected = bankAccount.getBlockedAmount().plus(exchangeCurrencyAmountHelper.convertCurrencyAmount(moneyToAuthorize, bankAccount.getCurrency()));
         blockedAmountExpected.setValue(blockedAmountExpected.getValue().setScale(2, RoundingMode.FLOOR));
         Assertions.assertEquals(blockedAmountExpected, bankAccountAfterAmountAuthorization.getBlockedAmount());
-        Transaction transaction = transactionRepository.findByPublicId(checkPaymentAmount.extTransactionId).get();
+        Transaction transaction = transactionRepository.findByPublicId(checkPaymentAmount.extTransactionId.toString()).get();
         Assertions.assertEquals(Transaction.Status.AUTHORISED, transaction.getStatus());
         Money moneyToAuthorizeExpected = exchangeCurrencyAmountHelper.convertCurrencyAmount(moneyToAuthorize, bankAccount.getCurrency());
         moneyToAuthorizeExpected.setValue(moneyToAuthorizeExpected.getValue().setScale(2, RoundingMode.FLOOR));
@@ -135,7 +135,7 @@ public class TransactionControllerTest {
         Assertions.assertEquals(checkPaymentAmount.reason, "Amount not available");
         Assertions.assertFalse(checkPaymentAmount.authorized);
         Assertions.assertNotNull(checkPaymentAmount.extTransactionId);
-        Transaction transaction = transactionRepository.findByPublicId(checkPaymentAmount.extTransactionId).get();
+        Transaction transaction = transactionRepository.findByPublicId(checkPaymentAmount.extTransactionId.toString()).get();
         Assertions.assertEquals(Transaction.Status.DECLINED, transaction.getStatus());
     }
 
@@ -149,7 +149,7 @@ public class TransactionControllerTest {
         Assertions.assertEquals(checkPaymentAmount.reason, "Amount not available");
         Assertions.assertFalse(checkPaymentAmount.authorized);
         Assertions.assertNotNull(checkPaymentAmount.extTransactionId);
-        Transaction transaction = transactionRepository.findByPublicId(checkPaymentAmount.extTransactionId).get();
+        Transaction transaction = transactionRepository.findByPublicId(checkPaymentAmount.extTransactionId.toString()).get();
         Assertions.assertEquals(Transaction.Status.DECLINED, transaction.getStatus());
     }
 

@@ -16,7 +16,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     @Query("select t from Transaction t where t.toBankAccount.accountId = :accountId or t.fromBankAccount.accountId = :accountId")
     List<Transaction> findByAccountId(Long accountId);
 
-    Optional<Transaction> findByPublicId(UUID publicId);
+    Optional<Transaction> findByPublicId(String publicId);
 
     List<Transaction> findTransactionsByCard_Id(Long cardId);
 }
