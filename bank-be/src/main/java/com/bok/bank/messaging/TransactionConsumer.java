@@ -20,7 +20,7 @@ public class TransactionConsumer {
     @JmsListener(destination = "${active-mq.bank-withdrawal}")
     public void withdrawalListener(BankWithdrawalMessage message) {
         log.info("Received withdrawal Message: " + message.toString());
-        transactionHelper.performTransaction(new TransactionDTO(message.money, message.accountId, message.fromMarket, message.extTransactionId, Transaction.Type.WITHDRAWAL.name()));
+        transactionHelper.performTransaction(new TransactionDTO(message.money, message.accountId, message.fromMarket, message.extTransactionId, Transaction.Type.PAYMENT.name()));
     }
 
     @JmsListener(destination = "${active-mq.bank-deposit}")

@@ -17,4 +17,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     List<Transaction> findByAccountId(Long accountId);
 
     Optional<Transaction> findByPublicId(UUID publicId);
+
+    List<Transaction> findTransactionsByCard_Id(Long cardId);
 }

@@ -7,8 +7,10 @@ import com.bok.bank.integration.dto.AuthorizationResponseDTO;
 import com.bok.bank.integration.dto.TransactionDTO;
 import com.bok.bank.integration.dto.TransactionResponseDTO;
 import com.bok.bank.model.BankAccount;
+import com.bok.bank.model.Card;
 import com.bok.bank.model.Transaction;
 import com.bok.bank.repository.BankAccountRepository;
+import com.bok.bank.repository.CardRepository;
 import com.bok.bank.repository.TransactionRepository;
 import com.bok.bank.util.Money;
 import com.google.common.base.Preconditions;
@@ -38,14 +40,23 @@ public class TransactionHelper {
     BankAccountRepository bankAccountRepository;
     @Autowired
     ExchangeCurrencyAmountHelper exchangeCurrencyAmountHelper;
+    @Autowired
+    CardRepository cardRepository;
 
-    public AuthorizationResponseDTO authorizeTransaction(Long accountId, Money amount, String fromMarket) {
+    public AuthorizationResponseDTO authorizeTransaction(Long accountId, Money amount, String fromMarket, String cardToken) {
         Optional<BankAccount> bankAccountOptional = bankAccountRepository.findByAccountIdAndStatus(accountId, BankAccount.Status.ACTIVE);
         if (!bankAccountOptional.isPresent())
             return new AuthorizationResponseDTO(false, "User not have a bank account or is bank account not is active", null);
         BankAccount bankAccount = bankAccountOptional.get();
         Money availableBalance = bankAccount.getAvailableAmount().subtract(bankAccount.getBlockedAmount());
         boolean isImportAvailable;
+        Card card = cardRepository.findByToken(cardToken).orElse(null);
+        if (Objects.isNull(card)) {
+            return new AuthorizationResponseDTO(false, "Card not found by token: " + cardToken, null);
+        }
+        if (!card.getCardStatus().equals(Card.CardStatus.ACTIVE)) {
+            return new AuthorizationResponseDTO(false, "Card is not ACTIVE, it's status is: " + card.getCardStatus().name(), null);
+        }
         if (bankAccount.getCurrency().equals(amount.getCurrency())) {
             isImportAvailable = availableBalance.isGreaterOrEqualsThan(amount);
         } else {
@@ -56,11 +67,11 @@ public class TransactionHelper {
             bankAccount.setBlockedAmount(bankAccount.getBlockedAmount().plus(amount));
             bankAccount.setAvailableAmount(bankAccount.getAvailableAmount().subtract(amount));
             bankAccount = bankAccountRepository.saveAndFlush(bankAccount);
-            Transaction transaction = new Transaction(Transaction.Type.WITHDRAWAL, Transaction.Status.AUTHORISED, fromMarket, bankAccount, amount, UUID.randomUUID());
+            Transaction transaction = new Transaction(Transaction.Type.PAYMENT, Transaction.Status.AUTHORISED, fromMarket, bankAccount, amount, UUID.randomUUID(), card);
             transaction = transactionRepository.saveAndFlush(transaction);
             return new AuthorizationResponseDTO(true, "", transaction.getPublicId());
         }
-        Transaction transaction = new Transaction(Transaction.Type.WITHDRAWAL, Transaction.Status.DECLINED, fromMarket, bankAccount, amount, UUID.randomUUID());
+        Transaction transaction = new Transaction(Transaction.Type.PAYMENT, Transaction.Status.DECLINED, fromMarket, bankAccount, amount, UUID.randomUUID());
         transaction = transactionRepository.saveAndFlush(transaction);
         return new AuthorizationResponseDTO(false, "Amount not available", transaction.getPublicId());
 
@@ -72,12 +83,7 @@ public class TransactionHelper {
         Preconditions.checkArgument(StringUtils.isNotBlank(transactionDTO.fromMarket), "fromMarket passed is blank");
         Preconditions.checkNotNull(transactionDTO.extTransactionId, "extTransactionId passed is null");
         Preconditions.checkArgument(Objects.nonNull(transactionDTO.transactionAmount) && transactionDTO.transactionAmount.amount.compareTo(BigDecimal.ZERO) == 1, "amount not valid");
-
-        Money amount = new Money(transactionDTO.transactionAmount.amount, transactionDTO.transactionAmount.currency);
         BankAccount toBankAccount = bankAccountRepository.findByAccountId(transactionDTO.accountId).orElseThrow(BankAccountException::new);
-        if (!authorizeTransaction(transactionDTO.accountId, amount, transactionDTO.fromMarket).authorized) {
-            throw new TransactionException();
-        }
         executeTransaction(transactionDTO, toBankAccount);
     }
 
@@ -89,7 +95,7 @@ public class TransactionHelper {
         return transactions.stream().map(t -> toTransactionResponseDTO(t, accountId)).collect(Collectors.toList());
     }
 
-    private TransactionResponseDTO toTransactionResponseDTO(Transaction transaction, Long accountId) {
+    public TransactionResponseDTO toTransactionResponseDTO(Transaction transaction, Long accountId) {
         TransactionResponseDTO transactionResponseDTO = new TransactionResponseDTO(transaction.getPublicId().toString(), transaction.getType().name(), transaction.getStatus().name(), transaction.getTimestamp());
         Money amount = transaction.getAmount();
         if (transaction.getFromBankAccount().getAccountId().equals(accountId)) {
@@ -109,20 +115,30 @@ public class TransactionHelper {
         }
         Money amountWithBankAccountCurrency = exchangeCurrencyAmountHelper.convertCurrencyAmount(transaction.getAmount(), toBankAccount.getCurrency());
         switch (transaction.getType()) {
-            case DEPOSIT:
+            case DEPOSIT: {
                 toBankAccount.setAvailableAmount(toBankAccount.getAvailableAmount().plus(amountWithBankAccountCurrency));
                 break;
+            }
             case WITHDRAWAL:
+            case PAYMENT: {
                 if (transaction.getStatus().equals(Transaction.Status.DECLINED) || transaction.getStatus().equals(Transaction.Status.CANCELLED)) {
                     break;
                 }
                 toBankAccount.setBlockedAmount(toBankAccount.getBlockedAmount().subtract(amountWithBankAccountCurrency));
                 transaction.setStatus(Transaction.Status.SETTLED);
                 break;
-            default:
+            }
+            default: {
                 throw new TransactionException(ErrorCode.TRANSACTION_TYPE_NOT_VALID.name());
+            }
         }
         transactionRepository.saveAndFlush(transaction);
         bankAccountRepository.saveAndFlush(toBankAccount);
+    }
+
+    public List<Transaction> findTransactionByCardToken(Long accountId, String token) {
+        Card card = cardRepository.findByToken(token).orElseThrow(() -> new IllegalArgumentException("Card with token: " + token + " not found"));
+        Preconditions.checkArgument(card.getAccount().getId().equals(accountId), "Card not found for accountId: " + accountId);
+        return transactionRepository.findTransactionsByCard_Id(card.getId());
     }
 }

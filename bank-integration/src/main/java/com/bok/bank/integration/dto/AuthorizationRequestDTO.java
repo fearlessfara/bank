@@ -21,4 +21,5 @@ public class AuthorizationRequestDTO {
     public UUID extTransactionId;
     public Money money;
     public String fromMarket;
+    public String cardToken;
 }

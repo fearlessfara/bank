@@ -3,12 +3,16 @@ package com.bok.bank;
 import com.bok.bank.helper.ExchangeCurrencyAmountHelper;
 import com.bok.bank.integration.dto.AuthorizationRequestDTO;
 import com.bok.bank.integration.dto.AuthorizationResponseDTO;
+import com.bok.bank.integration.dto.CardDTO;
 import com.bok.bank.integration.service.AccountController;
+import com.bok.bank.integration.service.CardController;
 import com.bok.bank.integration.service.TransactionController;
 import com.bok.bank.model.BankAccount;
+import com.bok.bank.model.Card;
 import com.bok.bank.model.Transaction;
 import com.bok.bank.model.User;
 import com.bok.bank.repository.BankAccountRepository;
+import com.bok.bank.repository.CardRepository;
 import com.bok.bank.repository.TransactionRepository;
 import com.bok.bank.util.Money;
 import lombok.extern.slf4j.Slf4j;
@@ -27,9 +31,8 @@ import java.util.UUID;
 
 import static com.bok.bank.ModelTestUtil.EUR;
 import static com.bok.bank.ModelTestUtil.USD;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static com.bok.bank.ModelTestUtil.faker;
+import static com.bok.bank.model.Card.Type.DEBIT;
 
 @SpringBootTest
 @Slf4j
@@ -45,6 +48,12 @@ public class TransactionControllerTest {
 
     @Autowired
     TransactionController transactionController;
+
+    @Autowired
+    CardController cardController;
+
+    @Autowired
+    CardRepository cardRepository;
 
     @Autowired
     BankAccountRepository bankAccountRepository;
@@ -63,8 +72,11 @@ public class TransactionControllerTest {
     public void checkPaymentAmountTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user);
+        cardController.createCard(user.getId(), new CardDTO(faker.name().title(), DEBIT.name(), faker.name().name()));
+        Card card = cardRepository.findAll().get(0);
+
         Money moneyToAuthorize = new Money(new BigDecimal(10).setScale(2,RoundingMode.FLOOR), bankAccount.getCurrency());
-        AuthorizationResponseDTO checkPaymentAmount = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), null, new com.bok.bank.integration.util.Money(moneyToAuthorize.getCurrency(), moneyToAuthorize.getValue()), "MARKET"));
+        AuthorizationResponseDTO checkPaymentAmount = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), null, new com.bok.bank.integration.util.Money(moneyToAuthorize.getCurrency(), moneyToAuthorize.getValue()), "MARKET", card.getToken()));
         Assertions.assertEquals(checkPaymentAmount.reason, "");
         Assertions.assertTrue(checkPaymentAmount.authorized);
         Assertions.assertNotNull(checkPaymentAmount.extTransactionId);
@@ -82,19 +94,24 @@ public class TransactionControllerTest {
     @Test
     public void checkPaymentAmountFailTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
-        AuthorizationResponseDTO checkPaymentAmount = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(EUR, BigDecimal.valueOf(50)), "MARKET"));
-        assertEquals(checkPaymentAmount.reason, "User not have a bank account or is bank account not is active");
-        assertFalse(checkPaymentAmount.authorized);
+        cardController.createCard(user.getId(), new CardDTO(faker.name().title(), DEBIT.name(), faker.name().name()));
+        Card card = cardRepository.findAll().get(0);
+
+        AuthorizationResponseDTO checkPaymentAmount = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(EUR, BigDecimal.valueOf(50)), "MARKET", card.getToken()));
+        Assertions.assertEquals(checkPaymentAmount.reason, "User not have a bank account or is bank account not is active");
+        Assertions.assertFalse(checkPaymentAmount.authorized);
     }
 
     @Test
     public void checkPaymentAmountAnotherCurrencyTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
+        cardController.createCard(user.getId(), new CardDTO(faker.name().title(), DEBIT.name(), faker.name().name()));
+        Card card = cardRepository.findAll().get(0);
         Money moneyToAuthorize = new Money(new BigDecimal(121).setScale(2,RoundingMode.FLOOR), USD);
-        AuthorizationResponseDTO checkPaymentAmount = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(USD, BigDecimal.valueOf(121)), "MARKET"));
-        assertEquals(checkPaymentAmount.reason, "");
-        assertTrue(checkPaymentAmount.authorized);
+        AuthorizationResponseDTO checkPaymentAmount = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(USD, BigDecimal.valueOf(121)), "MARKET", card.getToken()));
+        Assertions.assertEquals(checkPaymentAmount.reason, "");
+        Assertions.assertTrue(checkPaymentAmount.authorized);
         Assertions.assertNotNull(checkPaymentAmount.extTransactionId);
         BankAccount bankAccountAfterAmountAuthorization = bankAccountRepository.findByAccountId(user.getId()).get();
         Money blockedAmountExpected = bankAccount.getBlockedAmount().plus(exchangeCurrencyAmountHelper.convertCurrencyAmount(moneyToAuthorize, bankAccount.getCurrency()));
@@ -112,9 +129,11 @@ public class TransactionControllerTest {
     public void checkPaymentAmountGreaterWithAnotherCurrencyTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
-        AuthorizationResponseDTO checkPaymentAmount = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(USD, BigDecimal.valueOf(123)), "MARKET"));
-        assertEquals(checkPaymentAmount.reason, "Amount not available");
-        assertFalse(checkPaymentAmount.authorized);
+        cardController.createCard(user.getId(), new CardDTO(faker.name().title(), DEBIT.name(), faker.name().name()));
+        Card card = cardRepository.findAll().get(0);
+        AuthorizationResponseDTO checkPaymentAmount = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(USD, BigDecimal.valueOf(123)), "MARKET", card.getToken()));
+        Assertions.assertEquals(checkPaymentAmount.reason, "Amount not available");
+        Assertions.assertFalse(checkPaymentAmount.authorized);
         Assertions.assertNotNull(checkPaymentAmount.extTransactionId);
         Transaction transaction = transactionRepository.findByPublicId(checkPaymentAmount.extTransactionId).get();
         Assertions.assertEquals(Transaction.Status.DECLINED, transaction.getStatus());
@@ -124,11 +143,25 @@ public class TransactionControllerTest {
     public void checkPaymentAmountWithNotCommonCurrencyTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
-        AuthorizationResponseDTO checkPaymentAmount = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)), "MARKET"));
-        assertEquals(checkPaymentAmount.reason, "Amount not available");
-        assertFalse(checkPaymentAmount.authorized);
+        cardController.createCard(user.getId(), new CardDTO(faker.name().title(), DEBIT.name(), faker.name().name()));
+        Card card = cardRepository.findAll().get(0);
+        AuthorizationResponseDTO checkPaymentAmount = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)), "MARKET", card.getToken()));
+        Assertions.assertEquals(checkPaymentAmount.reason, "Amount not available");
+        Assertions.assertFalse(checkPaymentAmount.authorized);
         Assertions.assertNotNull(checkPaymentAmount.extTransactionId);
         Transaction transaction = transactionRepository.findByPublicId(checkPaymentAmount.extTransactionId).get();
         Assertions.assertEquals(Transaction.Status.DECLINED, transaction.getStatus());
+    }
+
+    @Test
+    public void listTransactionByCard() {
+        User user = modelTestUtil.createAndSaveUser(17L);
+        BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
+        cardController.createCard(user.getId(), new CardDTO(faker.name().title(), DEBIT.name(), faker.name().name()));
+        Card card = cardRepository.findAll().get(0);
+        AuthorizationResponseDTO firstTransaction = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)), "MARKET", card.getToken()));
+        AuthorizationResponseDTO secondTransaction = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)), "MARKET", card.getToken()));
+        AuthorizationResponseDTO thirdTransaction = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)), "MARKET", card.getToken()));
+
     }
 }

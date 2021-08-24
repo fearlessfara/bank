@@ -35,6 +35,8 @@ public interface CardRepository extends JpaRepository<Card, Long> {
     @Query("UPDATE Card set cardStatus = :status where id= :cardId")
     int changeCardStatus(Long cardId, Card.CardStatus status);
 
+    Optional<Card> findByToken(String token);
+
     class Projection {
         public interface CardInfo {
             Long getCardId();
