@@ -4,13 +4,7 @@ import com.bok.bank.helper.AccountHelper;
 import com.bok.bank.helper.ExchangeCurrencyAmountHelper;
 import com.bok.bank.integration.dto.AuthorizationRequestDTO;
 import com.bok.bank.integration.dto.AuthorizationResponseDTO;
-import com.bok.bank.integration.grpc.AccountCreationCheckRequest;
-import com.bok.bank.integration.grpc.AccountCreationCheckResponse;
-import com.bok.bank.integration.grpc.AuthorizationRequest;
-import com.bok.bank.integration.grpc.AuthorizationResponse;
-import com.bok.bank.integration.grpc.BankGrpc;
-import com.bok.bank.integration.grpc.ConversionRequest;
-import com.bok.bank.integration.service.BankAccountController;
+import com.bok.bank.integration.grpc.*;
 import com.bok.bank.integration.service.CardController;
 import com.bok.bank.integration.service.TransactionController;
 import com.bok.bank.integration.util.Money;
@@ -40,10 +34,10 @@ public class BankGrpcServerService extends BankGrpc.BankImplBase {
 
     @Override
     public void authorize(AuthorizationRequest request, StreamObserver<AuthorizationResponse> responseObserver) {
-        AuthorizationResponseDTO authorization = transactionController.authorize(request.getAccountId(), new AuthorizationRequestDTO(request.getAccountId(), UUID.fromString(request.getExtTransactionId()), new Money(Currency.getInstance(request.getMoney().getCurrency().name()), BigDecimal.valueOf(request.getMoney().getAmount())) , request.getFromMarket(), request.getCardToken()));
+        AuthorizationResponseDTO authorization = transactionController.authorize(request.getAccountId(), new AuthorizationRequestDTO(request.getAccountId(), UUID.fromString(request.getExtTransactionId()), new Money(Currency.getInstance(request.getMoney().getCurrency().name()), BigDecimal.valueOf(request.getMoney().getAmount())), request.getFromMarket(), request.getCardToken()));
         AuthorizationResponse.Builder responseBuilder = AuthorizationResponse.newBuilder();
         responseBuilder.setAuthorized(authorization.authorized);
-        if(Objects.nonNull(authorization.extTransactionId)) {
+        if (Objects.nonNull(authorization.extTransactionId)) {
             responseBuilder.setAuthorizationId(authorization.extTransactionId.toString());
         }
         responseObserver.onNext(responseBuilder.build());
