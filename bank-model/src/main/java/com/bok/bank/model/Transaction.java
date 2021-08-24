@@ -27,8 +27,7 @@ public class Transaction implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
-    @GeneratedValue
-    private UUID publicId;
+    private String publicId;
     @Column
     @Enumerated(EnumType.STRING)
     private Type type;
@@ -64,7 +63,7 @@ public class Transaction implements Serializable {
         this.fromMarket = fromMarket;
         this.toBankAccount = toBankAccount;
         this.amount = amount;
-        this.publicId = publicId;
+        this.publicId = publicId.toString();
     }
     public Transaction(Type type, Status status, String fromMarket, BankAccount toBankAccount, Money amount, UUID publicId, Card card) {
         this.type = type;
@@ -72,7 +71,7 @@ public class Transaction implements Serializable {
         this.fromMarket = fromMarket;
         this.toBankAccount = toBankAccount;
         this.amount = amount;
-        this.publicId = publicId;
+        this.publicId = publicId.toString();
         this.card = card;
     }
 
@@ -164,12 +163,12 @@ public class Transaction implements Serializable {
         this.status = status;
     }
 
-    public UUID getPublicId() {
+    public String getPublicId() {
         return publicId;
     }
 
     public void setPublicId(UUID publicId) {
-        this.publicId = publicId;
+        this.publicId = publicId.toString();
     }
 
     @Override

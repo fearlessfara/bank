@@ -69,11 +69,11 @@ public class TransactionHelper {
             bankAccount = bankAccountRepository.saveAndFlush(bankAccount);
             Transaction transaction = new Transaction(Transaction.Type.PAYMENT, Transaction.Status.AUTHORISED, fromMarket, bankAccount, amount, UUID.randomUUID(), card);
             transaction = transactionRepository.saveAndFlush(transaction);
-            return new AuthorizationResponseDTO(true, "", transaction.getPublicId());
+            return new AuthorizationResponseDTO(true, "", UUID.fromString(transaction.getPublicId()));
         }
         Transaction transaction = new Transaction(Transaction.Type.PAYMENT, Transaction.Status.DECLINED, fromMarket, bankAccount, amount, UUID.randomUUID());
         transaction = transactionRepository.saveAndFlush(transaction);
-        return new AuthorizationResponseDTO(false, "Amount not available", transaction.getPublicId());
+        return new AuthorizationResponseDTO(false, "Amount not available", UUID.fromString(transaction.getPublicId()));
 
     }
 
