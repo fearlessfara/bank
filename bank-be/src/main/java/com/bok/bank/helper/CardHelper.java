@@ -81,7 +81,9 @@ public class CardHelper {
 
     public CardInfoDTO verifyCard(Long accountId, String confirmationToken) {
         ConfirmationEmailHistory confirmationEmailHistory = confirmationEmailHelper.findAndVerifyConfirmationToken(accountId, confirmationToken, ConfirmationEmailHistory.ResourceType.CARD);
-        Preconditions.checkArgument(cardRepository.changeCardStatus(confirmationEmailHistory.getResourceId(), Card.CardStatus.ACTIVE) < 0, "Card activation is failed, please try again");
+        Card card = cardRepository.findById(confirmationEmailHistory.getResourceId()).orElseThrow(() -> new IllegalStateException("Card not found"));
+        card.setCardStatus(Card.CardStatus.ACTIVE);
+        cardRepository.saveAndFlush(card);
         return getCardInfo(accountId, confirmationEmailHistory.getResourceId());
     }
 
