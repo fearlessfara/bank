@@ -4,11 +4,13 @@ import com.bok.bank.helper.AccountHelper;
 import com.bok.bank.helper.ExchangeCurrencyAmountHelper;
 import com.bok.bank.integration.dto.AuthorizationRequestDTO;
 import com.bok.bank.integration.dto.AuthorizationResponseDTO;
+import com.bok.bank.integration.dto.CardInfoDTO;
 import com.bok.bank.integration.grpc.AccountCreationCheckRequest;
 import com.bok.bank.integration.grpc.AccountCreationCheckResponse;
 import com.bok.bank.integration.grpc.AuthorizationRequest;
 import com.bok.bank.integration.grpc.AuthorizationResponse;
 import com.bok.bank.integration.grpc.BankGrpc;
+import com.bok.bank.integration.grpc.ConfirmationResponse;
 import com.bok.bank.integration.grpc.ConversionRequest;
 import com.bok.bank.integration.service.BankAccountController;
 import com.bok.bank.integration.service.CardController;
@@ -66,6 +68,16 @@ public class BankGrpcServerService extends BankGrpc.BankImplBase {
         com.bok.bank.integration.grpc.Money.Builder responseBuilder = com.bok.bank.integration.grpc.Money.newBuilder();
         responseBuilder.setAmount(money.getValue().doubleValue());
         responseBuilder.setCurrency(com.bok.bank.integration.grpc.Currency.valueOf(money.getCurrency().getCurrencyCode()));
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void confirmCard(com.bok.bank.integration.grpc.CardConfirmationRequest request,
+                            io.grpc.stub.StreamObserver<ConfirmationResponse> responseObserver) {
+        CardInfoDTO cardInfoDTO = cardController.verify(request.getAccountId(), request.getToken());
+        ConfirmationResponse.Builder responseBuilder = ConfirmationResponse.newBuilder();
+        responseBuilder.setConfirmed(cardInfoDTO != null);
         responseObserver.onNext(responseBuilder.build());
         responseObserver.onCompleted();
     }
