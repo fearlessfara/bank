@@ -44,6 +44,7 @@ spring:
     url: jdbc:mariadb://bok.faraone.ovh:3307/bank
     username: developer
     password: password4testing
+
 exchange-currency:
   endpoint: https://v6.exchangerate-api.com/v6/
   api-key: ceb94d443f6398dd5e640cd1
