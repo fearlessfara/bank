@@ -58,6 +58,9 @@ public class Card implements Serializable {
     @Column(nullable = false)
     private int cvv;
 
+    @Column(nullable = false)
+    private String PIN;
+
     @CreationTimestamp
     private Instant creationTimestamp;
 
@@ -74,7 +77,7 @@ public class Card implements Serializable {
     public Card() {
     }
 
-    public Card(String name, Account account, CardStatus cardStatus, Type type, Instant expirationDate, String token, String label, String maskedPan, BankAccount bankAccount, int cvv) {
+    public Card(String name, Account account, CardStatus cardStatus, Type type, Instant expirationDate, String token, String label, String maskedPan, BankAccount bankAccount, int cvv, String PIN) {
         this.name = name;
         this.account = account;
         this.cardStatus = cardStatus;
@@ -85,6 +88,7 @@ public class Card implements Serializable {
         this.maskedPan = maskedPan;
         this.bankAccount = bankAccount;
         this.cvv = cvv;
+        this.PIN = PIN;
     }
 
     public Long getId() {
@@ -168,6 +172,10 @@ public class Card implements Serializable {
         this.updateTimestamp = updateTimestamp;
     }
 
+    public String getPIN() {
+        return PIN;
+    }
+
     public Type getType() {
         return type;
     }
@@ -239,7 +247,8 @@ public class Card implements Serializable {
         LOST,
         STOLEN,
         BROKEN,
-        DESTROYED
+        DESTROYED,
+        EXPIRED
     }
 
     public enum Type {

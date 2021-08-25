@@ -55,7 +55,7 @@ public class TransactionHelper {
             return new AuthorizationResponseDTO(false, "Card not found by token: " + cardToken, null);
         }
         if (!card.getCardStatus().equals(Card.CardStatus.ACTIVE)) {
-            return new AuthorizationResponseDTO(false, "Card is not ACTIVE, it's status is: " + card.getCardStatus().name(), null);
+            return new AuthorizationResponseDTO(false, "Card is not ACTIVE, the status is: " + card.getCardStatus().name(), null);
         }
         if (bankAccount.getCurrency().equals(amount.getCurrency())) {
             isImportAvailable = availableBalance.isGreaterOrEqualsThan(amount);

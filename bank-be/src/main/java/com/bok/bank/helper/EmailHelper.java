@@ -24,7 +24,6 @@ public class EmailHelper {
     @Value("${server.base-url}")
     String baseUrl;
 
-
     public void sendBankAccountConfirmationEmail(Account account, BankAccount bankAccount) {
         ConfirmationEmailHistory confirmationEmailHistory = confirmationEmailHelper.saveConfirmationEmail(account, bankAccount.getId(), ConfirmationEmailHistory.ResourceType.BANK_ACCOUNT);
         log.info("email: {}", account.getEmail());
@@ -34,23 +33,30 @@ public class EmailHelper {
         emailMessage.body = "Dear " + account.getName() + ",\nClick on the following link to complete creation of the bank account named " + bankAccount.getName() + "\n" +
                 baseUrl + "/bankAccount/verify?accountId=" + account.getId() + "&verificationToken=" + confirmationEmailHistory.getConfirmationToken() +
                 "\n\nThe BOK Team.";
-
         emailMQProducer.send(emailMessage);
     }
 
-    //TODO create the grpc listener for this method
     public void sendCardConfirmationEmail(Account account, Card card) {
-        ConfirmationEmailHistory confirmationEmailHistory = confirmationEmailHelper.saveConfirmationEmail(account, card.getId(), ConfirmationEmailHistory.ResourceType.CARD);
         log.info("email: {}", account.getEmail());
         EmailMessage emailMessage = new EmailMessage();
         emailMessage.to = account.getEmail();
         emailMessage.subject = "BOK - Card activation";
-        emailMessage.body = "Dear " + account.getName() + ",\nClick on the following link to complete creation of the card named " + card.getName() + "\n" +
-                "https://api.bok.faraone.ovh/cardConfirm/" + account.getId() + "/" + confirmationEmailHistory.getConfirmationToken() +
-                "\n\nThe BOK Team.";
-
+        emailMessage.body = "Dear " + account.getName() +
+                ",\nThis is the PIN of your new card called: " + card.getName() + ".\n\n"
+                + card.getPIN()
+                + "\n\nIt can be used to active your card. \n\nPlease insert the PIN to active the new card \n https://bok.faraone.ovh/"
+                + "\n\nThe BOK Team.";
         emailMQProducer.send(emailMessage);
     }
-
-
+    public String sendPINEmail(Account account, Card card) {
+        log.info("email: {}", account.getEmail());
+        EmailMessage emailMessage = new EmailMessage();
+        emailMessage.to = account.getEmail();
+        emailMessage.subject = "BOK - Card PIN";
+        emailMessage.body = "Dear " + account.getName() + ",\nThe PIN of the card: " + card.getName() + " is:\n\n"
+                + card.getPIN()
+                + "\n\nThe BOK Team.";
+        emailMQProducer.send(emailMessage);
+        return "Please check your email, the PIN has been send";
+    }
 }

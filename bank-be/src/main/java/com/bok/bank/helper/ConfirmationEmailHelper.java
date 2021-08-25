@@ -26,7 +26,7 @@ public class ConfirmationEmailHelper {
     }
 
     public ConfirmationEmailHistory saveConfirmationEmail(Account account, Long resourceId, ConfirmationEmailHistory.ResourceType resourceType) {
-        ConfirmationEmailHistory confirmationEmailHistory = new ConfirmationEmailHistory(account, resourceId, resourceType, generator.generateConfirmationToken());
+        ConfirmationEmailHistory confirmationEmailHistory = new ConfirmationEmailHistory(account, resourceId, resourceType, generator.getRandomNumberString());
         return confirmationEmailHistoryRepository.save(confirmationEmailHistory);
     }
 

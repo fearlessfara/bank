@@ -92,6 +92,10 @@ public class CreditCardNumberGenerator {
         return this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + randomNum() + "" + this.randomNum();
     }
 
+    public String generatePIN() {
+        return this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum();
+    }
+
     private int randomNum() {
         return this.random.nextInt(9);
     }

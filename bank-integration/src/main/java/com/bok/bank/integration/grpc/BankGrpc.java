@@ -242,13 +242,6 @@ public final class BankGrpc {
       asyncUnimplementedUnaryCall(getConvertMoneyMethod(), responseObserver);
     }
 
-    /**
-     */
-    public void confirmCard(com.bok.bank.integration.grpc.CardConfirmationRequest request,
-        io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.ConfirmationResponse> responseObserver) {
-      asyncUnimplementedUnaryCall(getConfirmCardMethod(), responseObserver);
-    }
-
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -500,10 +493,6 @@ public final class BankGrpc {
         case METHODID_CONVERT_MONEY:
           serviceImpl.convertMoney((com.bok.bank.integration.grpc.ConversionRequest) request,
               (io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.Money>) responseObserver);
-          break;
-        case METHODID_CONFIRM_CARD:
-          serviceImpl.confirmCard((com.bok.bank.integration.grpc.CardConfirmationRequest) request,
-              (io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.ConfirmationResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
