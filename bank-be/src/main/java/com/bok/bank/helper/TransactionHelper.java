@@ -100,7 +100,7 @@ public class TransactionHelper {
         TransactionResponseDTO transactionResponseDTO = new TransactionResponseDTO(transaction.getPublicId(), transaction.getType().name(), transaction.getStatus().name(), transaction.getTimestamp());
         Money amount = transaction.getAmount();
         if (Objects.nonNull(transaction.getFromBankAccount()) && transaction.getFromBankAccount().getAccountId().equals(accountId)) {
-            amount.subtract(amount.multiply(2));
+            amount.setValue(amount.getValue().negate());
         }
         transactionResponseDTO.amount = new com.bok.bank.integration.util.Money(amount.getCurrency(), amount.getValue());
         return transactionResponseDTO;
