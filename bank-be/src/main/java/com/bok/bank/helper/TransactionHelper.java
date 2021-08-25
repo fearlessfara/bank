@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -71,7 +72,7 @@ public class TransactionHelper {
             transaction = transactionRepository.saveAndFlush(transaction);
             return new AuthorizationResponseDTO(true, "", UUID.fromString(transaction.getPublicId()));
         }
-        Transaction transaction = new Transaction(Transaction.Type.PAYMENT, Transaction.Status.DECLINED, fromMarket, bankAccount, amount, UUID.randomUUID());
+        Transaction transaction = new Transaction(Transaction.Type.PAYMENT, Transaction.Status.DECLINED, fromMarket, bankAccount, amount, UUID.randomUUID(), card);
         transaction = transactionRepository.saveAndFlush(transaction);
         return new AuthorizationResponseDTO(false, "Amount not available", UUID.fromString(transaction.getPublicId()));
 
@@ -90,15 +91,15 @@ public class TransactionHelper {
     public List<TransactionResponseDTO> findTransactionsByAccountId(Long accountId) {
         List<Transaction> transactions = transactionRepository.findByAccountId(accountId);
         if (transactions.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         }
         return transactions.stream().map(t -> toTransactionResponseDTO(t, accountId)).collect(Collectors.toList());
     }
 
     public TransactionResponseDTO toTransactionResponseDTO(Transaction transaction, Long accountId) {
-        TransactionResponseDTO transactionResponseDTO = new TransactionResponseDTO(transaction.getPublicId().toString(), transaction.getType().name(), transaction.getStatus().name(), transaction.getTimestamp());
+        TransactionResponseDTO transactionResponseDTO = new TransactionResponseDTO(transaction.getPublicId(), transaction.getType().name(), transaction.getStatus().name(), transaction.getTimestamp());
         Money amount = transaction.getAmount();
-        if (transaction.getFromBankAccount().getAccountId().equals(accountId)) {
+        if (Objects.nonNull(transaction.getFromBankAccount()) && transaction.getFromBankAccount().getAccountId().equals(accountId)) {
             amount.subtract(amount.multiply(2));
         }
         transactionResponseDTO.amount = new com.bok.bank.integration.util.Money(amount.getCurrency(), amount.getValue());
