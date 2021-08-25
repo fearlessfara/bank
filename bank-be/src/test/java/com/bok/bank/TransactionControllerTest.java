@@ -4,6 +4,7 @@ import com.bok.bank.helper.ExchangeCurrencyAmountHelper;
 import com.bok.bank.integration.dto.AuthorizationRequestDTO;
 import com.bok.bank.integration.dto.AuthorizationResponseDTO;
 import com.bok.bank.integration.dto.CardDTO;
+import com.bok.bank.integration.dto.TransactionResponseDTO;
 import com.bok.bank.integration.service.AccountController;
 import com.bok.bank.integration.service.CardController;
 import com.bok.bank.integration.service.TransactionController;
@@ -27,6 +28,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Currency;
+import java.util.List;
 import java.util.UUID;
 
 import static com.bok.bank.ModelTestUtil.EUR;
@@ -72,8 +74,7 @@ public class TransactionControllerTest {
     public void checkPaymentAmountTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user);
-        cardController.createCard(user.getId(), new CardDTO(faker.name().title(), DEBIT.name(), faker.name().name()));
-        Card card = cardRepository.findAll().get(0);
+        Card card = modelTestUtil.createAndSaveActiveCard(user, bankAccount);
 
         Money moneyToAuthorize = new Money(new BigDecimal(10).setScale(2,RoundingMode.FLOOR), bankAccount.getCurrency());
         AuthorizationResponseDTO checkPaymentAmount = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), null, new com.bok.bank.integration.util.Money(moneyToAuthorize.getCurrency(), moneyToAuthorize.getValue()), "MARKET", card.getToken()));
@@ -91,23 +92,13 @@ public class TransactionControllerTest {
 
     }
 
-    @Test
-    public void checkPaymentAmountFailTest() {
-        User user = modelTestUtil.createAndSaveUser(17L);
-        cardController.createCard(user.getId(), new CardDTO(faker.name().title(), DEBIT.name(), faker.name().name()));
-        Card card = cardRepository.findAll().get(0);
-
-        AuthorizationResponseDTO checkPaymentAmount = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(EUR, BigDecimal.valueOf(50)), "MARKET", card.getToken()));
-        Assertions.assertEquals(checkPaymentAmount.reason, "User not have a bank account or is bank account not is active");
-        Assertions.assertFalse(checkPaymentAmount.authorized);
-    }
 
     @Test
     public void checkPaymentAmountAnotherCurrencyTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
-        cardController.createCard(user.getId(), new CardDTO(faker.name().title(), DEBIT.name(), faker.name().name()));
-        Card card = cardRepository.findAll().get(0);
+        Card card = modelTestUtil.createAndSaveActiveCard(user, bankAccount);
+
         Money moneyToAuthorize = new Money(new BigDecimal(121).setScale(2,RoundingMode.FLOOR), USD);
         AuthorizationResponseDTO checkPaymentAmount = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(USD, BigDecimal.valueOf(121)), "MARKET", card.getToken()));
         Assertions.assertEquals(checkPaymentAmount.reason, "");
@@ -129,8 +120,8 @@ public class TransactionControllerTest {
     public void checkPaymentAmountGreaterWithAnotherCurrencyTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
-        cardController.createCard(user.getId(), new CardDTO(faker.name().title(), DEBIT.name(), faker.name().name()));
-        Card card = cardRepository.findAll().get(0);
+        Card card = modelTestUtil.createAndSaveActiveCard(user, bankAccount);
+
         AuthorizationResponseDTO checkPaymentAmount = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(USD, BigDecimal.valueOf(123)), "MARKET", card.getToken()));
         Assertions.assertEquals(checkPaymentAmount.reason, "Amount not available");
         Assertions.assertFalse(checkPaymentAmount.authorized);
@@ -140,11 +131,23 @@ public class TransactionControllerTest {
     }
 
     @Test
-    public void checkPaymentAmountWithNotCommonCurrencyTest() {
+    public void failCheckPaymentAmountWithNotActiveCardTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
         cardController.createCard(user.getId(), new CardDTO(faker.name().title(), DEBIT.name(), faker.name().name()));
         Card card = cardRepository.findAll().get(0);
+        AuthorizationResponseDTO checkPaymentAmount = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)), "MARKET", card.getToken()));
+        Assertions.assertEquals(checkPaymentAmount.reason, "Card is not ACTIVE, the status is: TO_ACTIVATE");
+        Assertions.assertFalse(checkPaymentAmount.authorized);
+        Assertions.assertNull(checkPaymentAmount.extTransactionId);
+    }
+
+    @Test
+    public void checkPaymentAmountWithNotCommonCurrencyTest() {
+        User user = modelTestUtil.createAndSaveUser(17L);
+        BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
+        Card card = modelTestUtil.createAndSaveActiveCard(user, bankAccount);
+
         AuthorizationResponseDTO checkPaymentAmount = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)), "MARKET", card.getToken()));
         Assertions.assertEquals(checkPaymentAmount.reason, "Amount not available");
         Assertions.assertFalse(checkPaymentAmount.authorized);
@@ -157,11 +160,110 @@ public class TransactionControllerTest {
     public void listTransactionByCard() {
         User user = modelTestUtil.createAndSaveUser(17L);
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
-        cardController.createCard(user.getId(), new CardDTO(faker.name().title(), DEBIT.name(), faker.name().name()));
-        Card card = cardRepository.findAll().get(0);
-        AuthorizationResponseDTO firstTransaction = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)), "MARKET", card.getToken()));
-        AuthorizationResponseDTO secondTransaction = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)), "MARKET", card.getToken()));
-        AuthorizationResponseDTO thirdTransaction = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)), "MARKET", card.getToken()));
+        Card card = modelTestUtil.createAndSaveActiveCard(user, bankAccount);
+        Card card2 = modelTestUtil.createAndSaveActiveCard(user, bankAccount);
 
+        AuthorizationResponseDTO firstTransaction = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)), "MARKET", card.getToken()));
+        Transaction t1 = transactionRepository.findByPublicId(firstTransaction.extTransactionId.toString()).get();
+        AuthorizationResponseDTO secondTransaction = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)), "MARKET", card.getToken()));
+        Transaction t2 = transactionRepository.findByPublicId(secondTransaction.extTransactionId.toString()).get();
+        AuthorizationResponseDTO thirdTransaction = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)), "MARKET", card.getToken()));
+        Transaction t3 = transactionRepository.findByPublicId(thirdTransaction.extTransactionId.toString()).get();
+        AuthorizationResponseDTO fourthTransaction = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)), "MARKET", card2.getToken()));
+        Transaction t4 = transactionRepository.findByPublicId(fourthTransaction.extTransactionId.toString()).get();
+
+        List<TransactionResponseDTO> card1Transaction = transactionController.getCardTransaction(user.getId(), card.getToken());
+        Assertions.assertEquals(card1Transaction.size(), 3);
+        card1Transaction.stream().filter(t -> t.publicId.equals(firstTransaction.getExtTransactionId().toString())).forEach(t -> {
+            Assertions.assertEquals(t.publicId, t1.getPublicId());
+            Assertions.assertEquals(t.type, t1.getType().name());
+            Assertions.assertEquals(t.status, t1.getStatus().name());
+            Assertions.assertEquals(t.amount.getAmount(), t1.getAmount().getValue());
+            Assertions.assertEquals(t.amount.getCurrency(), t1.getAmount().getCurrency());
+            Assertions.assertEquals(t.timestamp, t1.getTimestamp());
+        });
+        card1Transaction.stream().filter(t -> t.publicId.equals(secondTransaction.getExtTransactionId().toString())).forEach(t -> {
+            Assertions.assertEquals(t.publicId, t2.getPublicId());
+            Assertions.assertEquals(t.type, t2.getType().name());
+            Assertions.assertEquals(t.status, t2.getStatus().name());
+            Assertions.assertEquals(t.amount.getAmount(), t2.getAmount().getValue());
+            Assertions.assertEquals(t.amount.getCurrency(), t2.getAmount().getCurrency());
+            Assertions.assertEquals(t.timestamp, t2.getTimestamp());
+        });
+        card1Transaction.stream().filter(t -> t.publicId.equals(thirdTransaction.getExtTransactionId().toString())).forEach(t -> {
+            Assertions.assertEquals(t.publicId, t3.getPublicId());
+            Assertions.assertEquals(t.type, t3.getType().name());
+            Assertions.assertEquals(t.status, t3.getStatus().name());
+            Assertions.assertEquals(t.amount.getAmount(), t3.getAmount().getValue());
+            Assertions.assertEquals(t.amount.getCurrency(), t3.getAmount().getCurrency());
+            Assertions.assertEquals(t.timestamp, t3.getTimestamp());
+        });
+
+        Assertions.assertFalse(card1Transaction.stream().anyMatch(t -> t.publicId.equals(fourthTransaction.getExtTransactionId().toString())));
+
+        List<TransactionResponseDTO> card2Transaction = transactionController.getCardTransaction(user.getId(), card2.getToken());
+        Assertions.assertEquals(card2Transaction.size(), 1);
+
+        card2Transaction.stream().filter(t -> t.publicId.equals(fourthTransaction.getExtTransactionId().toString())).forEach(t -> {
+            Assertions.assertEquals(t.publicId, t4.getPublicId());
+            Assertions.assertEquals(t.type, t4.getType().name());
+            Assertions.assertEquals(t.status, t4.getStatus().name());
+            Assertions.assertEquals(t.amount.getAmount(), t4.getAmount().getValue());
+            Assertions.assertEquals(t.amount.getCurrency(), t4.getAmount().getCurrency());
+            Assertions.assertEquals(t.timestamp, t4.getTimestamp());
+        });
+    }
+
+    @Test
+    public void allTransaction() {
+        User user = modelTestUtil.createAndSaveUser(17L);
+        BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
+        Card card = modelTestUtil.createAndSaveActiveCard(user, bankAccount);
+        Card card2 = modelTestUtil.createAndSaveActiveCard(user, bankAccount);
+
+        AuthorizationResponseDTO firstTransaction = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)), "MARKET", card.getToken()));
+        Transaction t1 = transactionRepository.findByPublicId(firstTransaction.extTransactionId.toString()).get();
+        AuthorizationResponseDTO secondTransaction = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)), "MARKET", card.getToken()));
+        Transaction t2 = transactionRepository.findByPublicId(secondTransaction.extTransactionId.toString()).get();
+        AuthorizationResponseDTO thirdTransaction = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)), "MARKET", card.getToken()));
+        Transaction t3 = transactionRepository.findByPublicId(thirdTransaction.extTransactionId.toString()).get();
+        AuthorizationResponseDTO fourthTransaction = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(Currency.getInstance("AMD"), BigDecimal.valueOf(64156)), "MARKET", card2.getToken()));
+        Transaction t4 = transactionRepository.findByPublicId(fourthTransaction.extTransactionId.toString()).get();
+
+        List<TransactionResponseDTO> transactions = transactionController.allTransaction(user.getId());
+        Assertions.assertEquals(transactions.size(), 4);
+        transactions.stream().filter(t -> t.publicId.equals(firstTransaction.getExtTransactionId().toString())).forEach(t -> {
+            Assertions.assertEquals(t.publicId, t1.getPublicId());
+            Assertions.assertEquals(t.type, t1.getType().name());
+            Assertions.assertEquals(t.status, t1.getStatus().name());
+            Assertions.assertEquals(t.amount.getAmount(), t1.getAmount().getValue());
+            Assertions.assertEquals(t.amount.getCurrency(), t1.getAmount().getCurrency());
+            Assertions.assertEquals(t.timestamp, t1.getTimestamp());
+        });
+        transactions.stream().filter(t -> t.publicId.equals(secondTransaction.getExtTransactionId().toString())).forEach(t -> {
+            Assertions.assertEquals(t.publicId, t2.getPublicId());
+            Assertions.assertEquals(t.type, t2.getType().name());
+            Assertions.assertEquals(t.status, t2.getStatus().name());
+            Assertions.assertEquals(t.amount.getAmount(), t2.getAmount().getValue());
+            Assertions.assertEquals(t.amount.getCurrency(), t2.getAmount().getCurrency());
+            Assertions.assertEquals(t.timestamp, t2.getTimestamp());
+        });
+        transactions.stream().filter(t -> t.publicId.equals(thirdTransaction.getExtTransactionId().toString())).forEach(t -> {
+            Assertions.assertEquals(t.publicId, t3.getPublicId());
+            Assertions.assertEquals(t.type, t3.getType().name());
+            Assertions.assertEquals(t.status, t3.getStatus().name());
+            Assertions.assertEquals(t.amount.getAmount(), t3.getAmount().getValue());
+            Assertions.assertEquals(t.amount.getCurrency(), t3.getAmount().getCurrency());
+            Assertions.assertEquals(t.timestamp, t3.getTimestamp());
+        });
+
+        transactions.stream().filter(t -> t.publicId.equals(fourthTransaction.getExtTransactionId().toString())).forEach(t -> {
+            Assertions.assertEquals(t.publicId, t4.getPublicId());
+            Assertions.assertEquals(t.type, t4.getType().name());
+            Assertions.assertEquals(t.status, t4.getStatus().name());
+            Assertions.assertEquals(t.amount.getAmount(), t4.getAmount().getValue());
+            Assertions.assertEquals(t.amount.getCurrency(), t4.getAmount().getCurrency());
+            Assertions.assertEquals(t.timestamp, t4.getTimestamp());
+        });
     }
 }

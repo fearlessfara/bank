@@ -35,8 +35,6 @@ public class BankGrpcServerService extends BankGrpc.BankImplBase {
     @Autowired
     TransactionController transactionController;
     @Autowired
-    CardController cardController;
-    @Autowired
     ExchangeCurrencyAmountHelper exchangeCurrencyAmountHelper;
 
 
@@ -68,16 +66,6 @@ public class BankGrpcServerService extends BankGrpc.BankImplBase {
         com.bok.bank.integration.grpc.Money.Builder responseBuilder = com.bok.bank.integration.grpc.Money.newBuilder();
         responseBuilder.setAmount(money.getValue().doubleValue());
         responseBuilder.setCurrency(com.bok.bank.integration.grpc.Currency.valueOf(money.getCurrency().getCurrencyCode()));
-        responseObserver.onNext(responseBuilder.build());
-        responseObserver.onCompleted();
-    }
-
-    @Override
-    public void confirmCard(com.bok.bank.integration.grpc.CardConfirmationRequest request,
-                            io.grpc.stub.StreamObserver<ConfirmationResponse> responseObserver) {
-        CardInfoDTO cardInfoDTO = cardController.verify(request.getAccountId(), request.getToken());
-        ConfirmationResponse.Builder responseBuilder = ConfirmationResponse.newBuilder();
-        responseBuilder.setConfirmed(cardInfoDTO != null);
         responseObserver.onNext(responseBuilder.build());
         responseObserver.onCompleted();
     }

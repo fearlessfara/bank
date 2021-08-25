@@ -22,18 +22,26 @@ public interface CardController {
     @GetMapping("/{cardId}")
     public CardInfoDTO findCard(@RequestParam Long accountId, @PathVariable Long cardId);
 
-    @GetMapping("/getPlainPAN/{cardId}")
-    public String getPlainPan(@RequestParam Long accountId, @PathVariable Long cardId);
+    @GetMapping("/getPlainPAN/{cardId}/{PIN}")
+    public String getPlainPan(@RequestParam Long accountId, @PathVariable Long cardId, @PathVariable String PIN);
 
     @GetMapping("/getCardToken/{cardId}")
     public String getCardToken(@RequestParam Long accountId, @PathVariable Long cardId);
 
-    @GetMapping("/getCvv/{cardId}")
-    public Integer getCvv(@RequestParam Long accountId, @PathVariable Long cardId);
+    @GetMapping("/getCvv/{cardId}/{PIN}")
+    public Integer getCvv(@RequestParam Long accountId, @PathVariable Long cardId, @PathVariable String PIN);
+
+    @GetMapping("/getPIN/{cardId}")
+    public String getPIN(@RequestParam Long accountId, @PathVariable Long cardId);
+
+    @GetMapping("/changeCardStatus/{cardId}/{PIN}/{status}")
+    public String changeCardStatus(@RequestParam Long accountId, @PathVariable Long cardId, @PathVariable String PIN, @PathVariable String status);
 
     @PostMapping("/create")
     public String createCard(@RequestParam Long accountId, @RequestBody CardDTO cardDTO);
 
     @GetMapping("/verify")
-    CardInfoDTO verify(@RequestParam("accountId") Long accountId, String confirmationToken);
+    String activation(@RequestParam("accountId") Long accountId, @PathVariable Long cardId, @PathVariable String PIN);
+    @GetMapping("/delete")
+    String delete(@RequestParam("accountId") Long accountId, @PathVariable Long cardId, @PathVariable String PIN);
 }

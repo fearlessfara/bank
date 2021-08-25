@@ -20,14 +20,4 @@ public class CardInfoDTO {
     public String type;
     public String label;
     public String maskedPan;
-    public Integer cvv;
-
-    public CardInfoDTO(Long cardId, String name, String cardStatus, String type, String label, String maskedPan) {
-        this.cardId = cardId;
-        this.name = name;
-        this.cardStatus = cardStatus;
-        this.type = type;
-        this.label = label;
-        this.maskedPan = maskedPan;
-    }
 }

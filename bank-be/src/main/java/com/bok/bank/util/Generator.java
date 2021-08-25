@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.Random;
 import java.util.UUID;
 
 @Component
@@ -34,6 +35,15 @@ public class Generator {
         return confirmationEmailHistoryRepository.existsByConfirmationToken(confirmationToken) ? generateConfirmationToken() : confirmationToken;
     }
 
+    public  String getRandomNumberString() {
+        // It will generate 6 digit random Number.
+        // from 0 to 999999
+        Random rnd = new Random();
+        int number = rnd.nextInt(999999);
+        // this will convert any number sequence into 6 character. String.format("%06d", number)
+        // recursive until not produce unique code
+        return confirmationEmailHistoryRepository.existsByConfirmationToken(String.format("%06d", number)) ? getRandomNumberString() : String.format("%06d", number);
+    }
     public String generateUrlServiceByResourceType(ConfirmationEmailHistory.ResourceType resourceType) {
         switch (resourceType) {
             case CARD:

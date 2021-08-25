@@ -126,9 +126,9 @@ public class ModelTestUtil {
     }
 
     public void clearAll() {
+        transactionRepository.deleteAll();
         cardRepository.deleteAll();
         confirmationEmailHistoryRepository.deleteAll();
-        transactionRepository.deleteAll();
         bankAccountRepository.deleteAll();
         accountRepository.deleteAll();
         exchangeCurrencyValueHistoryRepository.deleteAll();
@@ -162,4 +162,9 @@ public class ModelTestUtil {
     }
 
 
+    public Card createAndSaveActiveCard(Account account, BankAccount bankAccount) {
+        Card newCard = new Card(faker.name().title(), account, Card.CardStatus.ACTIVE, Card.Type.DEBIT, Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS),
+                creditCardNumberGenerator.generateToken(), faker.lorem().characters(4, 10), creditCardNumberGenerator.generate(Constants.BIN_BOK, 15), bankAccount, creditCardNumberGenerator.generateCvv(), creditCardNumberGenerator.generatePIN());
+        return cardRepository.saveAndFlush(newCard);
+    }
 }
