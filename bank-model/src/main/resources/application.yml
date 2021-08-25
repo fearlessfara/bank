@@ -59,7 +59,7 @@ eureka:
     serviceUrl:
       defaultZone: http://services.faraone.ovh:8761/eureka
   instance:
-    lease-renewal-interval-in-seconds: 30
+    lease-renewal-interval-in-seconds: 15
 active-mq:
   bank-users: bank-accounts
   emails: emails
