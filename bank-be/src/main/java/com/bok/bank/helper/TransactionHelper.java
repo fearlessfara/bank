@@ -84,8 +84,8 @@ public class TransactionHelper {
         Preconditions.checkArgument(StringUtils.isNotBlank(transactionDTO.fromMarket), "fromMarket passed is blank");
         Preconditions.checkNotNull(transactionDTO.extTransactionId, "extTransactionId passed is null");
         Preconditions.checkArgument(Objects.nonNull(transactionDTO.transactionAmount) && transactionDTO.transactionAmount.amount.compareTo(BigDecimal.ZERO) == 1, "amount not valid");
-        BankAccount toBankAccount = bankAccountRepository.findByAccountId(transactionDTO.accountId).orElseThrow(BankAccountException::new);
-        executeTransaction(transactionDTO, toBankAccount);
+        BankAccount bankAccount = bankAccountRepository.findByAccountId(transactionDTO.accountId).orElseThrow(BankAccountException::new);
+        executeTransaction(transactionDTO, bankAccount);
     }
 
     public List<TransactionResponseDTO> findTransactionsByAccountId(Long accountId) {
@@ -106,18 +106,20 @@ public class TransactionHelper {
         return transactionResponseDTO;
     }
 
-    private void executeTransaction(TransactionDTO transactionDTO, BankAccount toBankAccount) {
+    private void executeTransaction(TransactionDTO transactionDTO, BankAccount bankAccount) {
         Optional<Transaction> transactionOptional = transactionRepository.findByPublicId(transactionDTO.extTransactionId.toString());
         Transaction transaction;
         if (!transactionOptional.isPresent() && transactionDTO.type.equals(Transaction.Type.DEPOSIT.name())) {
-            transaction = new Transaction(Transaction.Type.DEPOSIT, Transaction.Status.SETTLED, transactionDTO.fromMarket, toBankAccount, new Money(transactionDTO.transactionAmount.amount, transactionDTO.transactionAmount.currency), UUID.randomUUID());
+            transaction = new Transaction(Transaction.Type.DEPOSIT, Transaction.Status.SETTLED, transactionDTO.fromMarket, bankAccount, new Money(transactionDTO.transactionAmount.amount, transactionDTO.transactionAmount.currency), UUID.randomUUID(), bankAccount.getAccountId());
         } else {
             transaction = transactionOptional.orElseThrow(() -> new TransactionException(ErrorCode.TRANSACTION_NOT_VALID.name()));
         }
-        Money amountWithBankAccountCurrency = exchangeCurrencyAmountHelper.convertCurrencyAmount(transaction.getAmount(), toBankAccount.getCurrency());
+        Money amountWithBankAccountCurrency = exchangeCurrencyAmountHelper.convertCurrencyAmount(transaction.getAmount(), bankAccount.getCurrency());
         switch (transaction.getType()) {
             case DEPOSIT: {
-                toBankAccount.setAvailableAmount(toBankAccount.getAvailableAmount().plus(amountWithBankAccountCurrency));
+                bankAccount.setAvailableAmount(bankAccount.getAvailableAmount().plus(amountWithBankAccountCurrency));
+                transaction.setToBankAccount(bankAccount);
+                transaction.setFromBankAccount(null);
                 break;
             }
             case WITHDRAWAL:
@@ -125,7 +127,9 @@ public class TransactionHelper {
                 if (transaction.getStatus().equals(Transaction.Status.DECLINED) || transaction.getStatus().equals(Transaction.Status.CANCELLED)) {
                     break;
                 }
-                toBankAccount.setBlockedAmount(toBankAccount.getBlockedAmount().subtract(amountWithBankAccountCurrency));
+                bankAccount.setBlockedAmount(bankAccount.getBlockedAmount().subtract(amountWithBankAccountCurrency));
+                transaction.setToBankAccount(null);
+                transaction.setFromBankAccount(bankAccount);
                 transaction.setStatus(Transaction.Status.SETTLED);
                 break;
             }
@@ -134,7 +138,7 @@ public class TransactionHelper {
             }
         }
         transactionRepository.saveAndFlush(transaction);
-        bankAccountRepository.saveAndFlush(toBankAccount);
+        bankAccountRepository.saveAndFlush(bankAccount);
     }
 
     public List<Transaction> findTransactionByCardToken(Long accountId, String token) {

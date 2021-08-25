@@ -45,7 +45,7 @@ public class Transaction implements Serializable {
     @ManyToOne
     private Card card;
     @ManyToOne
-    private User transactionOwner;
+    private Account transactionOwner;
     @Column
     @CreationTimestamp
     private Instant timestamp;
@@ -57,22 +57,24 @@ public class Transaction implements Serializable {
     public Transaction() {
     }
 
-    public Transaction(Type type, Status status, String fromMarket, BankAccount toBankAccount, Money amount, UUID publicId) {
+    public Transaction(Type type, Status status, String fromMarket, BankAccount toBankAccount, Money amount, UUID publicId, Long accountId) {
         this.type = type;
         this.status = status;
         this.fromMarket = fromMarket;
         this.toBankAccount = toBankAccount;
         this.amount = amount;
         this.publicId = publicId.toString();
+        this.transactionOwner = new Account(accountId);
     }
-    public Transaction(Type type, Status status, String fromMarket, BankAccount toBankAccount, Money amount, UUID publicId, Card card) {
+    public Transaction(Type type, Status status, String fromMarket, BankAccount fromBankAccount, Money amount, UUID publicId, Card card) {
         this.type = type;
         this.status = status;
         this.fromMarket = fromMarket;
-        this.toBankAccount = toBankAccount;
+        this.fromBankAccount = fromBankAccount;
         this.amount = amount;
         this.publicId = publicId.toString();
         this.card = card;
+        this.transactionOwner = card.getAccount();
     }
 
     public Long getId() {
@@ -123,7 +125,7 @@ public class Transaction implements Serializable {
         this.card = card;
     }
 
-    public User getTransactionOwner() {
+    public Account getTransactionOwner() {
         return transactionOwner;
     }
 
