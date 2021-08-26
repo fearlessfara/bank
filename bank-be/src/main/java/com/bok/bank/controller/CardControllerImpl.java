@@ -33,7 +33,7 @@ public class CardControllerImpl implements CardController {
     @Override
     public String getPlainPan(Long accountId, Long cardId, PinDTO pinDTO) {
         Preconditions.checkNotNull(cardId, "cardId must not be null");
-        cardHelper.checkPin(accountId, cardId, pinDTO.PIN);
+        cardHelper.checkPin(accountId, cardId, pinDTO.pin);
         return cardHelper.getPlainPan(accountId, cardId);
     }
 
@@ -46,7 +46,7 @@ public class CardControllerImpl implements CardController {
     @Override
     public Integer getCvv(Long accountId, Long cardId, PinDTO pinDTO) {
         Preconditions.checkNotNull(cardId, "cardId must not be null");
-        cardHelper.checkPin(accountId, cardId, pinDTO.PIN);
+        cardHelper.checkPin(accountId, cardId, pinDTO.pin);
         return cardHelper.getCvv(accountId, cardId);
     }
 
@@ -61,7 +61,7 @@ public class CardControllerImpl implements CardController {
         Preconditions.checkNotNull(cardId, "cardId must not be null");
         Preconditions.checkNotNull(status, "status must not be null");
         Preconditions.checkNotNull(pinDTO, "pinDTO must not be null");
-        cardHelper.checkPin(accountId, cardId, pinDTO.PIN);
+        cardHelper.checkPin(accountId, cardId, pinDTO.pin);
         return cardHelper.changeCardStatus(cardId, Card.CardStatus.valueOf(status));
     }
 
@@ -73,14 +73,14 @@ public class CardControllerImpl implements CardController {
 
     @Override
     public String activation(Long accountId, Long cardId, PinDTO pinDTO) {
-        Preconditions.checkArgument(StringUtils.isNotBlank(pinDTO.PIN.trim()), "configurationToken is blank");
-        cardHelper.checkPin(accountId, cardId, pinDTO.PIN);
+        Preconditions.checkArgument(StringUtils.isNotBlank(pinDTO.pin.trim()), "configurationToken is blank");
+        cardHelper.checkPin(accountId, cardId, pinDTO.pin);
         return cardHelper.changeCardStatus(cardId, Card.CardStatus.ACTIVE);
     }
     @Override
     public String delete(Long accountId, Long cardId, PinDTO pinDTO) {
-        Preconditions.checkArgument(StringUtils.isNotBlank(pinDTO.PIN.trim()), "configurationToken is blank");
-        cardHelper.checkPin(accountId, cardId, pinDTO.PIN);
+        Preconditions.checkArgument(StringUtils.isNotBlank(pinDTO.pin.trim()), "configurationToken is blank");
+        cardHelper.checkPin(accountId, cardId, pinDTO.pin);
         return cardHelper.changeCardStatus(cardId, Card.CardStatus.DESTROYED);
     }
 }
