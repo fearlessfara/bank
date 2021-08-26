@@ -178,7 +178,7 @@ public class TransactionControllerTest {
             Assertions.assertEquals(t.publicId, t1.getPublicId());
             Assertions.assertEquals(t.type, t1.getType().name());
             Assertions.assertEquals(t.status, t1.getStatus().name());
-            Assertions.assertEquals(t.amount.getAmount(), t1.getAmount().getValue());
+            Assertions.assertEquals(t.amount.getAmount(), t1.getAmount().getValue().negate());
             Assertions.assertEquals(t.amount.getCurrency(), t1.getAmount().getCurrency());
             Assertions.assertEquals(t.timestamp, t1.getTimestamp());
         });
@@ -186,7 +186,7 @@ public class TransactionControllerTest {
             Assertions.assertEquals(t.publicId, t2.getPublicId());
             Assertions.assertEquals(t.type, t2.getType().name());
             Assertions.assertEquals(t.status, t2.getStatus().name());
-            Assertions.assertEquals(t.amount.getAmount(), t2.getAmount().getValue());
+            Assertions.assertEquals(t.amount.getAmount(), t2.getAmount().getValue().negate());
             Assertions.assertEquals(t.amount.getCurrency(), t2.getAmount().getCurrency());
             Assertions.assertEquals(t.timestamp, t2.getTimestamp());
         });
@@ -194,7 +194,7 @@ public class TransactionControllerTest {
             Assertions.assertEquals(t.publicId, t3.getPublicId());
             Assertions.assertEquals(t.type, t3.getType().name());
             Assertions.assertEquals(t.status, t3.getStatus().name());
-            Assertions.assertEquals(t.amount.getAmount(), t3.getAmount().getValue());
+            Assertions.assertEquals(t.amount.getAmount(), t3.getAmount().getValue().negate());
             Assertions.assertEquals(t.amount.getCurrency(), t3.getAmount().getCurrency());
             Assertions.assertEquals(t.timestamp, t3.getTimestamp());
         });
@@ -208,7 +208,7 @@ public class TransactionControllerTest {
             Assertions.assertEquals(t.publicId, t4.getPublicId());
             Assertions.assertEquals(t.type, t4.getType().name());
             Assertions.assertEquals(t.status, t4.getStatus().name());
-            Assertions.assertEquals(t.amount.getAmount(), t4.getAmount().getValue());
+            Assertions.assertEquals(t.amount.getAmount(), t4.getAmount().getValue().negate());
             Assertions.assertEquals(t.amount.getCurrency(), t4.getAmount().getCurrency());
             Assertions.assertEquals(t.timestamp, t4.getTimestamp());
         });
@@ -236,7 +236,7 @@ public class TransactionControllerTest {
             Assertions.assertEquals(t.publicId, t1.getPublicId());
             Assertions.assertEquals(t.type, t1.getType().name());
             Assertions.assertEquals(t.status, t1.getStatus().name());
-            Assertions.assertEquals(t.amount.getAmount(), t1.getAmount().getValue());
+            Assertions.assertEquals(t.amount.getAmount(), t1.getAmount().getValue().negate());
             Assertions.assertEquals(t.amount.getCurrency(), t1.getAmount().getCurrency());
             Assertions.assertEquals(t.timestamp, t1.getTimestamp());
         });
@@ -244,7 +244,7 @@ public class TransactionControllerTest {
             Assertions.assertEquals(t.publicId, t2.getPublicId());
             Assertions.assertEquals(t.type, t2.getType().name());
             Assertions.assertEquals(t.status, t2.getStatus().name());
-            Assertions.assertEquals(t.amount.getAmount(), t2.getAmount().getValue());
+            Assertions.assertEquals(t.amount.getAmount(), t2.getAmount().getValue().negate());
             Assertions.assertEquals(t.amount.getCurrency(), t2.getAmount().getCurrency());
             Assertions.assertEquals(t.timestamp, t2.getTimestamp());
         });
@@ -252,7 +252,7 @@ public class TransactionControllerTest {
             Assertions.assertEquals(t.publicId, t3.getPublicId());
             Assertions.assertEquals(t.type, t3.getType().name());
             Assertions.assertEquals(t.status, t3.getStatus().name());
-            Assertions.assertEquals(t.amount.getAmount(), t3.getAmount().getValue());
+            Assertions.assertEquals(t.amount.getAmount(), t3.getAmount().getValue().negate());
             Assertions.assertEquals(t.amount.getCurrency(), t3.getAmount().getCurrency());
             Assertions.assertEquals(t.timestamp, t3.getTimestamp());
         });
@@ -261,7 +261,7 @@ public class TransactionControllerTest {
             Assertions.assertEquals(t.publicId, t4.getPublicId());
             Assertions.assertEquals(t.type, t4.getType().name());
             Assertions.assertEquals(t.status, t4.getStatus().name());
-            Assertions.assertEquals(t.amount.getAmount(), t4.getAmount().getValue());
+            Assertions.assertEquals(t.amount.getAmount(), t4.getAmount().getValue().negate());
             Assertions.assertEquals(t.amount.getCurrency(), t4.getAmount().getCurrency());
             Assertions.assertEquals(t.timestamp, t4.getTimestamp());
         });

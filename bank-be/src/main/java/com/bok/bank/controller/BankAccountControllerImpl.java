@@ -32,17 +32,5 @@ public class BankAccountControllerImpl implements BankAccountController {
         return bankAccountHelper.getBankAccountInfo(accountId);
     }
 
-    @Override
-    public String createBankAccount(Long accountId, BankAccountDTO bankAccountDTO) {
-        bankAccountHelper.checkBankAccountInfoForCreation(accountId, bankAccountDTO);
-        return bankAccountHelper.createBankAccount(accountId, bankAccountDTO);
-    }
-
-    @Override
-    public BankAccountInfoDTO verify(Long accountId, String confirmationToken) {
-        Preconditions.checkArgument(StringUtils.isNotBlank(confirmationToken.trim()), "configurationToken is blank");
-        return bankAccountHelper.verifyBankAccount(accountId, confirmationToken);
-    }
-
 
 }

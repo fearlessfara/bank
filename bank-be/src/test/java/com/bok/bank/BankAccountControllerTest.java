@@ -45,17 +45,6 @@ public class BankAccountControllerTest {
     }
 
     @Test
-    public void newBankAccountTest() {
-//        User user = modelTestUtil.createAndSaveUser(17L);
-//        log.info(user.toString());
-//        BankAccountDTO bankAccountDTO = new BankAccountDTO(faker.funnyName().name(), faker.lorem().paragraph(), Currency.getInstance(faker.currency().code()));
-//        BankAccountInfoDTO bankAccountInfoDTO = bankAccountController.newBankAccount(user.getId(), bankAccountDTO);
-//        assertEquals(bankAccountInfoDTO.bankAccountName, bankAccountDTO.name);
-//        assertEquals(bankAccountInfoDTO.label, bankAccountDTO.label);
-//        assertEquals(bankAccountInfoDTO.currency, bankAccountDTO.currency);
-    }
-
-    @Test
     public void bankAccountInfoTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
         log.info(user.toString());
