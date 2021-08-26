@@ -35,7 +35,7 @@ public interface CardController {
     @GetMapping("/getPIN/{cardId}")
     public String getPIN(@RequestParam Long accountId, @PathVariable Long cardId);
 
-    @GetMapping("/changeCardStatus/{cardId}/{status}")
+    @PostMapping("/changeCardStatus/{cardId}/{status}")
     public String changeCardStatus(@RequestParam Long accountId, @PathVariable Long cardId, @PathVariable String status, @RequestBody PinDTO pinDTO);
 
     @PostMapping("/create")
