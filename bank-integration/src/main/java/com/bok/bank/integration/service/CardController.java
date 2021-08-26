@@ -2,6 +2,7 @@ package com.bok.bank.integration.service;
 
 import com.bok.bank.integration.dto.CardDTO;
 import com.bok.bank.integration.dto.CardInfoDTO;
+import com.bok.bank.integration.dto.PinDTO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,26 +23,27 @@ public interface CardController {
     @GetMapping("/{cardId}")
     public CardInfoDTO findCard(@RequestParam Long accountId, @PathVariable Long cardId);
 
-    @GetMapping("/getPlainPAN/{cardId}/{PIN}")
-    public String getPlainPan(@RequestParam Long accountId, @PathVariable Long cardId, @PathVariable String PIN);
+    @PostMapping("/getPlainPAN/{cardId}")
+    public String getPlainPan(@RequestParam Long accountId, @PathVariable Long cardId, @RequestBody PinDTO pinDTO);
 
     @GetMapping("/getCardToken/{cardId}")
     public String getCardToken(@RequestParam Long accountId, @PathVariable Long cardId);
 
-    @GetMapping("/getCvv/{cardId}/{PIN}")
-    public Integer getCvv(@RequestParam Long accountId, @PathVariable Long cardId, @PathVariable String PIN);
+    @PostMapping("/getCvv/{cardId}")
+    public Integer getCvv(@RequestParam Long accountId, @PathVariable Long cardId, @RequestBody PinDTO pinDTO);
 
     @GetMapping("/getPIN/{cardId}")
     public String getPIN(@RequestParam Long accountId, @PathVariable Long cardId);
 
-    @GetMapping("/changeCardStatus/{cardId}/{PIN}/{status}")
-    public String changeCardStatus(@RequestParam Long accountId, @PathVariable Long cardId, @PathVariable String PIN, @PathVariable String status);
+    @GetMapping("/changeCardStatus/{cardId}/{status}")
+    public String changeCardStatus(@RequestParam Long accountId, @PathVariable Long cardId, @PathVariable String status, @RequestBody PinDTO pinDTO);
 
     @PostMapping("/create")
     public String createCard(@RequestParam Long accountId, @RequestBody CardDTO cardDTO);
 
-    @GetMapping("/verify")
-    String activation(@RequestParam("accountId") Long accountId, @PathVariable Long cardId, @PathVariable String PIN);
-    @GetMapping("/delete")
-    String delete(@RequestParam("accountId") Long accountId, @PathVariable Long cardId, @PathVariable String PIN);
+    @PostMapping("/activation/{cardId}")
+    String activation(@RequestParam("accountId") Long accountId, @PathVariable Long cardId, @RequestBody PinDTO pinDTO);
+
+    @PostMapping("/delete/{cardId}")
+    String delete(@RequestParam("accountId") Long accountId, @PathVariable Long cardId, @RequestBody PinDTO pinDTO);
 }

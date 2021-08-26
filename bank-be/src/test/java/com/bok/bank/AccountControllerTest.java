@@ -104,4 +104,20 @@ public class AccountControllerTest {
         Assertions.assertEquals(bankAccount.getBlockedAmount(), new Money(BigDecimal.valueOf(0).setScale(2, RoundingMode.FLOOR), bankAccount.getCurrency()));
     }
 
+    @Test
+    public void companyCreationTest() {
+        AccountCreationMessage accountCreationMessage = new AccountCreationMessage("Domenico", null, null, "mico@gmail.com", null, null, null, true, null, "123456789098765", "+39", "3926772950", "23", "via le mani dal naso", "Locorotondo", "BA", "Italy", "70010", 123L, null);
+        accountHelper.createAccount(accountCreationMessage);
+        AccountInfoDTO accountInfo = accountHelper.getAccountInfo(123L);
+        Assertions.assertEquals(accountInfo.email, accountCreationMessage.email);
+        Assertions.assertEquals(accountInfo.fullName, accountCreationMessage.name );
+        Assertions.assertEquals(accountInfo.mobile, accountCreationMessage.mobile);
+        Assertions.assertEquals(accountInfo.type, Account.Type.COMPANY.name());
+        Assertions.assertEquals(accountInfo.status, ACTIVE.name());
+        BankAccount bankAccount = bankAccountRepository.findByAccountId(123L).get();
+        Assertions.assertNotNull(bankAccount);
+        Assertions.assertEquals(bankAccount.getAvailableAmount(), new Money(BigDecimal.valueOf(100000).setScale(2, RoundingMode.FLOOR), bankAccount.getCurrency()));
+        Assertions.assertEquals(bankAccount.getBlockedAmount(), new Money(BigDecimal.valueOf(0).setScale(2, RoundingMode.FLOOR), bankAccount.getCurrency()));
+    }
+
 }

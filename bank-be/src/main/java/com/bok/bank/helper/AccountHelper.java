@@ -43,7 +43,7 @@ public class AccountHelper {
     public void createAccount(AccountCreationMessage message) {
         Preconditions.checkNotNull(message, "Message of user creation is null: {}", message);
         if (message.business) {
-            Company company = new Company(message.accountId, message.name, message.email, message.mobile, message.icc, Account.Status.PENDING, message.country, message.county, message.city,
+            Company company = new Company(message.accountId, message.name, message.email, message.mobile, message.icc, Account.Status.ACTIVE, message.country, message.county, message.city,
                     message.postalCode, message.street, message.houseNumber, message.vatNumber);
             accountRepository.saveAndFlush(company);
             log.info("Company saved, with mail: {} and id: {}", message.email, message.accountId);

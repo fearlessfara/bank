@@ -3,6 +3,7 @@ package com.bok.bank.controller;
 import com.bok.bank.helper.CardHelper;
 import com.bok.bank.integration.dto.CardDTO;
 import com.bok.bank.integration.dto.CardInfoDTO;
+import com.bok.bank.integration.dto.PinDTO;
 import com.bok.bank.integration.service.CardController;
 import com.bok.bank.model.Card;
 import com.google.common.base.Preconditions;
@@ -30,9 +31,9 @@ public class CardControllerImpl implements CardController {
     }
 
     @Override
-    public String getPlainPan(Long accountId, Long cardId, String PIN) {
+    public String getPlainPan(Long accountId, Long cardId, PinDTO pinDTO) {
         Preconditions.checkNotNull(cardId, "cardId must not be null");
-        cardHelper.checkPin(accountId, cardId, PIN);
+        cardHelper.checkPin(accountId, cardId, pinDTO.PIN);
         return cardHelper.getPlainPan(accountId, cardId);
     }
 
@@ -43,9 +44,9 @@ public class CardControllerImpl implements CardController {
     }
 
     @Override
-    public Integer getCvv(Long accountId, Long cardId, String PIN) {
+    public Integer getCvv(Long accountId, Long cardId, PinDTO pinDTO) {
         Preconditions.checkNotNull(cardId, "cardId must not be null");
-        cardHelper.checkPin(accountId, cardId, PIN);
+        cardHelper.checkPin(accountId, cardId, pinDTO.PIN);
         return cardHelper.getCvv(accountId, cardId);
     }
 
@@ -56,10 +57,11 @@ public class CardControllerImpl implements CardController {
     }
 
     @Override
-    public String changeCardStatus(Long accountId, Long cardId, String PIN, String status) {
+    public String changeCardStatus(Long accountId, Long cardId, String status, PinDTO pinDTO) {
         Preconditions.checkNotNull(cardId, "cardId must not be null");
         Preconditions.checkNotNull(status, "status must not be null");
-        cardHelper.checkPin(accountId, cardId, PIN);
+        Preconditions.checkNotNull(pinDTO, "pinDTO must not be null");
+        cardHelper.checkPin(accountId, cardId, pinDTO.PIN);
         return cardHelper.changeCardStatus(cardId, Card.CardStatus.valueOf(status));
     }
 
@@ -70,15 +72,15 @@ public class CardControllerImpl implements CardController {
     }
 
     @Override
-    public String activation(Long accountId, Long cardId, String PIN) {
-        Preconditions.checkArgument(StringUtils.isNotBlank(PIN.trim()), "configurationToken is blank");
-        cardHelper.checkPin(accountId, cardId, PIN);
+    public String activation(Long accountId, Long cardId, PinDTO pinDTO) {
+        Preconditions.checkArgument(StringUtils.isNotBlank(pinDTO.PIN.trim()), "configurationToken is blank");
+        cardHelper.checkPin(accountId, cardId, pinDTO.PIN);
         return cardHelper.changeCardStatus(cardId, Card.CardStatus.ACTIVE);
     }
     @Override
-    public String delete(Long accountId, Long cardId, String PIN) {
-        Preconditions.checkArgument(StringUtils.isNotBlank(PIN.trim()), "configurationToken is blank");
-        cardHelper.checkPin(accountId, cardId, PIN);
+    public String delete(Long accountId, Long cardId, PinDTO pinDTO) {
+        Preconditions.checkArgument(StringUtils.isNotBlank(pinDTO.PIN.trim()), "configurationToken is blank");
+        cardHelper.checkPin(accountId, cardId, pinDTO.PIN);
         return cardHelper.changeCardStatus(cardId, Card.CardStatus.DESTROYED);
     }
 }

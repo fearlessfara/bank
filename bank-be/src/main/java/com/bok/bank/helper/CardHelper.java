@@ -117,7 +117,13 @@ public class CardHelper {
     }
 
     public String changeCardStatus(Long cardId, Card.CardStatus status) {
+        if(status.equals(Card.CardStatus.ACTIVE)) {
+            throw new IllegalArgumentException("Cannot active card from this endpoint, please use activation endpoint");
+        }
         Card card = cardRepository.findById(cardId).orElseThrow(CardException::new);
+        if(card.getCardStatus().equals(Card.CardStatus.DESTROYED) || card.getCardStatus().equals(Card.CardStatus.EXPIRED) || card.getCardStatus().equals(Card.CardStatus.BROKEN)) {
+            throw new IllegalArgumentException("Cannot change status of a " + card.getCardStatus().name());
+        }
         card.setCardStatus(status);
         cardRepository.saveAndFlush(card);
         return "The status of the card: " + card.getName() + ", now is " + status.name();
