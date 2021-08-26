@@ -22,7 +22,7 @@ public interface TransactionController {
     @PostMapping("/authorize")
     AuthorizationResponseDTO authorize(@RequestParam("accountId") Long accountId, @RequestBody AuthorizationRequestDTO authorizationRequestDTO);
 
-    @PostMapping("/card/token")
-    List<TransactionResponseDTO> getCardTransaction(@RequestParam("accountId") Long accountId, @RequestParam String token);
+    @PostMapping("/card/{token}")
+    List<TransactionResponseDTO> getCardTransaction(@RequestParam("accountId") Long accountId, @RequestParam("token") String token);
 
 }
