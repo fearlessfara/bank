@@ -3,13 +3,16 @@ package com.bok.bank;
 import com.bok.bank.helper.AccountHelper;
 import com.bok.bank.integration.dto.AccountInfoDTO;
 import com.bok.bank.integration.service.AccountController;
+import com.bok.bank.messaging.AccountConsumer;
 import com.bok.bank.model.Account;
 import com.bok.bank.model.BankAccount;
 import com.bok.bank.model.Company;
 import com.bok.bank.model.User;
+import com.bok.bank.repository.AccountRepository;
 import com.bok.bank.repository.BankAccountRepository;
 import com.bok.bank.util.Money;
 import com.bok.parent.integration.message.AccountCreationMessage;
+import com.bok.parent.integration.message.AccountDeletionMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +25,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
+import java.util.Optional;
 
 import static com.bok.bank.model.Account.Status.ACTIVE;
 import static org.junit.Assert.assertEquals;
@@ -43,7 +47,13 @@ public class AccountControllerTest {
     AccountHelper accountHelper;
 
     @Autowired
+    AccountConsumer accountConsumer;
+
+    @Autowired
     BankAccountRepository bankAccountRepository;
+
+    @Autowired
+    AccountRepository accountRepository;
 
     @BeforeEach
     public void init() {
@@ -118,6 +128,16 @@ public class AccountControllerTest {
         Assertions.assertNotNull(bankAccount);
         Assertions.assertEquals(bankAccount.getAvailableAmount(), new Money(BigDecimal.valueOf(100000).setScale(2, RoundingMode.FLOOR), bankAccount.getCurrency()));
         Assertions.assertEquals(bankAccount.getBlockedAmount(), new Money(BigDecimal.valueOf(0).setScale(2, RoundingMode.FLOOR), bankAccount.getCurrency()));
+    }
+    @Test
+    public void deleteUserTest() {
+        AccountCreationMessage accountCreationMessage = new AccountCreationMessage("Domenico", "", "Fasano", "mico@gmail.com", new Date(10212541), "Fasano", "Italia", false, "FSNDMC99C13D508Y", "", "+39", "3926772950", "23", "via le mani dal naso", "Locorotondo", "BA", "Italy", "70010", 123L, User.Gender.M.name());
+        accountHelper.createAccount(accountCreationMessage);
+        accountConsumer.deleteUserListener(new AccountDeletionMessage(123L));
+        Optional<Account> account = accountRepository.findById(123L);
+        Optional<BankAccount> bankAccount = bankAccountRepository.findByAccountId(123L);
+        Assertions.assertFalse(account.isPresent());
+        Assertions.assertFalse(bankAccount.isPresent());
     }
 
 }
