@@ -1,11 +1,13 @@
 package com.bok.bank.controller;
 
+import com.bok.bank.exception.CardException;
 import com.bok.bank.helper.CardHelper;
 import com.bok.bank.integration.dto.CardDTO;
 import com.bok.bank.integration.dto.CardInfoDTO;
 import com.bok.bank.integration.dto.PinDTO;
 import com.bok.bank.integration.service.CardController;
 import com.bok.bank.model.Card;
+import com.bok.bank.repository.CardRepository;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +15,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.bok.bank.model.Card.CardStatus.ACTIVE;
+import static com.bok.bank.model.Card.CardStatus.DESTROYED;
+
 @Service
 public class CardControllerImpl implements CardController {
 
     @Autowired
     CardHelper cardHelper;
+    @Autowired
+    CardRepository cardRepository;
 
     @Override
     public List<CardInfoDTO> allCards(Long accountId) {
@@ -75,12 +82,18 @@ public class CardControllerImpl implements CardController {
     public String activation(Long accountId, Long cardId, PinDTO pinDTO) {
         Preconditions.checkArgument(StringUtils.isNotBlank(pinDTO.pin.trim()), "configurationToken is blank");
         cardHelper.checkPin(accountId, cardId, pinDTO.pin);
-        return cardHelper.changeCardStatus(cardId, Card.CardStatus.ACTIVE);
+        Card card = cardRepository.findById(cardId).orElseThrow(CardException::new);
+        card.setCardStatus(ACTIVE);
+        cardRepository.saveAndFlush(card);
+        return "The status of the card: " + card.getName() + ", now is " + ACTIVE.name();
     }
     @Override
     public String delete(Long accountId, Long cardId, PinDTO pinDTO) {
         Preconditions.checkArgument(StringUtils.isNotBlank(pinDTO.pin.trim()), "configurationToken is blank");
         cardHelper.checkPin(accountId, cardId, pinDTO.pin);
-        return cardHelper.changeCardStatus(cardId, Card.CardStatus.DESTROYED);
+        Card card = cardRepository.findById(cardId).orElseThrow(CardException::new);
+        card.setCardStatus(DESTROYED);
+        cardRepository.saveAndFlush(card);
+        return "The status of the card: " + card.getName() + ", now is " + DESTROYED.name();
     }
 }
