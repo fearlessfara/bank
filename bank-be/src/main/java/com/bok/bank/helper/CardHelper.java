@@ -51,6 +51,7 @@ public class CardHelper {
     public List<CardInfoDTO> getAllCards(Long accountId) {
         List<CardRepository.Projection.CardInfo> cardInfos = cardRepository.findAllCardInfoByAccountId(accountId);
         return cardInfos.stream()
+                .filter(cardInfo -> !cardInfo.getCardStatus().equals(Card.CardStatus.DESTROYED))
                 .map(cardInfo -> new CardInfoDTO(cardInfo.getCardId(), cardInfo.getName(), cardInfo.getCardStatus().name(), cardInfo.getType().name(), cardInfo.getLabel(), creditCardNumberGenerator.maskingPan(cardInfo.getMaskedPan())))
                 .collect(Collectors.toList());
     }
