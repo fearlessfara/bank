@@ -17,7 +17,7 @@ import java.util.List;
 public interface TransactionController {
 
     @GetMapping("/allTransaction")
-    List<TransactionResponseDTO> allTransaction(@RequestParam Long accountId);
+    List<TransactionResponseDTO> allTransaction(@RequestParam("accountId") Long accountId);
 
     @PostMapping("/authorize")
     AuthorizationResponseDTO authorize(@RequestParam("accountId") Long accountId, @RequestBody AuthorizationRequestDTO authorizationRequestDTO);

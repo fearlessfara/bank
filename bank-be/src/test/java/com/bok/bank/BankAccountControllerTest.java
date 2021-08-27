@@ -1,10 +1,7 @@
 package com.bok.bank;
 
-import com.bok.bank.integration.dto.AuthorizationRequestDTO;
-import com.bok.bank.integration.dto.AuthorizationResponseDTO;
 import com.bok.bank.integration.dto.BankAccountInfoDTO;
 import com.bok.bank.integration.service.BankAccountController;
-import com.bok.bank.integration.util.Money;
 import com.bok.bank.model.BankAccount;
 import com.bok.bank.model.User;
 import lombok.extern.slf4j.Slf4j;
@@ -16,15 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.math.BigDecimal;
-import java.util.Currency;
-import java.util.UUID;
-
-import static com.bok.bank.ModelTestUtil.EUR;
-import static com.bok.bank.ModelTestUtil.USD;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 @SpringBootTest
 @Slf4j
