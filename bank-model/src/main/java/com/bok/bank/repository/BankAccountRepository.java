@@ -24,6 +24,8 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, Long> 
     @Query("SELECT ba.id as id, ba.name as bankAccountName, ba.currency as currency, ba.status as status FROM BankAccount ba WHERE ba.accountId = :accountId")
     Optional<Projections.BankAccountBasicInfo> findBankAccountBasicInfoByAccountId(Long accountId);
 
+    Optional<BankAccount> findBankAccountByIBAN(String IBAN);
+
     public class Projections {
         public interface BankAccountBasicInfo {
             Long getId();
