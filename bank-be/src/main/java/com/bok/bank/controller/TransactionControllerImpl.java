@@ -38,7 +38,7 @@ public class TransactionControllerImpl implements TransactionController {
 
     @Override
     public AuthorizationResponseDTO authorize(Long accountId, AuthorizationRequestDTO request) {
-        log.info("{} {}", request.money.amount.toString(), request.money.currency);
+        log.info("Authorize passed param accountId: {} authorizationRequest: {}", accountId, request);
         Preconditions.checkNotNull(accountId, "accountId is null");
         Preconditions.checkNotNull(request.money, "Money passed is null");
         Preconditions.checkNotNull(request.money.amount, "Amount passed is null");
@@ -50,7 +50,7 @@ public class TransactionControllerImpl implements TransactionController {
 
     @Override
     public WireTransferResponseDTO wireTransfer(Long accountId, WireTransferRequestDTO wireTransferRequestDTO) {
-        log.info("param passed to wire trasfer are: {}, {}",accountId, wireTransferRequestDTO.toString() );
+        log.info("param passed to wire transfer are: {}, {}",accountId, wireTransferRequestDTO.toString() );
         Preconditions.checkArgument(StringUtils.isNotBlank(wireTransferRequestDTO.destinationIBAN), "destinationIBAN passed is blank");
         wireTransferRequestDTO.destinationIBAN = wireTransferRequestDTO.destinationIBAN.replace(" ","").toUpperCase(Locale.ROOT);
         Iban.valueOf(wireTransferRequestDTO.destinationIBAN);
@@ -67,6 +67,8 @@ public class TransactionControllerImpl implements TransactionController {
 
     @Override
     public List<TransactionResponseDTO> getCardTransaction(Long accountId, String token) {
+        log.info("get card transaction account id: {}, token: {}",accountId, token);
+
         List<Transaction> transactions = transactionHelper.findTransactionByCardToken(accountId, token);
         return transactions.stream().map(t -> transactionHelper.toTransactionResponseDTO(t, accountId)).collect(Collectors.toList());
     }

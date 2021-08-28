@@ -34,9 +34,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.bok.bank.model.Transaction.Type.DEPOSIT;
-import static com.bok.bank.model.Transaction.Type.PAYMENT;
 import static com.bok.bank.model.Transaction.Type.WIRE_TRANSFER;
-import static com.bok.bank.model.Transaction.Type.WITHDRAWAL;
 
 @Component
 @Slf4j
@@ -56,6 +54,14 @@ public class TransactionHelper {
     @Autowired
     AccountRepository accountRepository;
 
+    /**
+     * given requested param this method check the amount available and the card of the bank account and authorize or decline the payment
+     * @param accountId
+     * @param amount
+     * @param fromMarket
+     * @param cardToken
+     * @return
+     */
     public AuthorizationResponseDTO authorizeTransaction(Long accountId, Money amount, String fromMarket, String cardToken) {
         Optional<BankAccount> bankAccountOptional = bankAccountRepository.findByAccountIdAndStatus(accountId, BankAccount.Status.ACTIVE);
         if (!bankAccountOptional.isPresent())
@@ -90,7 +96,11 @@ public class TransactionHelper {
 
     }
 
-
+    /**
+     * given requested param this method check the amount available and the IBAN of the bank account and authorize or decline the wire transfer
+     * @param transactionDTO
+     * @return
+     */
     public WireTransferResponseDTO authorizeWireTransfer(TransactionDTO transactionDTO) {
         Account account = accountRepository.findById(transactionDTO.accountId).orElseThrow(AccountException::new);
         BankAccount bankAccount = bankAccountRepository.findByAccountIdAndStatus(transactionDTO.accountId, BankAccount.Status.ACTIVE).orElseThrow(BankAccountException::new);
@@ -112,6 +122,7 @@ public class TransactionHelper {
         return new WireTransferResponseDTO(false, "Amount not available");
 
     }
+
 
     @Transactional
     public boolean performTransaction(TransactionDTO transactionDTO) {
