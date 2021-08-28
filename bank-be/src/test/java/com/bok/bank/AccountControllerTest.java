@@ -133,7 +133,7 @@ public class AccountControllerTest {
     public void deleteUserTest() {
         AccountCreationMessage accountCreationMessage = new AccountCreationMessage("Domenico", "", "Fasano", "mico@gmail.com", new Date(10212541), "Fasano", "Italia", false, "FSNDMC99C13D508Y", "", "+39", "3926772950", "23", "via le mani dal naso", "Locorotondo", "BA", "Italy", "70010", 123L, User.Gender.M.name());
         accountHelper.createAccount(accountCreationMessage);
-        accountConsumer.deleteUserListener(new AccountClosureMessage(123L));
+        accountConsumer.deleteUserListener(new AccountClosureMessage(123L, "AAAA"));
         Optional<Account> account = accountRepository.findById(123L);
         Optional<BankAccount> bankAccount = bankAccountRepository.findByAccountId(123L);
         Assertions.assertFalse(account.isPresent());
