@@ -51,17 +51,21 @@ public class TransactionControllerImpl implements TransactionController {
     @Override
     public WireTransferResponseDTO wireTransfer(Long accountId, WireTransferRequestDTO wireTransferRequestDTO) {
         log.info("param passed to wire transfer are: {}, {}",accountId, wireTransferRequestDTO.toString() );
+        Preconditions.checkNotNull(wireTransferRequestDTO.money, "money is null");
+        Preconditions.checkNotNull(wireTransferRequestDTO.causal, "causal is null");
+        Preconditions.checkNotNull(wireTransferRequestDTO.money.amount, "money is null");
+        Preconditions.checkArgument(wireTransferRequestDTO.executionDate.isAfter(LocalDate.now()), "executionDate is before then " + LocalDate.now());
         Preconditions.checkArgument(StringUtils.isNotBlank(wireTransferRequestDTO.destinationIBAN), "destinationIBAN passed is blank");
         wireTransferRequestDTO.destinationIBAN = wireTransferRequestDTO.destinationIBAN.replace(" ","").toUpperCase(Locale.ROOT);
         Iban.valueOf(wireTransferRequestDTO.destinationIBAN);
 
         if(wireTransferRequestDTO.instantTransfer) {
-            return new WireTransferResponseDTO(transactionHelper.performTransaction(new TransactionDTO(wireTransferRequestDTO.money, accountId, wireTransferRequestDTO.destinationIBAN, wireTransferRequestDTO.beneficiary, wireTransferRequestDTO.instantTransfer, wireTransferRequestDTO.executionDate, Transaction.Type.WIRE_TRANSFER.name())), "");
+            return new WireTransferResponseDTO(transactionHelper.performTransaction(new TransactionDTO(wireTransferRequestDTO.money, accountId, wireTransferRequestDTO.destinationIBAN, wireTransferRequestDTO.causal, wireTransferRequestDTO.beneficiary, wireTransferRequestDTO.instantTransfer, wireTransferRequestDTO.executionDate, Transaction.Type.WIRE_TRANSFER.name())), "");
 
         }
         Preconditions.checkNotNull(wireTransferRequestDTO.executionDate, "executionDate passed is null");
         Preconditions.checkArgument(wireTransferRequestDTO.executionDate.isAfter(LocalDate.now()), "executionDate is before then " + LocalDate.now());
-        return transactionHelper.authorizeWireTransfer(new TransactionDTO(wireTransferRequestDTO.money, accountId, wireTransferRequestDTO.destinationIBAN, wireTransferRequestDTO.beneficiary, wireTransferRequestDTO.instantTransfer, wireTransferRequestDTO.executionDate, Transaction.Type.WIRE_TRANSFER.name()));
+        return transactionHelper.authorizeWireTransfer(new TransactionDTO(wireTransferRequestDTO.money, accountId, wireTransferRequestDTO.destinationIBAN, wireTransferRequestDTO.causal, wireTransferRequestDTO.beneficiary, wireTransferRequestDTO.instantTransfer, wireTransferRequestDTO.executionDate, Transaction.Type.WIRE_TRANSFER.name()));
     }
 
 

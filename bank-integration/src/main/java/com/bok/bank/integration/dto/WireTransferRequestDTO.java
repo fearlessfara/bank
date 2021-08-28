@@ -16,6 +16,7 @@ import java.time.LocalDate;
 public class WireTransferRequestDTO {
     public String destinationIBAN;
     public String beneficiary;
+    public String causal;
     public Money money;
     public LocalDate executionDate;
     public boolean instantTransfer;

@@ -41,6 +41,8 @@ public class Transaction implements Serializable {
     @Column
     private String destinationIban;
     @Column
+    private String causal;
+    @Column
     private String beneficiary;
     @Column
     private Boolean instantTransfer;
@@ -85,10 +87,11 @@ public class Transaction implements Serializable {
         this.transactionOwner = card.getAccount();
     }
 
-    public Transaction(Type type, Status status, String destinationIban, String beneficiary, Boolean instantTransfer, LocalDate executionDate, BankAccount fromBankAccount, BankAccount toBankAccount, Account transactionOwner, Money amount, UUID publicId) {
+    public Transaction(Type type, Status status, String destinationIban, String causal, String beneficiary, Boolean instantTransfer, LocalDate executionDate, BankAccount fromBankAccount, BankAccount toBankAccount, Account transactionOwner, Money amount, UUID publicId) {
         this.type = type;
         this.status = status;
         this.destinationIban = destinationIban;
+        this.causal = causal;
         this.beneficiary = beneficiary;
         this.instantTransfer = instantTransfer;
         this.executionDate = executionDate;
@@ -181,6 +184,14 @@ public class Transaction implements Serializable {
 
     public Account getTransactionOwner() {
         return transactionOwner;
+    }
+
+    public String getCausal() {
+        return causal;
+    }
+
+    public void setCausal(String causal) {
+        this.causal = causal;
     }
 
     public void setTransactionOwner(User transactionOwner) {

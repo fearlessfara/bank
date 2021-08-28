@@ -113,11 +113,11 @@ public class TransactionHelper {
             bankAccount.setBlockedAmount(bankAccount.getBlockedAmount().plus(amountWithBankAccountCurrency));
             bankAccount.setAvailableAmount(bankAccount.getAvailableAmount().subtract(amountWithBankAccountCurrency));
             bankAccount = bankAccountRepository.saveAndFlush(bankAccount);
-            Transaction transaction = new Transaction(WIRE_TRANSFER, Transaction.Status.AUTHORISED, transactionDTO.destinationIBAN, transactionDTO.beneficiary, transactionDTO.instantTransfer, transactionDTO.executionDate, bankAccount, null, account, new Money(transactionDTO.transactionAmount.amount, transactionDTO.transactionAmount.currency), UUID.randomUUID());
+            Transaction transaction = new Transaction(WIRE_TRANSFER, Transaction.Status.AUTHORISED, transactionDTO.destinationIBAN, transactionDTO.causal, transactionDTO.beneficiary, transactionDTO.instantTransfer, transactionDTO.executionDate, bankAccount, null, account, new Money(transactionDTO.transactionAmount.amount, transactionDTO.transactionAmount.currency), UUID.randomUUID());
             transactionRepository.saveAndFlush(transaction);
             return new WireTransferResponseDTO(true, "");
         }
-        Transaction transaction = new Transaction(WIRE_TRANSFER, Transaction.Status.DECLINED, transactionDTO.destinationIBAN, transactionDTO.beneficiary, transactionDTO.instantTransfer, transactionDTO.executionDate, bankAccount, null, account, new Money(transactionDTO.transactionAmount.amount, transactionDTO.transactionAmount.currency), UUID.randomUUID());
+        Transaction transaction = new Transaction(WIRE_TRANSFER, Transaction.Status.DECLINED, transactionDTO.destinationIBAN, transactionDTO.causal, transactionDTO.beneficiary, transactionDTO.instantTransfer, transactionDTO.executionDate, bankAccount, null, account, new Money(transactionDTO.transactionAmount.amount, transactionDTO.transactionAmount.currency), UUID.randomUUID());
         transactionRepository.saveAndFlush(transaction);
         return new WireTransferResponseDTO(false, "Amount not available");
 
@@ -193,7 +193,7 @@ public class TransactionHelper {
                     if(bankAccount.getAvailableAmount().isLessThan(amount)){
                         throw new TransactionException();
                     }
-                    transaction = new Transaction(WIRE_TRANSFER, Transaction.Status.SETTLED, transactionDTO.destinationIBAN, transactionDTO.beneficiary, transactionDTO.instantTransfer, transactionDTO.executionDate, bankAccount, null, account, new Money(transactionDTO.transactionAmount.amount, transactionDTO.transactionAmount.currency), UUID.randomUUID());
+                    transaction = new Transaction(WIRE_TRANSFER, Transaction.Status.SETTLED, transactionDTO.destinationIBAN, transactionDTO.causal, transactionDTO.beneficiary, transactionDTO.instantTransfer, transactionDTO.executionDate, bankAccount, null, account, new Money(transactionDTO.transactionAmount.amount, transactionDTO.transactionAmount.currency), UUID.randomUUID());
                     if (bankAccountDestinationOptional.isPresent()) {
                         BankAccount bankAccountDestination = bankAccountDestinationOptional.get();
                         transaction.setToBankAccount(bankAccountDestination);
@@ -240,7 +240,7 @@ public class TransactionHelper {
     public void processScheduledTransfers() {
         List<Transaction> wireTransfers = transactionRepository.findTransactionsByStatusAndTypeAndExecutionDate(Transaction.Status.AUTHORISED, WIRE_TRANSFER, LocalDate.now());
         wireTransfers.forEach(transaction -> {
-            performTransaction(new TransactionDTO(new com.bok.bank.integration.util.Money(transaction.getAmount().getCurrency(), transaction.getAmount().getValue()), transaction.getTransactionOwner().getId(), transaction.getDestinationIban(), transaction.getBeneficiary(), transaction.getInstantTransfer(), transaction.getExecutionDate(), WIRE_TRANSFER.name()));
+            performTransaction(new TransactionDTO(new com.bok.bank.integration.util.Money(transaction.getAmount().getCurrency(), transaction.getAmount().getValue()), transaction.getTransactionOwner().getId(), transaction.getDestinationIban(), transaction.getCausal(), transaction.getBeneficiary(), transaction.getInstantTransfer(), transaction.getExecutionDate(), WIRE_TRANSFER.name()));
         });
     }
 }

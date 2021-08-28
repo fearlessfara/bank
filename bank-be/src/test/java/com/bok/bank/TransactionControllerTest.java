@@ -128,7 +128,7 @@ public class TransactionControllerTest {
 
         com.bok.bank.integration.util.Money moneyToSend = new com.bok.bank.integration.util.Money(USD, BigDecimal.valueOf(12));
         Money moneyToSendBE = new Money(BigDecimal.valueOf(12), USD);
-        WireTransferResponseDTO wireTransferResponseDTO = transactionController.wireTransfer(user.getId(), new WireTransferRequestDTO(bankAccount2.getIBAN(), user2.getName() + " " + user2.getSurname(), moneyToSend, null, true));
+        WireTransferResponseDTO wireTransferResponseDTO = transactionController.wireTransfer(user.getId(), new WireTransferRequestDTO(bankAccount2.getIBAN(), user2.getName() + " " + user2.getSurname(), faker.name().title(),moneyToSend, null, true));
         Assertions.assertEquals(wireTransferResponseDTO.reason, "");
         Assertions.assertTrue(wireTransferResponseDTO.accepted);
         BankAccount bankAccountAfterWireTransfer = bankAccountRepository.findByAccountId(user.getId()).get();
@@ -152,7 +152,7 @@ public class TransactionControllerTest {
 
         com.bok.bank.integration.util.Money moneyToSend = new com.bok.bank.integration.util.Money(USD, BigDecimal.valueOf(12));
         Money moneyToSendBE = new Money(BigDecimal.valueOf(12), USD);
-        WireTransferResponseDTO wireTransferResponseDTO = transactionController.wireTransfer(user.getId(), new WireTransferRequestDTO(bankAccount2.getIBAN(), user2.getName() + " " + user2.getSurname(), moneyToSend, LocalDate.now().plus(1, ChronoUnit.DAYS), false));
+        WireTransferResponseDTO wireTransferResponseDTO = transactionController.wireTransfer(user.getId(), new WireTransferRequestDTO(bankAccount2.getIBAN(), user2.getName() + " " + user2.getSurname(), faker.name().title(), moneyToSend, LocalDate.now().plus(1, ChronoUnit.DAYS), false));
         Assertions.assertEquals(wireTransferResponseDTO.reason, "");
         Assertions.assertTrue(wireTransferResponseDTO.accepted);
 
@@ -179,14 +179,14 @@ public class TransactionControllerTest {
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
 
         com.bok.bank.integration.util.Money moneyToSend = new com.bok.bank.integration.util.Money(USD, BigDecimal.valueOf(12));
-        Assertions.assertThrows(IllegalStateException.class, () -> transactionController.wireTransfer(user.getId(), new WireTransferRequestDTO(bankAccount.getIBAN(), user.getName() + " " + user.getSurname(), moneyToSend, null, true)));
+        Assertions.assertThrows(IllegalStateException.class, () -> transactionController.wireTransfer(user.getId(), new WireTransferRequestDTO(bankAccount.getIBAN(), user.getName() + " " + user.getSurname(), faker.name().title(),  moneyToSend, null, true)));
     }
     @Test
     public void checkWireTransferToYourselfFAIL() {
         User user = modelTestUtil.createAndSaveUser(17L);
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
         com.bok.bank.integration.util.Money moneyToSend = new com.bok.bank.integration.util.Money(USD, BigDecimal.valueOf(12));
-        Assertions.assertThrows(IllegalStateException.class, () -> transactionController.wireTransfer(user.getId(), new WireTransferRequestDTO(bankAccount.getIBAN(), user.getName() + " " + user.getSurname(), moneyToSend, LocalDate.now().plus(1, ChronoUnit.DAYS), false)));
+        Assertions.assertThrows(IllegalStateException.class, () -> transactionController.wireTransfer(user.getId(), new WireTransferRequestDTO(bankAccount.getIBAN(), user.getName() + " " + user.getSurname(), faker.name().title(), moneyToSend, LocalDate.now().plus(1, ChronoUnit.DAYS), false)));
     }
 
     @Test

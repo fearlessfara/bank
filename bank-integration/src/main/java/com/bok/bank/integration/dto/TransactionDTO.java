@@ -22,6 +22,7 @@ public class TransactionDTO implements Serializable {
     public String fromMarket;
     public String destinationIBAN;
     public String beneficiary;
+    public String causal;
     public UUID extTransactionId;
     public LocalDate executionDate;
     public boolean instantTransfer;
@@ -42,11 +43,12 @@ public class TransactionDTO implements Serializable {
         this.type = type;
     }
 
-    public TransactionDTO(Money transactionAmount, Long accountId, String destinationIBAN, String beneficiary, boolean instantTransfer, LocalDate executionDate, String type) {
+    public TransactionDTO(Money transactionAmount, Long accountId, String destinationIBAN, String causal, String beneficiary, boolean instantTransfer, LocalDate executionDate, String type) {
         this.transactionAmount = transactionAmount;
         this.accountId = accountId;
         this.destinationIBAN = destinationIBAN;
         this.beneficiary = beneficiary;
+        this.causal = causal;
         this.executionDate = executionDate;
         this.instantTransfer = instantTransfer;
         this.type = type;
