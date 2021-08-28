@@ -5,6 +5,8 @@ import com.bok.bank.integration.dto.AuthorizationRequestDTO;
 import com.bok.bank.integration.dto.AuthorizationResponseDTO;
 import com.bok.bank.integration.dto.CardDTO;
 import com.bok.bank.integration.dto.TransactionResponseDTO;
+import com.bok.bank.integration.dto.WireTransferRequestDTO;
+import com.bok.bank.integration.dto.WireTransferResponseDTO;
 import com.bok.bank.integration.service.AccountController;
 import com.bok.bank.integration.service.CardController;
 import com.bok.bank.integration.service.TransactionController;
@@ -18,8 +20,8 @@ import com.bok.bank.repository.TransactionRepository;
 import com.bok.bank.util.Money;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.PropertySource;
@@ -27,11 +29,12 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Currency;
 import java.util.List;
 import java.util.UUID;
 
-import static com.bok.bank.ModelTestUtil.EUR;
 import static com.bok.bank.ModelTestUtil.USD;
 import static com.bok.bank.ModelTestUtil.faker;
 import static com.bok.bank.model.Card.Type.DEBIT;
@@ -114,6 +117,76 @@ public class TransactionControllerTest {
         moneyToAuthorizeExpected.setValue(moneyToAuthorizeExpected.getValue().setScale(2, RoundingMode.FLOOR));
         Assertions.assertEquals(moneyToAuthorizeExpected, transaction.getAmount());
         Assertions.assertEquals(bankAccount.getAvailableAmount().subtract(moneyToAuthorizeExpected), bankAccountAfterAmountAuthorization.getAvailableAmount());
+    }
+
+    @Test
+    public void checkInstantWireTransfer() {
+        User user = modelTestUtil.createAndSaveUser(17L);
+        BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
+        User user2 = modelTestUtil.createAndSaveUser(18L);
+        BankAccount bankAccount2 = modelTestUtil.createAndSaveBankAccount(user2, Currency.getInstance("USD"));
+
+        com.bok.bank.integration.util.Money moneyToSend = new com.bok.bank.integration.util.Money(USD, BigDecimal.valueOf(12));
+        Money moneyToSendBE = new Money(BigDecimal.valueOf(12), USD);
+        WireTransferResponseDTO wireTransferResponseDTO = transactionController.wireTransfer(user.getId(), new WireTransferRequestDTO(bankAccount2.getIBAN(), user2.getName() + " " + user2.getSurname(), moneyToSend, null, true));
+        Assertions.assertEquals(wireTransferResponseDTO.reason, "");
+        Assertions.assertTrue(wireTransferResponseDTO.accepted);
+        BankAccount bankAccountAfterWireTransfer = bankAccountRepository.findByAccountId(user.getId()).get();
+        BankAccount bankAccount2AfterWireTransfer = bankAccountRepository.findByAccountId(user2.getId()).get();
+        Money availableAmountBA1 = bankAccount.getAvailableAmount().subtract(exchangeCurrencyAmountHelper.convertCurrencyAmount(moneyToSendBE, bankAccount.getCurrency()));
+        availableAmountBA1.setValue(availableAmountBA1.getValue().setScale(2, RoundingMode.FLOOR));
+        Assertions.assertEquals(availableAmountBA1, bankAccountAfterWireTransfer.getAvailableAmount());
+        Money availableAmountBA2 = bankAccount2.getAvailableAmount().plus(exchangeCurrencyAmountHelper.convertCurrencyAmount(moneyToSendBE, bankAccount2.getCurrency()));
+        availableAmountBA2.setValue(availableAmountBA2.getValue().setScale(2, RoundingMode.FLOOR));
+        Assertions.assertEquals(availableAmountBA2, bankAccount2AfterWireTransfer.getAvailableAmount());
+        Transaction transaction = transactionRepository.findAll().get(0);
+        Assertions.assertEquals(Transaction.Status.SETTLED, transaction.getStatus());
+    }
+
+    @Test
+    public void checkWireTransfer() {
+        User user = modelTestUtil.createAndSaveUser(17L);
+        BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
+        User user2 = modelTestUtil.createAndSaveUser(18L);
+        BankAccount bankAccount2 = modelTestUtil.createAndSaveBankAccount(user2, Currency.getInstance("USD"));
+
+        com.bok.bank.integration.util.Money moneyToSend = new com.bok.bank.integration.util.Money(USD, BigDecimal.valueOf(12));
+        Money moneyToSendBE = new Money(BigDecimal.valueOf(12), USD);
+        WireTransferResponseDTO wireTransferResponseDTO = transactionController.wireTransfer(user.getId(), new WireTransferRequestDTO(bankAccount2.getIBAN(), user2.getName() + " " + user2.getSurname(), moneyToSend, LocalDate.now().plus(1, ChronoUnit.DAYS), false));
+        Assertions.assertEquals(wireTransferResponseDTO.reason, "");
+        Assertions.assertTrue(wireTransferResponseDTO.accepted);
+
+        BankAccount bankAccountAfterWireTransfer = bankAccountRepository.findByAccountId(user.getId()).get();
+        BankAccount bankAccount2AfterWireTransfer = bankAccountRepository.findByAccountId(user2.getId()).get();
+        Money availableAmountBA1 = bankAccount.getAvailableAmount().subtract(exchangeCurrencyAmountHelper.convertCurrencyAmount(moneyToSendBE, bankAccount.getCurrency()));
+        availableAmountBA1.setValue(availableAmountBA1.getValue().setScale(2, RoundingMode.FLOOR));
+        Assertions.assertEquals(availableAmountBA1, bankAccountAfterWireTransfer.getAvailableAmount());
+
+        Money blockedAmountBA1 = bankAccount.getBlockedAmount().plus(exchangeCurrencyAmountHelper.convertCurrencyAmount(moneyToSendBE, bankAccount.getCurrency()));
+        blockedAmountBA1.setValue(blockedAmountBA1.getValue().setScale(2, RoundingMode.FLOOR));
+        Assertions.assertEquals(blockedAmountBA1, bankAccountAfterWireTransfer.getBlockedAmount());
+
+        Money availableAmountBA2 = bankAccount2.getAvailableAmount();
+        availableAmountBA2.setValue(availableAmountBA2.getValue().setScale(2, RoundingMode.FLOOR));
+        Assertions.assertEquals(availableAmountBA2, bankAccount2AfterWireTransfer.getAvailableAmount());
+        Transaction transaction = transactionRepository.findAll().get(0);
+        Assertions.assertEquals(Transaction.Status.AUTHORISED, transaction.getStatus());
+    }
+
+    @Test
+    public void checkInstantWireTransferToYourselfFAIL() {
+        User user = modelTestUtil.createAndSaveUser(17L);
+        BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
+
+        com.bok.bank.integration.util.Money moneyToSend = new com.bok.bank.integration.util.Money(USD, BigDecimal.valueOf(12));
+        Assertions.assertThrows(IllegalStateException.class, () -> transactionController.wireTransfer(user.getId(), new WireTransferRequestDTO(bankAccount.getIBAN(), user.getName() + " " + user.getSurname(), moneyToSend, null, true)));
+    }
+    @Test
+    public void checkWireTransferToYourselfFAIL() {
+        User user = modelTestUtil.createAndSaveUser(17L);
+        BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
+        com.bok.bank.integration.util.Money moneyToSend = new com.bok.bank.integration.util.Money(USD, BigDecimal.valueOf(12));
+        Assertions.assertThrows(IllegalStateException.class, () -> transactionController.wireTransfer(user.getId(), new WireTransferRequestDTO(bankAccount.getIBAN(), user.getName() + " " + user.getSurname(), moneyToSend, LocalDate.now().plus(1, ChronoUnit.DAYS), false)));
     }
 
     @Test

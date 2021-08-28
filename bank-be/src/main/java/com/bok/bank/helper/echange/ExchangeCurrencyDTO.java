@@ -1,4 +1,4 @@
-package com.bok.bank.util.echange;
+package com.bok.bank.helper.echange;
 
 import com.bok.bank.model.ExchangeCurrencyValueHistory;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

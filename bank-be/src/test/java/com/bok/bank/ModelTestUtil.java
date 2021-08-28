@@ -16,6 +16,7 @@ import com.bok.bank.repository.ExchangeCurrencyValueRepository;
 import com.bok.bank.repository.TransactionRepository;
 import com.bok.bank.util.Constants;
 import com.bok.bank.util.CreditCardNumberGenerator;
+import com.bok.bank.util.Generator;
 import com.bok.bank.util.Money;
 import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,8 @@ public class ModelTestUtil {
     public static final Currency USD = Currency.getInstance("USD");
     @Autowired
     CreditCardNumberGenerator creditCardNumberGenerator;
+    @Autowired
+    Generator generator;
     @Autowired
     ConfirmationEmailHistoryRepository confirmationEmailHistoryRepository;
     @Autowired
@@ -152,12 +155,12 @@ public class ModelTestUtil {
 
     public BankAccount createAndSaveBankAccount(Account account) {
         Currency currency = Currency.getInstance(faker.currency().code());
-        BankAccount bankAccount = new BankAccount(account.getId(), creditCardNumberGenerator.generate(Constants.BIN_BOK, 15), faker.funnyName().name(), faker.lorem().paragraph(), currency, new Money(BigDecimal.ZERO, currency), new Money(BigDecimal.valueOf(100), currency), BankAccount.Status.ACTIVE);
+        BankAccount bankAccount = new BankAccount(account.getId(), generator.generateIBAN(), faker.funnyName().name(), faker.lorem().paragraph(), currency, new Money(BigDecimal.ZERO, currency), new Money(BigDecimal.valueOf(100), currency), BankAccount.Status.ACTIVE);
         return bankAccountRepository.save(bankAccount);
     }
 
     public BankAccount createAndSaveBankAccount(Account account, Currency currency) {
-        BankAccount bankAccount = new BankAccount(account.getId(), creditCardNumberGenerator.generate(Constants.BIN_BOK, 15), faker.funnyName().name(), faker.lorem().paragraph(), currency, new Money(BigDecimal.ZERO, currency), new Money(BigDecimal.valueOf(100), currency), BankAccount.Status.ACTIVE);
+        BankAccount bankAccount = new BankAccount(account.getId(), generator.generateIBAN(), faker.funnyName().name(), faker.lorem().paragraph(), currency, new Money(BigDecimal.ZERO, currency), new Money(BigDecimal.valueOf(100), currency), BankAccount.Status.ACTIVE);
         return bankAccountRepository.save(bankAccount);
     }
 

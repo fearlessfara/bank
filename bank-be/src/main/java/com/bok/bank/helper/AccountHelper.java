@@ -26,6 +26,11 @@ public class AccountHelper {
     @Autowired
     BankAccountHelper bankAccountHelper;
 
+    /**
+     * This method get the principal account info from database
+     * @param accountId
+     * @return accountInfoDTO
+     */
     public AccountInfoDTO getAccountInfo(Long accountId) {
         AccountRepository.Projection.AccountInfo accountInfo = accountRepository.findAccountInfoByAccountId(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("Account not found for accountId " + accountId));

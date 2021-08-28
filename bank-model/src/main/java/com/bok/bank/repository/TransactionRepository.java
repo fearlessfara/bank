@@ -5,6 +5,7 @@ import com.bok.bank.model.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,4 +20,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     Optional<Transaction> findByPublicId(String publicId);
 
     List<Transaction> findTransactionsByCard_Id(Long cardId);
+
+    List<Transaction> findTransactionsByStatusAndTypeAndExecutionDate(Transaction.Status status, Transaction.Type type, LocalDate localDate);
 }

@@ -3,6 +3,8 @@ package com.bok.bank.integration.service;
 import com.bok.bank.integration.dto.AuthorizationRequestDTO;
 import com.bok.bank.integration.dto.AuthorizationResponseDTO;
 import com.bok.bank.integration.dto.TransactionResponseDTO;
+import com.bok.bank.integration.dto.WireTransferRequestDTO;
+import com.bok.bank.integration.dto.WireTransferResponseDTO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +23,9 @@ public interface TransactionController {
 
     @PostMapping("/authorize")
     AuthorizationResponseDTO authorize(@RequestParam("accountId") Long accountId, @RequestBody AuthorizationRequestDTO authorizationRequestDTO);
+
+    @PostMapping("/wireTransfer")
+    WireTransferResponseDTO wireTransfer(@RequestParam("accountId") Long accountId, @RequestBody WireTransferRequestDTO wiredTransferRequestDTO);
 
     @PostMapping("/card/{token}")
     List<TransactionResponseDTO> getCardTransaction(@RequestParam("accountId") Long accountId, @RequestParam("token") String token);
