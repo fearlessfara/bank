@@ -1,6 +1,7 @@
 package com.bok.bank.model;
 
 import com.bok.bank.util.Money;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -18,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -37,7 +39,15 @@ public class Transaction implements Serializable {
     @Column
     private String fromMarket;
     @Column
-    private String fromIban;
+    private String destinationIban;
+    @Column
+    private String causal;
+    @Column
+    private String beneficiary;
+    @Column
+    private Boolean instantTransfer;
+    @Column
+    private LocalDate executionDate;
     @ManyToOne
     private BankAccount fromBankAccount;
     @ManyToOne
@@ -77,6 +87,22 @@ public class Transaction implements Serializable {
         this.transactionOwner = card.getAccount();
     }
 
+    public Transaction(Type type, Status status, String destinationIban, String causal, String beneficiary, Boolean instantTransfer, LocalDate executionDate, BankAccount fromBankAccount, BankAccount toBankAccount, Account transactionOwner, Money amount, UUID publicId) {
+        this.type = type;
+        this.status = status;
+        this.destinationIban = destinationIban;
+        this.causal = causal;
+        this.beneficiary = beneficiary;
+        this.instantTransfer = instantTransfer;
+        this.executionDate = executionDate;
+        this.fromBankAccount = fromBankAccount;
+        this.toBankAccount = toBankAccount;
+        this.transactionOwner = transactionOwner;
+        this.amount = amount;
+        this.publicId = publicId.toString();
+
+    }
+
     public Long getId() {
         return id;
     }
@@ -93,14 +119,45 @@ public class Transaction implements Serializable {
         this.fromMarket = fromMarket;
     }
 
-    public String getFromIban() {
-        return fromIban;
+    public void setPublicId(String publicId) {
+        this.publicId = publicId;
     }
 
-    public void setFromIban(String fromIban) {
-        this.fromIban = fromIban;
+    public String getDestinationIban() {
+        return destinationIban;
     }
 
+    public void setDestinationIban(String destinationIban) {
+        this.destinationIban = destinationIban;
+    }
+
+    public String getBeneficiary() {
+        return beneficiary;
+    }
+
+    public void setBeneficiary(String beneficiary) {
+        this.beneficiary = beneficiary;
+    }
+
+    public Boolean getInstantTransfer() {
+        return instantTransfer;
+    }
+
+    public void setInstantTransfer(Boolean instantTransfer) {
+        this.instantTransfer = instantTransfer;
+    }
+
+    public LocalDate getExecutionDate() {
+        return executionDate;
+    }
+
+    public void setExecutionDate(LocalDate executionDate) {
+        this.executionDate = executionDate;
+    }
+
+    public void setTransactionOwner(Account transactionOwner) {
+        this.transactionOwner = transactionOwner;
+    }
     public BankAccount getFromBankAccount() {
         return fromBankAccount;
     }
@@ -127,6 +184,14 @@ public class Transaction implements Serializable {
 
     public Account getTransactionOwner() {
         return transactionOwner;
+    }
+
+    public String getCausal() {
+        return causal;
+    }
+
+    public void setCausal(String causal) {
+        this.causal = causal;
     }
 
     public void setTransactionOwner(User transactionOwner) {

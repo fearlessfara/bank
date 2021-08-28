@@ -1,4 +1,4 @@
-package com.bok.bank.util.echange;
+package com.bok.bank.helper.echange;
 
 import com.bok.bank.model.ExchangeCurrencyValue;
 import com.bok.bank.model.ExchangeCurrencyValueHistory;
@@ -48,8 +48,10 @@ public class ExchangeData {
     private String endpoint;
 
     /**
+     * TEST METHOD
      * API GET https://v6.exchangerate-api.com/v6/ceb94d443f6398dd5e640cd1/latest/USD
      */
+    @Deprecated
     public ExchangeCurrencyDTO fetchData() {
 
         try {
@@ -61,7 +63,7 @@ public class ExchangeData {
     }
 
     /**
-     * update currencies exchange value every 6H
+     * update currencies exchange and history value every 6H
      */
     @Scheduled(fixedDelay = 21600000, initialDelay = 1000)
     public void updateDatabaseCurrenciesExchange() {
@@ -87,6 +89,12 @@ public class ExchangeData {
         updateCurrencyValue(exchangeCurrencyValueHistoryToSave);
     }
 
+    /**
+     * this method make the request and parse the data returned in an ExchangeCurrencyDTO object
+     * @param uri
+     * @return
+     * @throws IOException
+     */
     private ExchangeCurrencyDTO makeAPICall(String uri) throws IOException {
         // Making Request
         URL url = new URL(uri);
@@ -102,6 +110,10 @@ public class ExchangeData {
         return gson.fromJson(jsonObject, ExchangeCurrencyDTO.class);
     }
 
+    /**
+     * Update if needed the currency value on db
+     * @param exchangeCurrencyValueHistories
+     */
     private void updateCurrencyValue(List<ExchangeCurrencyValueHistory> exchangeCurrencyValueHistories) {
         log.info("updateCurrencyValue");
         Map<String, ExchangeCurrencyValueHistory> exchangeCurrencyValueHistoryMap = exchangeCurrencyValueHistories.stream().collect(Collectors.toMap(ExchangeCurrencyValueHistory::getBaseCurrency, Function.identity()));

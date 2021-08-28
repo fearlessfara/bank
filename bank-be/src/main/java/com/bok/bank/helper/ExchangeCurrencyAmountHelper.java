@@ -19,6 +19,9 @@ public class ExchangeCurrencyAmountHelper {
     ExchangeCurrencyValueRepository exchangeCurrencyValueRepository;
 
     public Money convertCurrencyAmount(Money fromCurrencyAmount, Currency toCurrency) {
+        if(fromCurrencyAmount.getCurrency().equals(toCurrency)) {
+            return fromCurrencyAmount;
+        }
         if (!Constants.CURRENCIES_SAVED.contains(fromCurrencyAmount.getCurrency().getCurrencyCode())) {
             ExchangeCurrencyValue exchangeCurrencyValue = exchangeCurrencyValueRepository.findByBaseCurrency(Money.DEFAULT_CURRENCY.getCurrencyCode());
             BigDecimal conversionRateToEUR = exchangeCurrencyValue.getConversion_rates().get(fromCurrencyAmount.getCurrency().getCurrencyCode());

@@ -48,6 +48,11 @@ public class CardHelper {
     @Autowired
     AccountRepository accountRepository;
 
+    /**
+     * this method takes all the cards from database and return only the card base info
+     * @param accountId
+     * @return cardsInfo -> LIST OF CardInfoDTO
+     */
     public List<CardInfoDTO> getAllCards(Long accountId) {
         List<CardRepository.Projection.CardInfo> cardInfos = cardRepository.findAllCardInfoByAccountId(accountId);
         return cardInfos.stream()
@@ -56,23 +61,50 @@ public class CardHelper {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Take only the base info for a card
+     * @param accountId
+     * @return cardsInfo -> LIST OF CardInfoDTO
+     */
     public CardInfoDTO getCardInfo(Long accountId, Long cardId) {
         CardRepository.Projection.CardInfo cardInfo = cardRepository.findCardInfoByAccountIdAndCardId(accountId, cardId).orElseThrow(() -> new IllegalArgumentException("Card not found for cardId " + cardId + "and accountId " + accountId));
         return new CardInfoDTO(cardInfo.getCardId(), cardInfo.getName(), cardInfo.getCardStatus().name(), cardInfo.getType().name(), cardInfo.getLabel(), creditCardNumberGenerator.maskingPan(cardInfo.getMaskedPan()));
     }
 
+    /**
+     * Take the plain pan from the db
+     * @param accountId
+     * @param cardId
+     * @return
+     */
     public String getPlainPan(Long accountId, Long cardId) {
         return cardRepository.findPlainPanByAccountIdAndCardId(accountId, cardId).orElseThrow(() -> new IllegalArgumentException("Card not found for cardId: " + cardId + " and accountId: " + accountId));
     }
 
+    /**
+     * take the card token from db
+     * @param accountId
+     * @param cardId
+     * @return
+     */
     public String getCardToken(Long accountId, Long cardId) {
         return cardRepository.findCardTokenByAccountIdAndCardId(accountId, cardId).orElseThrow(() -> new IllegalArgumentException("Card not found for cardId: " + cardId + " and accountId: " + accountId));
     }
-
+    /**
+     * take the card cvv from db
+     * @param accountId
+     * @param cardId
+     * @return
+     */
     public int getCvv(Long accountId, Long cardId) {
         return cardRepository.findCvvByAccountIdAndCardId(accountId, cardId).orElseThrow(() -> new IllegalArgumentException("Card not found for cardId: " + cardId + " and accountId: " + accountId));
     }
-
+    /**
+     * take the PIN from db
+     * @param accountId
+     * @param cardId
+     * @return
+     */
     public String getPIN(Long accountId, Long cardId) {
         Account account = accountRepository.findById(accountId).orElseThrow(AccountException::new);
         Card card = cardRepository.findById(cardId).orElseThrow(() -> new IllegalArgumentException("Card not found for cardId: " + cardId));
@@ -80,6 +112,12 @@ public class CardHelper {
         return emailHelper.sendPINEmail(account, card);
     }
 
+    /**
+     * Create and save the new requested card
+     * @param accountId
+     * @param cardDTO
+     * @return response
+     */
     public String createCard(Long accountId, CardDTO cardDTO) {
         Account account = accountRepository.findById(accountId).orElseThrow(AccountException::new);
         BankAccountRepository.Projections.BankAccountBasicInfo bankAccountBasicInfo = bankAccountRepository.findBankAccountBasicInfoByAccountId(accountId).orElseThrow(BankAccountException::new);
@@ -103,9 +141,12 @@ public class CardHelper {
         Preconditions.checkArgument(card.getPIN().equals(PIN), "PIN not valid");
     }
 
+    /**
+     * Every 13H check if there are new card expired and set card status to EXPIRED
+     */
     @Scheduled(fixedDelay = 31600000, initialDelay = 1000)
     public void checkCardExpired() {
-        List<Card> cards = cardRepository.findAll();
+        List<Card> cards = cardRepository.findCardNotExpired();
         if(CollectionUtils.isEmpty(cards)){
             return;
         }
@@ -117,6 +158,13 @@ public class CardHelper {
         cardRepository.saveAll(cardsExpired);
     }
 
+
+    /**
+     * With this method you can change the status at one of your card
+     * @param cardId
+     * @param status
+     * @return
+     */
     public String changeCardStatus(Long cardId, Card.CardStatus status) {
         if(status.equals(Card.CardStatus.ACTIVE)) {
             throw new IllegalArgumentException("Cannot active card from this endpoint, please use activation endpoint");

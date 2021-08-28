@@ -3,17 +3,23 @@ package com.bok.bank.controller;
 import com.bok.bank.helper.TransactionHelper;
 import com.bok.bank.integration.dto.AuthorizationRequestDTO;
 import com.bok.bank.integration.dto.AuthorizationResponseDTO;
+import com.bok.bank.integration.dto.TransactionDTO;
 import com.bok.bank.integration.dto.TransactionResponseDTO;
+import com.bok.bank.integration.dto.WireTransferRequestDTO;
+import com.bok.bank.integration.dto.WireTransferResponseDTO;
 import com.bok.bank.integration.service.TransactionController;
 import com.bok.bank.model.Transaction;
 import com.bok.bank.util.Money;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.iban4j.Iban;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static com.bok.bank.util.Constants.UNKNOWN_MARKET;
@@ -30,10 +36,9 @@ public class TransactionControllerImpl implements TransactionController {
         return transactionHelper.findTransactionsByAccountId(accountId);
     }
 
-
     @Override
     public AuthorizationResponseDTO authorize(Long accountId, AuthorizationRequestDTO request) {
-        log.info("{} {}", request.money.amount.toString(), request.money.currency);
+        log.info("Authorize passed param accountId: {} authorizationRequest: {}", accountId, request);
         Preconditions.checkNotNull(accountId, "accountId is null");
         Preconditions.checkNotNull(request.money, "Money passed is null");
         Preconditions.checkNotNull(request.money.amount, "Amount passed is null");
@@ -44,7 +49,29 @@ public class TransactionControllerImpl implements TransactionController {
     }
 
     @Override
+    public WireTransferResponseDTO wireTransfer(Long accountId, WireTransferRequestDTO wireTransferRequestDTO) {
+        log.info("param passed to wire transfer are: {}, {}",accountId, wireTransferRequestDTO.toString() );
+        Preconditions.checkNotNull(wireTransferRequestDTO.money, "money is null");
+        Preconditions.checkNotNull(wireTransferRequestDTO.causal, "causal is null");
+        Preconditions.checkNotNull(wireTransferRequestDTO.money.amount, "money is null");
+        Preconditions.checkArgument(StringUtils.isNotBlank(wireTransferRequestDTO.destinationIBAN), "destinationIBAN passed is blank");
+        wireTransferRequestDTO.destinationIBAN = wireTransferRequestDTO.destinationIBAN.replace(" ","").toUpperCase(Locale.ROOT);
+        Iban.valueOf(wireTransferRequestDTO.destinationIBAN);
+
+        if(wireTransferRequestDTO.instantTransfer) {
+            return new WireTransferResponseDTO(transactionHelper.performTransaction(new TransactionDTO(wireTransferRequestDTO.money, accountId, wireTransferRequestDTO.destinationIBAN, wireTransferRequestDTO.causal, wireTransferRequestDTO.beneficiary, wireTransferRequestDTO.instantTransfer, wireTransferRequestDTO.executionDate, Transaction.Type.WIRE_TRANSFER.name())), "");
+
+        }
+        Preconditions.checkNotNull(wireTransferRequestDTO.executionDate, "executionDate passed is null");
+        Preconditions.checkArgument(wireTransferRequestDTO.executionDate.isAfter(LocalDate.now()), "executionDate is before then " + LocalDate.now());
+        return transactionHelper.authorizeWireTransfer(new TransactionDTO(wireTransferRequestDTO.money, accountId, wireTransferRequestDTO.destinationIBAN, wireTransferRequestDTO.causal, wireTransferRequestDTO.beneficiary, wireTransferRequestDTO.instantTransfer, wireTransferRequestDTO.executionDate, Transaction.Type.WIRE_TRANSFER.name()));
+    }
+
+
+    @Override
     public List<TransactionResponseDTO> getCardTransaction(Long accountId, String token) {
+        log.info("get card transaction account id: {}, token: {}",accountId, token);
+
         List<Transaction> transactions = transactionHelper.findTransactionByCardToken(accountId, token);
         return transactions.stream().map(t -> transactionHelper.toTransactionResponseDTO(t, accountId)).collect(Collectors.toList());
     }

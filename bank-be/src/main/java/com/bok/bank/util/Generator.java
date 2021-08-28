@@ -5,6 +5,7 @@ import com.bok.bank.repository.BankAccountRepository;
 import com.bok.bank.repository.ConfirmationEmailHistoryRepository;
 import org.iban4j.CountryCode;
 import org.iban4j.Iban;
+import org.iban4j.IbanFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
