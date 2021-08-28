@@ -14,7 +14,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     int deleteByFromBankAccount(BankAccount toBankAccount);
 
-    @Query("select t from Transaction t where t.transactionOwner.id = :accountId order by t.timestamp")
+    @Query("select t from Transaction t where t.transactionOwner.id = :accountId order by t.timestamp desc")
     List<Transaction> findByAccountId(Long accountId);
 
     Optional<Transaction> findByPublicId(String publicId);
