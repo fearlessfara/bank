@@ -54,7 +54,6 @@ public class TransactionControllerImpl implements TransactionController {
         Preconditions.checkNotNull(wireTransferRequestDTO.money, "money is null");
         Preconditions.checkNotNull(wireTransferRequestDTO.causal, "causal is null");
         Preconditions.checkNotNull(wireTransferRequestDTO.money.amount, "money is null");
-        Preconditions.checkArgument(wireTransferRequestDTO.executionDate.isAfter(LocalDate.now()), "executionDate is before then " + LocalDate.now());
         Preconditions.checkArgument(StringUtils.isNotBlank(wireTransferRequestDTO.destinationIBAN), "destinationIBAN passed is blank");
         wireTransferRequestDTO.destinationIBAN = wireTransferRequestDTO.destinationIBAN.replace(" ","").toUpperCase(Locale.ROOT);
         Iban.valueOf(wireTransferRequestDTO.destinationIBAN);
