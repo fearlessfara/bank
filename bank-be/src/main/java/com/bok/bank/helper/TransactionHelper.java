@@ -137,7 +137,9 @@ public class TransactionHelper {
     }
 
     public List<TransactionResponseDTO> findTransactionsByAccountId(Long accountId) {
-        List<Transaction> transactions = transactionRepository.findByAccountId(accountId);
+        Account account = accountRepository.findById(accountId).orElseThrow(AccountException::new);
+        BankAccount bankAccount  = bankAccountRepository.findByAccountId(accountId).orElseThrow(BankAccountException::new);
+        List<Transaction> transactions = transactionRepository.findDistinctByTransactionOwnerOrFromBankAccountOrToBankAccount(account, bankAccount, bankAccount);
         if (transactions.isEmpty()) {
             return Collections.emptyList();
         }

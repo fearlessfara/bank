@@ -160,7 +160,7 @@ public class ModelTestUtil {
     }
 
     public BankAccount createAndSaveBankAccount(Account account, Currency currency) {
-        BankAccount bankAccount = new BankAccount(account.getId(), generator.generateIBAN(), faker.funnyName().name(), faker.lorem().paragraph(), currency, new Money(BigDecimal.ZERO, currency), new Money(BigDecimal.valueOf(100), currency), BankAccount.Status.ACTIVE);
+        BankAccount bankAccount = new BankAccount(account.getId(), generator.generateIBAN(), faker.funnyName().name(), faker.lorem().characters(5, 10), currency, new Money(BigDecimal.ZERO, currency), new Money(BigDecimal.valueOf(100), currency), BankAccount.Status.ACTIVE);
         return bankAccountRepository.save(bankAccount);
     }
 

@@ -1,5 +1,6 @@
 package com.bok.bank.repository;
 
+import com.bok.bank.model.Account;
 import com.bok.bank.model.BankAccount;
 import com.bok.bank.model.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,8 +15,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     int deleteByFromBankAccount(BankAccount toBankAccount);
 
-    @Query("select t from Transaction t where t.transactionOwner.id = :accountId or t.toBankAccount.accountId = :accountId order by t.timestamp desc")
-    List<Transaction> findByAccountId(Long accountId);
+    List<Transaction> findDistinctByTransactionOwnerOrFromBankAccountOrToBankAccount(Account account,BankAccount bankAccount, BankAccount bankAccount2);
 
     Optional<Transaction> findByPublicId(String publicId);
 
