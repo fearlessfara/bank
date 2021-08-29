@@ -123,7 +123,7 @@ public class CardHelper {
         BankAccountRepository.Projections.BankAccountBasicInfo bankAccountBasicInfo = bankAccountRepository.findBankAccountBasicInfoByAccountId(accountId).orElseThrow(BankAccountException::new);
         Preconditions.checkArgument(bankAccountBasicInfo.getStatus().equals(BankAccount.Status.ACTIVE), "Fail creation card related to not active bank account, bankAccountId: " + bankAccountBasicInfo.getId());
         Card newCard = new Card(cardDTO.name, new Account(accountId), Card.CardStatus.TO_ACTIVATE, Card.Type.valueOf(cardDTO.type.trim()), Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS),
-                creditCardNumberGenerator.generateToken(), cardDTO.label, creditCardNumberGenerator.generate(Constants.BIN_BOK, 15), new BankAccount(bankAccountBasicInfo.getId()), creditCardNumberGenerator.generateCvv(), creditCardNumberGenerator.generatePIN());
+                creditCardNumberGenerator.generateToken(), cardDTO.label, creditCardNumberGenerator.generate(Constants.BIN_BOK, 16), new BankAccount(bankAccountBasicInfo.getId()), creditCardNumberGenerator.generateCvv(), creditCardNumberGenerator.generatePIN());
         newCard = cardRepository.save(newCard);
         emailHelper.sendCardConfirmationEmail(account, newCard);
         return "Please check your mail and active your new card";
