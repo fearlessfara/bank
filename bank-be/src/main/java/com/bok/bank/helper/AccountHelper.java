@@ -63,7 +63,7 @@ public class AccountHelper {
     }
 
     public Boolean canCreate(AccountCreationCheckRequest bankCheckRequest) {
-        String code = bankCheckRequest.getBusiness() ? bankCheckRequest.getVatNumber() : bankCheckRequest.getFiscalCode();
-        return !accountRepository.existsByVatNumberOrTaxCode(code);
+        String codeToCheck = bankCheckRequest.getBusiness() ? bankCheckRequest.getVatNumber() : bankCheckRequest.getFiscalCode();
+        return !accountRepository.existsByVatNumberOrTaxCode(codeToCheck);
     }
 }
