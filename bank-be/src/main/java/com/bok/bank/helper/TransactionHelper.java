@@ -177,6 +177,11 @@ public class TransactionHelper {
                 if (transaction.getStatus().equals(Transaction.Status.DECLINED) || transaction.getStatus().equals(Transaction.Status.CANCELLED)) {
                     break;
                 }
+                Card card = transaction.getCard();
+                if(card.getType().equals(Card.Type.ONE_USE)) {
+                    card.setCardStatus(Card.CardStatus.DESTROYED);
+                    cardRepository.saveAndFlush(card);
+                }
                 bankAccount.setBlockedAmount(bankAccount.getBlockedAmount().subtract(amountWithBankAccountCurrency));
                 transaction.setToBankAccount(null);
                 transaction.setFromBankAccount(bankAccount);
