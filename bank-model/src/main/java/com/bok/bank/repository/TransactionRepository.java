@@ -15,7 +15,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     int deleteByFromBankAccount(BankAccount toBankAccount);
 
-    List<Transaction> findDistinctByTransactionOwnerOrFromBankAccountOrToBankAccount(Account account,BankAccount bankAccount, BankAccount bankAccount2);
+    List<Transaction> findDistinctByTransactionOwnerOrFromBankAccountOrToBankAccountOrderByTimestampDesc(Account account, BankAccount bankAccount, BankAccount bankAccount2);
 
     Optional<Transaction> findByPublicId(String publicId);
 
