@@ -12,7 +12,7 @@ import com.bok.bank.repository.AccountRepository;
 import com.bok.bank.repository.BankAccountRepository;
 import com.bok.bank.util.Money;
 import com.bok.parent.integration.message.AccountCreationMessage;
-import com.bok.parent.integration.message.AccountDeletionMessage;
+import com.bok.parent.integration.message.AccountClosureMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -133,7 +133,7 @@ public class AccountControllerTest {
     public void deleteUserTest() {
         AccountCreationMessage accountCreationMessage = new AccountCreationMessage("Domenico", "", "Fasano", "mico@gmail.com", new Date(10212541), "Fasano", "Italia", false, "FSNDMC99C13D508Y", "", "+39", "3926772950", "23", "via le mani dal naso", "Locorotondo", "BA", "Italy", "70010", 123L, User.Gender.M.name());
         accountHelper.createAccount(accountCreationMessage);
-        accountConsumer.deleteUserListener(new AccountDeletionMessage(123L));
+        accountConsumer.deleteUserListener(new AccountClosureMessage(123L, "AAAA"));
         Optional<Account> account = accountRepository.findById(123L);
         Optional<BankAccount> bankAccount = bankAccountRepository.findByAccountId(123L);
         Assertions.assertFalse(account.isPresent());

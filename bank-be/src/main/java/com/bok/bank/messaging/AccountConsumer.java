@@ -12,7 +12,7 @@ import com.bok.bank.repository.ConfirmationEmailHistoryRepository;
 import com.bok.bank.repository.TransactionRepository;
 import com.bok.bank.util.Money;
 import com.bok.parent.integration.message.AccountCreationMessage;
-import com.bok.parent.integration.message.AccountDeletionMessage;
+import com.bok.parent.integration.message.AccountClosureMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
@@ -36,7 +36,7 @@ public class AccountConsumer {
     TransactionRepository transactionRepository;
 
     @JmsListener(destination = "${active-mq.bank-account-deletion}")
-    public void deleteUserListener(AccountDeletionMessage message) {
+    public void deleteUserListener(AccountClosureMessage message) {
         log.info("Received Message: " + message.toString());
         Account account = accountRepository.findById(message.accountId).orElseThrow(AccountException::new);
         BankAccount bankAccount = bankAccountRepository.findByAccountId(account.getId()).orElseThrow(BankAccountException::new);

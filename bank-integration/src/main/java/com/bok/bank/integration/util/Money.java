@@ -1,14 +1,16 @@
 package com.bok.bank.integration.util;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Currency;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Money implements Serializable {
@@ -22,5 +24,10 @@ public class Money implements Serializable {
         com.bok.bank.integration.grpc.Currency currencyBuilder = com.bok.bank.integration.grpc.Currency.valueOf(currency.getCurrencyCode());
         moneyBuilder.setCurrency(currencyBuilder);
         return moneyBuilder.build();
+    }
+
+    @Override
+    public String toString() {
+        return "" + amount + " " + currency.getCurrencyCode();
     }
 }
