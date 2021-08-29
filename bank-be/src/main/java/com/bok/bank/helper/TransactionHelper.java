@@ -178,7 +178,7 @@ public class TransactionHelper {
                     break;
                 }
                 Card card = transaction.getCard();
-                if(card.getType().equals(Card.Type.ONE_USE)) {
+                if(Objects.nonNull(card) && card.getType().equals(Card.Type.ONE_USE)) {
                     card.setCardStatus(Card.CardStatus.DESTROYED);
                     cardRepository.saveAndFlush(card);
                 }
