@@ -1,7 +1,6 @@
 package com.bok.bank.model;
 
 import com.bok.bank.util.Money;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -76,6 +75,7 @@ public class Transaction implements Serializable {
         this.publicId = publicId.toString();
         this.transactionOwner = new Account(accountId);
     }
+
     public Transaction(Type type, Status status, String fromMarket, BankAccount fromBankAccount, Money amount, UUID publicId, Card card) {
         this.type = type;
         this.status = status;
@@ -119,10 +119,6 @@ public class Transaction implements Serializable {
         this.fromMarket = fromMarket;
     }
 
-    public void setPublicId(String publicId) {
-        this.publicId = publicId;
-    }
-
     public String getDestinationIban() {
         return destinationIban;
     }
@@ -155,9 +151,6 @@ public class Transaction implements Serializable {
         this.executionDate = executionDate;
     }
 
-    public void setTransactionOwner(Account transactionOwner) {
-        this.transactionOwner = transactionOwner;
-    }
     public BankAccount getFromBankAccount() {
         return fromBankAccount;
     }
@@ -184,6 +177,14 @@ public class Transaction implements Serializable {
 
     public Account getTransactionOwner() {
         return transactionOwner;
+    }
+
+    public void setTransactionOwner(Account transactionOwner) {
+        this.transactionOwner = transactionOwner;
+    }
+
+    public void setTransactionOwner(User transactionOwner) {
+        this.transactionOwner = transactionOwner;
     }
 
     public String getCausal() {
@@ -228,6 +229,10 @@ public class Transaction implements Serializable {
 
     public String getPublicId() {
         return publicId;
+    }
+
+    public void setPublicId(String publicId) {
+        this.publicId = publicId;
     }
 
     public void setPublicId(UUID publicId) {

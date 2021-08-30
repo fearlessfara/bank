@@ -11,8 +11,8 @@ import com.bok.bank.model.User;
 import com.bok.bank.repository.AccountRepository;
 import com.bok.bank.repository.BankAccountRepository;
 import com.bok.bank.util.Money;
-import com.bok.parent.integration.message.AccountCreationMessage;
 import com.bok.parent.integration.message.AccountClosureMessage;
+import com.bok.parent.integration.message.AccountCreationMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -120,7 +120,7 @@ public class AccountControllerTest {
         accountHelper.createAccount(accountCreationMessage);
         AccountInfoDTO accountInfo = accountHelper.getAccountInfo(123L);
         Assertions.assertEquals(accountInfo.email, accountCreationMessage.email);
-        Assertions.assertEquals(accountInfo.fullName, accountCreationMessage.name );
+        Assertions.assertEquals(accountInfo.fullName, accountCreationMessage.name);
         Assertions.assertEquals(accountInfo.mobile, accountCreationMessage.mobile);
         Assertions.assertEquals(accountInfo.type, Account.Type.COMPANY.name());
         Assertions.assertEquals(accountInfo.status, ACTIVE.name());
@@ -129,6 +129,7 @@ public class AccountControllerTest {
         Assertions.assertEquals(bankAccount.getAvailableAmount(), new Money(BigDecimal.valueOf(100000).setScale(2, RoundingMode.FLOOR), bankAccount.getCurrency()));
         Assertions.assertEquals(bankAccount.getBlockedAmount(), new Money(BigDecimal.valueOf(0).setScale(2, RoundingMode.FLOOR), bankAccount.getCurrency()));
     }
+
     @Test
     public void deleteUserTest() {
         AccountCreationMessage accountCreationMessage = new AccountCreationMessage("Domenico", "", "Fasano", "mico@gmail.com", new Date(10212541), "Fasano", "Italia", false, "FSNDMC99C13D508Y", "", "+39", "3926772950", "23", "via le mani dal naso", "Locorotondo", "BA", "Italy", "70010", 123L, User.Gender.M.name());

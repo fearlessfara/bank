@@ -5,7 +5,6 @@ import com.bok.bank.repository.BankAccountRepository;
 import com.bok.bank.repository.ConfirmationEmailHistoryRepository;
 import org.iban4j.CountryCode;
 import org.iban4j.Iban;
-import org.iban4j.IbanFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -36,7 +35,7 @@ public class Generator {
         return confirmationEmailHistoryRepository.existsByConfirmationToken(confirmationToken) ? generateConfirmationToken() : confirmationToken;
     }
 
-    public  String getRandomNumberString() {
+    public String getRandomNumberString() {
         // It will generate 6 digit random Number.
         // from 0 to 999999
         Random rnd = new Random();
@@ -45,6 +44,7 @@ public class Generator {
         // recursive until not produce unique code
         return confirmationEmailHistoryRepository.existsByConfirmationToken(String.format("%06d", number)) ? getRandomNumberString() : String.format("%06d", number);
     }
+
     public String generateUrlServiceByResourceType(ConfirmationEmailHistory.ResourceType resourceType) {
         switch (resourceType) {
             case CARD:

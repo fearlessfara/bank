@@ -28,6 +28,7 @@ public class AccountHelper {
 
     /**
      * This method get the principal account info from database
+     *
      * @param accountId
      * @return accountInfoDTO
      */

@@ -56,6 +56,7 @@ public class TransactionHelper {
 
     /**
      * given requested param this method check the amount available and the card of the bank account and authorize or decline the payment
+     *
      * @param accountId
      * @param amount
      * @param fromMarket
@@ -98,13 +99,14 @@ public class TransactionHelper {
 
     /**
      * given requested param this method check the amount available and the IBAN of the bank account and authorize or decline the wire transfer
+     *
      * @param transactionDTO
      * @return
      */
     public WireTransferResponseDTO authorizeWireTransfer(TransactionDTO transactionDTO) {
         Account account = accountRepository.findById(transactionDTO.accountId).orElseThrow(AccountException::new);
         BankAccount bankAccount = bankAccountRepository.findByAccountIdAndStatus(transactionDTO.accountId, BankAccount.Status.ACTIVE).orElseThrow(BankAccountException::new);
-        if(bankAccount.getIBAN().equals(transactionDTO.destinationIBAN)){
+        if (bankAccount.getIBAN().equals(transactionDTO.destinationIBAN)) {
             throw new IllegalStateException("CANNOT DO A WIRE TRANSFER TO YOURSELF");
         }
         Money amount = new Money(transactionDTO.transactionAmount.amount, transactionDTO.transactionAmount.currency);
@@ -129,7 +131,7 @@ public class TransactionHelper {
         Preconditions.checkArgument(Objects.nonNull(transactionDTO), "transactionDTO passed is null");
         Preconditions.checkArgument(Objects.nonNull(transactionDTO.transactionAmount) && transactionDTO.transactionAmount.amount.compareTo(BigDecimal.ZERO) == 1, "amount not valid");
         BankAccount bankAccount = bankAccountRepository.findByAccountId(transactionDTO.accountId).orElseThrow(BankAccountException::new);
-        if(bankAccount.getIBAN().equals(transactionDTO.destinationIBAN)){
+        if (bankAccount.getIBAN().equals(transactionDTO.destinationIBAN)) {
             throw new IllegalStateException("CANNOT DO A WIRE TRANSFER TO YOURSELF");
         }
         executeTransaction(transactionDTO, bankAccount);
@@ -138,7 +140,7 @@ public class TransactionHelper {
 
     public List<TransactionResponseDTO> findTransactionsByAccountId(Long accountId) {
         Account account = accountRepository.findById(accountId).orElseThrow(AccountException::new);
-        BankAccount bankAccount  = bankAccountRepository.findByAccountId(accountId).orElseThrow(BankAccountException::new);
+        BankAccount bankAccount = bankAccountRepository.findByAccountId(accountId).orElseThrow(BankAccountException::new);
         List<Transaction> transactions = transactionRepository.findDistinctByTransactionOwnerOrFromBankAccountOrToBankAccountOrderByTimestampDesc(account, bankAccount, bankAccount);
         if (transactions.isEmpty()) {
             return Collections.emptyList();
@@ -158,6 +160,7 @@ public class TransactionHelper {
 
     /**
      * this method subtract or add the amount of the transactions allowed and after move the transaction in the settled status
+     *
      * @param transactionDTO
      * @param bankAccount
      */
@@ -180,7 +183,7 @@ public class TransactionHelper {
                     break;
                 }
                 Card card = transaction.getCard();
-                if(Objects.nonNull(card) && card.getType().equals(Card.Type.ONE_USE)) {
+                if (Objects.nonNull(card) && card.getType().equals(Card.Type.ONE_USE)) {
                     card.setCardStatus(Card.CardStatus.DESTROYED);
                     cardRepository.saveAndFlush(card);
                 }
@@ -197,7 +200,7 @@ public class TransactionHelper {
                 Money amountWithBankAccountCurrency = exchangeCurrencyAmountHelper.convertCurrencyAmount(amount, bankAccount.getCurrency());
                 if (transactionDTO.instantTransfer) {
                     transactionDTO.executionDate = LocalDate.now();
-                    if(bankAccount.getAvailableAmount().isLessThan(amount)){
+                    if (bankAccount.getAvailableAmount().isLessThan(amount)) {
                         throw new TransactionException();
                     }
                     transaction = new Transaction(WIRE_TRANSFER, Transaction.Status.SETTLED, transactionDTO.destinationIBAN, transactionDTO.causal, transactionDTO.beneficiary, transactionDTO.instantTransfer, transactionDTO.executionDate, bankAccount, null, account, new Money(transactionDTO.transactionAmount.amount, transactionDTO.transactionAmount.currency), UUID.randomUUID());

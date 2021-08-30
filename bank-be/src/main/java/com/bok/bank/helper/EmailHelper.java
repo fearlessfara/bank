@@ -48,6 +48,7 @@ public class EmailHelper {
                 + "\n\nThe BOK Team.";
         emailMQProducer.send(emailMessage);
     }
+
     public String sendPINEmail(Account account, Card card) {
         log.info("email: {}", account.getEmail());
         EmailMessage emailMessage = new EmailMessage();

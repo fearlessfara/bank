@@ -57,6 +57,7 @@ public class CardControllerTest {
     public void init() {
         modelTestUtil.clearAll();
     }
+
     @Test
     public void createCardTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
