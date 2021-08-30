@@ -40,17 +40,17 @@ public class Money implements Comparable<Money>, Serializable {
 
     public Money(Money copy) {
         this.currency = copy.currency;
-        this.value = new BigDecimal(copy.value.unscaledValue(), copy.value.scale());
+        this.value = new BigDecimal(copy.value.unscaledValue(), DEFAULT_SCALE);
     }
 
     public Money(BigDecimal value) {
         this.currency = DEFAULT_CURRENCY;
-        this.value = value;
+        this.value = value.setScale(DEFAULT_SCALE, DEFAULT_ROUNDING);
     }
 
     public Money(BigDecimal value, Currency currency) {
         this.currency = currency;
-        this.value = value;
+        this.value = value.setScale(DEFAULT_SCALE, DEFAULT_ROUNDING);
     }
 
     public static Money money(Money copy) {

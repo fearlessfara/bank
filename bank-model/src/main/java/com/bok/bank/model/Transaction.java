@@ -48,6 +48,10 @@ public class Transaction implements Serializable {
     private Boolean instantTransfer;
     @Column
     private LocalDate executionDate;
+    @Embedded
+    @AttributeOverride(name = "currency", column = @Column(name = "amount_currency"))
+    @AttributeOverride(name = "value", column = @Column(name = "amount_value"))
+    private Money amount;
     @ManyToOne
     private BankAccount fromBankAccount;
     @ManyToOne
@@ -59,10 +63,6 @@ public class Transaction implements Serializable {
     @Column
     @CreationTimestamp
     private Instant timestamp;
-    @Embedded
-    @AttributeOverride(name = "currency", column = @Column(name = "amount_currency"))
-    @AttributeOverride(name = "value", column = @Column(name = "amount_value"))
-    private Money amount;
 
     public Transaction() {
     }
@@ -192,10 +192,6 @@ public class Transaction implements Serializable {
 
     public void setCausal(String causal) {
         this.causal = causal;
-    }
-
-    public void setTransactionOwner(User transactionOwner) {
-        this.transactionOwner = transactionOwner;
     }
 
     public Instant getTimestamp() {
