@@ -21,6 +21,7 @@
     <description>bank project for bok</description>
     <properties>
         <java.version>1.8</java.version>
+        <spring-cloud.version>Hoxton.SR10</spring-cloud.version>
     </properties>
     <dependencies>
         <dependency>
