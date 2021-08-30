@@ -19,7 +19,7 @@ public class ExchangeCurrencyAmountHelper {
     ExchangeCurrencyValueRepository exchangeCurrencyValueRepository;
 
     public Money convertCurrencyAmount(Money fromCurrencyAmount, Currency toCurrency) {
-        if(fromCurrencyAmount.getCurrency().equals(toCurrency)) {
+        if (fromCurrencyAmount.getCurrency().equals(toCurrency)) {
             return fromCurrencyAmount;
         }
         if (!Constants.CURRENCIES_SAVED.contains(fromCurrencyAmount.getCurrency().getCurrencyCode())) {

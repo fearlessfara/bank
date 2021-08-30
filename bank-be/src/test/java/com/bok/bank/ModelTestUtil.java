@@ -84,7 +84,8 @@ public class ModelTestUtil {
         populateCurrency();
 
     }
-    public void populateCurrency(){
+
+    public void populateCurrency() {
         Map<String, BigDecimal> currenciesEUR = new HashMap<>();
         currenciesEUR.put("USD", BigDecimal.valueOf(1.22));
         currenciesEUR.put("GBP", BigDecimal.valueOf(1.2));

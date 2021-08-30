@@ -50,15 +50,15 @@ public class TransactionControllerImpl implements TransactionController {
 
     @Override
     public WireTransferResponseDTO wireTransfer(Long accountId, WireTransferRequestDTO wireTransferRequestDTO) {
-        log.info("param passed to wire transfer are: {}, {}",accountId, wireTransferRequestDTO.toString() );
+        log.info("param passed to wire transfer are: {}, {}", accountId, wireTransferRequestDTO.toString());
         Preconditions.checkNotNull(wireTransferRequestDTO.money, "money is null");
         Preconditions.checkNotNull(wireTransferRequestDTO.causal, "causal is null");
         Preconditions.checkNotNull(wireTransferRequestDTO.money.amount, "money is null");
         Preconditions.checkArgument(StringUtils.isNotBlank(wireTransferRequestDTO.destinationIBAN), "destinationIBAN passed is blank");
-        wireTransferRequestDTO.destinationIBAN = wireTransferRequestDTO.destinationIBAN.replace(" ","").toUpperCase(Locale.ROOT);
+        wireTransferRequestDTO.destinationIBAN = wireTransferRequestDTO.destinationIBAN.replace(" ", "").toUpperCase(Locale.ROOT);
         Iban.valueOf(wireTransferRequestDTO.destinationIBAN);
 
-        if(wireTransferRequestDTO.instantTransfer) {
+        if (wireTransferRequestDTO.instantTransfer) {
             return new WireTransferResponseDTO(transactionHelper.performTransaction(new TransactionDTO(wireTransferRequestDTO.money, accountId, wireTransferRequestDTO.destinationIBAN, wireTransferRequestDTO.causal, wireTransferRequestDTO.beneficiary, wireTransferRequestDTO.instantTransfer, wireTransferRequestDTO.executionDate, Transaction.Type.WIRE_TRANSFER.name())), "");
 
         }
@@ -70,7 +70,7 @@ public class TransactionControllerImpl implements TransactionController {
 
     @Override
     public List<TransactionResponseDTO> getCardTransaction(Long accountId, String token) {
-        log.info("get card transaction account id: {}, token: {}",accountId, token);
+        log.info("get card transaction account id: {}, token: {}", accountId, token);
 
         List<Transaction> transactions = transactionHelper.findTransactionByCardToken(accountId, token);
         return transactions.stream().map(t -> transactionHelper.toTransactionResponseDTO(t, accountId)).collect(Collectors.toList());

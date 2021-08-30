@@ -2,7 +2,6 @@ package com.bok.bank.helper;
 
 import com.bok.bank.exception.AccountException;
 import com.bok.bank.exception.BankAccountException;
-import com.bok.bank.exception.ErrorCode;
 import com.bok.bank.integration.dto.BankAccountDTO;
 import com.bok.bank.integration.dto.BankAccountInfoDTO;
 import com.bok.bank.model.Account;
@@ -56,6 +55,7 @@ public class BankAccountHelper {
 
     /**
      * This method get the principal bank account info from database
+     *
      * @param accountId
      * @return bankAccountInfoDTO
      */
@@ -69,6 +69,7 @@ public class BankAccountHelper {
 
     /**
      * In the future we want to handle more bank account for one account and this method create and link a new bankAccount to the user that make a request
+     *
      * @param accountId
      * @param bankAccountDTO
      * @return
@@ -87,6 +88,7 @@ public class BankAccountHelper {
 
     /**
      * This method create the first bank account linked to the user that make a subscription
+     *
      * @param accountId
      * @param bankAccountDTO
      */
@@ -101,6 +103,7 @@ public class BankAccountHelper {
 
     /**
      * In the future we want to handle more bank account for one account and this method verify and active the new bank account created
+     *
      * @param accountId
      * @param confirmationToken
      * @return

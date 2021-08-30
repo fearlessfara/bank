@@ -8,7 +8,6 @@ import com.bok.bank.integration.dto.CardInfoDTO;
 import com.bok.bank.model.Account;
 import com.bok.bank.model.BankAccount;
 import com.bok.bank.model.Card;
-import com.bok.bank.model.ConfirmationEmailHistory;
 import com.bok.bank.repository.AccountRepository;
 import com.bok.bank.repository.BankAccountRepository;
 import com.bok.bank.repository.CardRepository;
@@ -50,6 +49,7 @@ public class CardHelper {
 
     /**
      * this method takes all the cards from database and return only the card base info
+     *
      * @param accountId
      * @return cardsInfo -> LIST OF CardInfoDTO
      */
@@ -63,6 +63,7 @@ public class CardHelper {
 
     /**
      * Take only the base info for a card
+     *
      * @param accountId
      * @return cardsInfo -> LIST OF CardInfoDTO
      */
@@ -73,6 +74,7 @@ public class CardHelper {
 
     /**
      * Take the plain pan from the db
+     *
      * @param accountId
      * @param cardId
      * @return
@@ -83,6 +85,7 @@ public class CardHelper {
 
     /**
      * take the card token from db
+     *
      * @param accountId
      * @param cardId
      * @return
@@ -90,8 +93,10 @@ public class CardHelper {
     public String getCardToken(Long accountId, Long cardId) {
         return cardRepository.findCardTokenByAccountIdAndCardId(accountId, cardId).orElseThrow(() -> new IllegalArgumentException("Card not found for cardId: " + cardId + " and accountId: " + accountId));
     }
+
     /**
      * take the card cvv from db
+     *
      * @param accountId
      * @param cardId
      * @return
@@ -99,8 +104,10 @@ public class CardHelper {
     public int getCvv(Long accountId, Long cardId) {
         return cardRepository.findCvvByAccountIdAndCardId(accountId, cardId).orElseThrow(() -> new IllegalArgumentException("Card not found for cardId: " + cardId + " and accountId: " + accountId));
     }
+
     /**
      * take the PIN from db
+     *
      * @param accountId
      * @param cardId
      * @return
@@ -114,6 +121,7 @@ public class CardHelper {
 
     /**
      * Create and save the new requested card
+     *
      * @param accountId
      * @param cardDTO
      * @return response
@@ -147,7 +155,7 @@ public class CardHelper {
     @Scheduled(fixedDelay = 31600000, initialDelay = 1000)
     public void checkCardExpired() {
         List<Card> cards = cardRepository.findCardNotExpired();
-        if(CollectionUtils.isEmpty(cards)){
+        if (CollectionUtils.isEmpty(cards)) {
             return;
         }
         List<Card> cardsExpired = new ArrayList<>();
@@ -161,16 +169,17 @@ public class CardHelper {
 
     /**
      * With this method you can change the status at one of your card
+     *
      * @param cardId
      * @param status
      * @return
      */
     public String changeCardStatus(Long cardId, Card.CardStatus status) {
-        if(status.equals(Card.CardStatus.ACTIVE)) {
+        if (status.equals(Card.CardStatus.ACTIVE)) {
             throw new IllegalArgumentException("Cannot active card from this endpoint, please use activation endpoint");
         }
         Card card = cardRepository.findById(cardId).orElseThrow(CardException::new);
-        if(card.getCardStatus().equals(Card.CardStatus.DESTROYED) || card.getCardStatus().equals(Card.CardStatus.EXPIRED) || card.getCardStatus().equals(Card.CardStatus.BROKEN)) {
+        if (card.getCardStatus().equals(Card.CardStatus.DESTROYED) || card.getCardStatus().equals(Card.CardStatus.EXPIRED) || card.getCardStatus().equals(Card.CardStatus.BROKEN)) {
             throw new IllegalArgumentException("Cannot change status of a " + card.getCardStatus().name());
         }
         card.setCardStatus(status);

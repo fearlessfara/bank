@@ -91,6 +91,7 @@ public class ExchangeData {
 
     /**
      * this method make the request and parse the data returned in an ExchangeCurrencyDTO object
+     *
      * @param uri
      * @return
      * @throws IOException
@@ -112,6 +113,7 @@ public class ExchangeData {
 
     /**
      * Update if needed the currency value on db
+     *
      * @param exchangeCurrencyValueHistories
      */
     private void updateCurrencyValue(List<ExchangeCurrencyValueHistory> exchangeCurrencyValueHistories) {

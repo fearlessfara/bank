@@ -87,6 +87,7 @@ public class CardControllerImpl implements CardController {
         cardRepository.saveAndFlush(card);
         return "The status of the card: " + card.getName() + ", now is " + ACTIVE.name();
     }
+
     @Override
     public String delete(Long accountId, Long cardId, PinDTO pinDTO) {
         Preconditions.checkArgument(StringUtils.isNotBlank(pinDTO.pin.trim()), "configurationToken is blank");

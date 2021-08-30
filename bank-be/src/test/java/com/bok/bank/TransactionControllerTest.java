@@ -73,13 +73,14 @@ public class TransactionControllerTest {
     public void init() {
         modelTestUtil.clearAll();
     }
+
     @Test
     public void checkPaymentAmountTest() {
         User user = modelTestUtil.createAndSaveUser(17L);
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user);
         Card card = modelTestUtil.createAndSaveActiveCard(user, bankAccount);
 
-        Money moneyToAuthorize = new Money(new BigDecimal(10).setScale(2,RoundingMode.FLOOR), bankAccount.getCurrency());
+        Money moneyToAuthorize = new Money(new BigDecimal(10).setScale(2, RoundingMode.FLOOR), bankAccount.getCurrency());
         AuthorizationResponseDTO checkPaymentAmount = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), null, new com.bok.bank.integration.util.Money(moneyToAuthorize.getCurrency(), moneyToAuthorize.getValue()), "MARKET", card.getToken()));
         Assertions.assertEquals(checkPaymentAmount.reason, "");
         Assertions.assertTrue(checkPaymentAmount.authorized);
@@ -102,7 +103,7 @@ public class TransactionControllerTest {
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
         Card card = modelTestUtil.createAndSaveActiveCard(user, bankAccount);
 
-        Money moneyToAuthorize = new Money(new BigDecimal(121).setScale(2,RoundingMode.FLOOR), USD);
+        Money moneyToAuthorize = new Money(new BigDecimal(121).setScale(2, RoundingMode.FLOOR), USD);
         AuthorizationResponseDTO checkPaymentAmount = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), UUID.randomUUID(), new com.bok.bank.integration.util.Money(USD, BigDecimal.valueOf(121)), "MARKET", card.getToken()));
         Assertions.assertEquals(checkPaymentAmount.reason, "");
         Assertions.assertTrue(checkPaymentAmount.authorized);
@@ -128,7 +129,7 @@ public class TransactionControllerTest {
 
         com.bok.bank.integration.util.Money moneyToSend = new com.bok.bank.integration.util.Money(USD, BigDecimal.valueOf(12));
         Money moneyToSendBE = new Money(BigDecimal.valueOf(12), USD);
-        WireTransferResponseDTO wireTransferResponseDTO = transactionController.wireTransfer(user.getId(), new WireTransferRequestDTO(bankAccount2.getIBAN(), user2.getName() + " " + user2.getSurname(), faker.name().title(),moneyToSend, null, true));
+        WireTransferResponseDTO wireTransferResponseDTO = transactionController.wireTransfer(user.getId(), new WireTransferRequestDTO(bankAccount2.getIBAN(), user2.getName() + " " + user2.getSurname(), faker.name().title(), moneyToSend, null, true));
         Assertions.assertEquals(wireTransferResponseDTO.reason, "");
         Assertions.assertTrue(wireTransferResponseDTO.accepted);
         BankAccount bankAccountAfterWireTransfer = bankAccountRepository.findByAccountId(user.getId()).get();
@@ -179,8 +180,9 @@ public class TransactionControllerTest {
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
 
         com.bok.bank.integration.util.Money moneyToSend = new com.bok.bank.integration.util.Money(USD, BigDecimal.valueOf(12));
-        Assertions.assertThrows(IllegalStateException.class, () -> transactionController.wireTransfer(user.getId(), new WireTransferRequestDTO(bankAccount.getIBAN(), user.getName() + " " + user.getSurname(), faker.name().title(),  moneyToSend, null, true)));
+        Assertions.assertThrows(IllegalStateException.class, () -> transactionController.wireTransfer(user.getId(), new WireTransferRequestDTO(bankAccount.getIBAN(), user.getName() + " " + user.getSurname(), faker.name().title(), moneyToSend, null, true)));
     }
+
     @Test
     public void checkWireTransferToYourselfFAIL() {
         User user = modelTestUtil.createAndSaveUser(17L);
