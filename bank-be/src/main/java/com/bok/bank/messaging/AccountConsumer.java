@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
+
 @Component
 @Slf4j
 public class AccountConsumer {
@@ -36,6 +38,7 @@ public class AccountConsumer {
     TransactionRepository transactionRepository;
 
     @JmsListener(destination = "${active-mq.bank-account-deletion}")
+    @Transactional
     public void deleteUserListener(AccountClosureMessage message) {
         log.info("Received Message: " + message.toString());
         Account account = accountRepository.findById(message.accountId).orElseThrow(AccountException::new);
