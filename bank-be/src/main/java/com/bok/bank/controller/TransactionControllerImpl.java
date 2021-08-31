@@ -65,10 +65,12 @@ public class TransactionControllerImpl implements TransactionController {
             return new WireTransferResponseDTO(false, e.getLocalizedMessage());
 
         }
-
-
         if (wireTransferRequestDTO.instantTransfer) {
-            return new WireTransferResponseDTO(transactionHelper.performTransaction(new TransactionDTO(wireTransferRequestDTO.money, accountId, wireTransferRequestDTO.destinationIBAN, wireTransferRequestDTO.causal, wireTransferRequestDTO.beneficiary, wireTransferRequestDTO.instantTransfer, wireTransferRequestDTO.executionDate, Transaction.Type.WIRE_TRANSFER.name())), "");
+            boolean success = transactionHelper.performTransaction(new TransactionDTO(wireTransferRequestDTO.money, accountId, wireTransferRequestDTO.destinationIBAN, wireTransferRequestDTO.causal, wireTransferRequestDTO.beneficiary, wireTransferRequestDTO.instantTransfer, wireTransferRequestDTO.executionDate, Transaction.Type.WIRE_TRANSFER.name()));
+            if(success){
+                return new WireTransferResponseDTO(true, "");
+            }
+            return new WireTransferResponseDTO(false, "Amount not available");
 
         }
         Preconditions.checkNotNull(wireTransferRequestDTO.executionDate, "executionDate passed is null");
