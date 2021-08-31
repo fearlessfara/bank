@@ -12,5 +12,4 @@ import lombok.ToString;
 public class WireTransferResponseDTO {
     public Boolean accepted;
     public String reason;
-
 }

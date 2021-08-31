@@ -25,5 +25,4 @@ public class BankAccountInfoDTO {
     public BigDecimal blockedAmount;
     public BigDecimal availableAmount;
     public String status;
-
 }

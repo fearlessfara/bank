@@ -1,18 +1,12 @@
 package com.bok.bank.integration.grpc;
 
+import io.grpc.stub.StreamObserver;
+
 import static io.grpc.MethodDescriptor.generateFullMethodName;
-import static io.grpc.stub.ClientCalls.asyncBidiStreamingCall;
-import static io.grpc.stub.ClientCalls.asyncClientStreamingCall;
-import static io.grpc.stub.ClientCalls.asyncServerStreamingCall;
 import static io.grpc.stub.ClientCalls.asyncUnaryCall;
-import static io.grpc.stub.ClientCalls.blockingServerStreamingCall;
 import static io.grpc.stub.ClientCalls.blockingUnaryCall;
 import static io.grpc.stub.ClientCalls.futureUnaryCall;
-import static io.grpc.stub.ServerCalls.asyncBidiStreamingCall;
-import static io.grpc.stub.ServerCalls.asyncClientStreamingCall;
-import static io.grpc.stub.ServerCalls.asyncServerStreamingCall;
 import static io.grpc.stub.ServerCalls.asyncUnaryCall;
-import static io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall;
 import static io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall;
 
 /**
@@ -41,7 +35,7 @@ public final class BankGrpc {
     if ((getAuthorizeMethod = BankGrpc.getAuthorizeMethod) == null) {
       synchronized (BankGrpc.class) {
         if ((getAuthorizeMethod = BankGrpc.getAuthorizeMethod) == null) {
-          BankGrpc.getAuthorizeMethod = getAuthorizeMethod = 
+          BankGrpc.getAuthorizeMethod = getAuthorizeMethod =
               io.grpc.MethodDescriptor.<com.bok.bank.integration.grpc.AuthorizationRequest, com.bok.bank.integration.grpc.AuthorizationResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
@@ -73,7 +67,7 @@ public final class BankGrpc {
     if ((getGetAccountInfoMethod = BankGrpc.getGetAccountInfoMethod) == null) {
       synchronized (BankGrpc.class) {
         if ((getGetAccountInfoMethod = BankGrpc.getGetAccountInfoMethod) == null) {
-          BankGrpc.getGetAccountInfoMethod = getGetAccountInfoMethod = 
+          BankGrpc.getGetAccountInfoMethod = getGetAccountInfoMethod =
               io.grpc.MethodDescriptor.<com.bok.bank.integration.grpc.AccountInfoRequest, com.bok.bank.integration.grpc.AccountInfoResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
@@ -105,7 +99,7 @@ public final class BankGrpc {
     if ((getAccountCreationCheckMethod = BankGrpc.getAccountCreationCheckMethod) == null) {
       synchronized (BankGrpc.class) {
         if ((getAccountCreationCheckMethod = BankGrpc.getAccountCreationCheckMethod) == null) {
-          BankGrpc.getAccountCreationCheckMethod = getAccountCreationCheckMethod = 
+          BankGrpc.getAccountCreationCheckMethod = getAccountCreationCheckMethod =
               io.grpc.MethodDescriptor.<com.bok.bank.integration.grpc.AccountCreationCheckRequest, com.bok.bank.integration.grpc.AccountCreationCheckResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
@@ -137,7 +131,7 @@ public final class BankGrpc {
     if ((getConvertMoneyMethod = BankGrpc.getConvertMoneyMethod) == null) {
       synchronized (BankGrpc.class) {
         if ((getConvertMoneyMethod = BankGrpc.getConvertMoneyMethod) == null) {
-          BankGrpc.getConvertMoneyMethod = getConvertMoneyMethod = 
+          BankGrpc.getConvertMoneyMethod = getConvertMoneyMethod =
               io.grpc.MethodDescriptor.<com.bok.bank.integration.grpc.ConversionRequest, com.bok.bank.integration.grpc.Money>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
@@ -169,7 +163,7 @@ public final class BankGrpc {
     if ((getConfirmCardMethod = BankGrpc.getConfirmCardMethod) == null) {
       synchronized (BankGrpc.class) {
         if ((getConfirmCardMethod = BankGrpc.getConfirmCardMethod) == null) {
-          BankGrpc.getConfirmCardMethod = getConfirmCardMethod = 
+          BankGrpc.getConfirmCardMethod = getConfirmCardMethod =
               io.grpc.MethodDescriptor.<com.bok.bank.integration.grpc.CardConfirmationRequest, com.bok.bank.integration.grpc.ConfirmationResponse>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(
@@ -216,29 +210,25 @@ public final class BankGrpc {
 
     /**
      */
-    public void authorize(com.bok.bank.integration.grpc.AuthorizationRequest request,
-        io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.AuthorizationResponse> responseObserver) {
+    public void authorize(AuthorizationRequest request, StreamObserver<AuthorizationResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getAuthorizeMethod(), responseObserver);
     }
 
     /**
      */
-    public void getAccountInfo(com.bok.bank.integration.grpc.AccountInfoRequest request,
-        io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.AccountInfoResponse> responseObserver) {
+    public void getAccountInfo(AccountInfoRequest request, StreamObserver<AccountInfoResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getGetAccountInfoMethod(), responseObserver);
     }
 
     /**
      */
-    public void accountCreationCheck(com.bok.bank.integration.grpc.AccountCreationCheckRequest request,
-        io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.AccountCreationCheckResponse> responseObserver) {
+    public void accountCreationCheck(AccountCreationCheckRequest request, StreamObserver<AccountCreationCheckResponse> responseObserver) {
       asyncUnimplementedUnaryCall(getAccountCreationCheckMethod(), responseObserver);
     }
 
     /**
      */
-    public void convertMoney(com.bok.bank.integration.grpc.ConversionRequest request,
-        io.grpc.stub.StreamObserver<com.bok.bank.integration.grpc.Money> responseObserver) {
+    public void convertMoney(ConversionRequest request, StreamObserver<Money> responseObserver) {
       asyncUnimplementedUnaryCall(getConvertMoneyMethod(), responseObserver);
     }
 

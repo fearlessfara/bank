@@ -15,5 +15,4 @@ public class CardDTO {
     public String name;
     public String type;
     public String label;
-
 }

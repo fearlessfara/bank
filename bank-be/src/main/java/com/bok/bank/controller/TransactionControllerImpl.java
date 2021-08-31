@@ -14,6 +14,9 @@ import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.iban4j.Iban;
+import org.iban4j.IbanFormatException;
+import org.iban4j.InvalidCheckDigitException;
+import org.iban4j.UnsupportedCountryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +59,13 @@ public class TransactionControllerImpl implements TransactionController {
         Preconditions.checkNotNull(wireTransferRequestDTO.money.amount, "money is null");
         Preconditions.checkArgument(StringUtils.isNotBlank(wireTransferRequestDTO.destinationIBAN), "destinationIBAN passed is blank");
         wireTransferRequestDTO.destinationIBAN = wireTransferRequestDTO.destinationIBAN.replace(" ", "").toUpperCase(Locale.ROOT);
-        Iban.valueOf(wireTransferRequestDTO.destinationIBAN);
+        try {
+            Iban.valueOf(wireTransferRequestDTO.destinationIBAN);
+        } catch (IbanFormatException | InvalidCheckDigitException | UnsupportedCountryException e) {
+            return new WireTransferResponseDTO(false, e.getLocalizedMessage());
+
+        }
+
 
         if (wireTransferRequestDTO.instantTransfer) {
             return new WireTransferResponseDTO(transactionHelper.performTransaction(new TransactionDTO(wireTransferRequestDTO.money, accountId, wireTransferRequestDTO.destinationIBAN, wireTransferRequestDTO.causal, wireTransferRequestDTO.beneficiary, wireTransferRequestDTO.instantTransfer, wireTransferRequestDTO.executionDate, Transaction.Type.WIRE_TRANSFER.name())), "");

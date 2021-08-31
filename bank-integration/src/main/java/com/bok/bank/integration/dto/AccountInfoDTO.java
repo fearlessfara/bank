@@ -20,5 +20,4 @@ public class AccountInfoDTO {
     public String status;
     public String type;
     public String fullName;
-
 }
