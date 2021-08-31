@@ -132,10 +132,9 @@ public class TransactionHelper {
         Preconditions.checkArgument(Objects.nonNull(transactionDTO.transactionAmount) && transactionDTO.transactionAmount.amount.compareTo(BigDecimal.ZERO) == 1, "amount not valid");
         BankAccount bankAccount = bankAccountRepository.findByAccountId(transactionDTO.accountId).orElseThrow(BankAccountException::new);
         if (bankAccount.getIBAN().equals(transactionDTO.destinationIBAN)) {
-            throw new IllegalStateException("CANNOT DO A WIRE TRANSFER TO YOURSELF");
+            throw new IllegalStateException("Cannot do a wire transfer to YOURSELF");
         }
-        executeTransaction(transactionDTO, bankAccount);
-        return true;
+        return executeTransaction(transactionDTO, bankAccount);
     }
 
     public List<TransactionResponseDTO> findTransactionsByAccountId(Long accountId) {
@@ -164,7 +163,7 @@ public class TransactionHelper {
      * @param transactionDTO
      * @param bankAccount
      */
-    private void executeTransaction(TransactionDTO transactionDTO, BankAccount bankAccount) {
+    private boolean executeTransaction(TransactionDTO transactionDTO, BankAccount bankAccount) {
         Transaction transaction;
         switch (Transaction.Type.valueOf(transactionDTO.type)) {
             case DEPOSIT: {
@@ -201,7 +200,9 @@ public class TransactionHelper {
                 if (transactionDTO.instantTransfer) {
                     transactionDTO.executionDate = LocalDate.now();
                     if (bankAccount.getAvailableAmount().isLessThan(amount)) {
-                        throw new TransactionException();
+                        transaction = new Transaction(WIRE_TRANSFER, Transaction.Status.DECLINED, transactionDTO.destinationIBAN, transactionDTO.causal, transactionDTO.beneficiary, transactionDTO.instantTransfer, transactionDTO.executionDate, bankAccount, null, account, new Money(transactionDTO.transactionAmount.amount, transactionDTO.transactionAmount.currency), UUID.randomUUID());
+                        transactionRepository.saveAndFlush(transaction);
+                        return false;
                     }
                     transaction = new Transaction(WIRE_TRANSFER, Transaction.Status.SETTLED, transactionDTO.destinationIBAN, transactionDTO.causal, transactionDTO.beneficiary, transactionDTO.instantTransfer, transactionDTO.executionDate, bankAccount, null, account, new Money(transactionDTO.transactionAmount.amount, transactionDTO.transactionAmount.currency), UUID.randomUUID());
                     if (bankAccountDestinationOptional.isPresent()) {
@@ -236,6 +237,7 @@ public class TransactionHelper {
         }
         transactionRepository.saveAndFlush(transaction);
         bankAccountRepository.saveAndFlush(bankAccount);
+        return true;
     }
 
     public List<Transaction> findTransactionByCardToken(Long accountId, String token) {

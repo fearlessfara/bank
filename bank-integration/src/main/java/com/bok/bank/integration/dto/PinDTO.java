@@ -10,7 +10,5 @@ import lombok.ToString;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PinDTO {
-
     public String pin;
-
 }

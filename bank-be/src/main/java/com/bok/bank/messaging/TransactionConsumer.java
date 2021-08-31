@@ -22,7 +22,7 @@ public class TransactionConsumer {
     TransactionHelper transactionHelper;
 
     @JmsListener(destination = "${active-mq.bank-withdrawal}")
-    public void withdrawalListener(BankWithdrawalMessage message) {
+    public void paymentListener(BankWithdrawalMessage message) {
         Preconditions.checkArgument(Objects.nonNull(message), "withdrawalDTO passed is null");
         log.info("Received withdrawal Message: " + message);
         Preconditions.checkArgument(StringUtils.isNotBlank(message.fromMarket), "fromMarket passed is blank");
