@@ -28,7 +28,7 @@ public class TransactionConsumer {
         Preconditions.checkArgument(StringUtils.isNotBlank(message.fromMarket), "fromMarket passed is blank");
         Preconditions.checkNotNull(message.extTransactionId, "extTransactionId passed is null");
         Preconditions.checkNotNull(message.accountId, "accountId passed is null");
-        transactionHelper.performTransaction(new TransactionDTO(message.money, message.accountId, message.fromMarket, message.extTransactionId, Transaction.Type.PAYMENT.name()));
+        transactionHelper.performTransaction(new TransactionDTO(message.money, message.accountId, message.fromMarket, message.extTransactionId.toString(), Transaction.Type.PAYMENT.name()));
     }
 
     @JmsListener(destination = "${active-mq.bank-deposit}")

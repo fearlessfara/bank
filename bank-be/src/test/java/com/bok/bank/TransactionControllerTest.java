@@ -1,6 +1,7 @@
 package com.bok.bank;
 
 import com.bok.bank.helper.ExchangeCurrencyAmountHelper;
+import com.bok.bank.helper.TransactionHelper;
 import com.bok.bank.integration.dto.AuthorizationRequestDTO;
 import com.bok.bank.integration.dto.AuthorizationResponseDTO;
 import com.bok.bank.integration.dto.CardDTO;
@@ -53,6 +54,9 @@ public class TransactionControllerTest {
 
     @Autowired
     TransactionController transactionController;
+
+    @Autowired
+    TransactionHelper transactionHelper;
 
     @Autowired
     CardController cardController;
@@ -145,7 +149,7 @@ public class TransactionControllerTest {
     }
 
     @Test
-    public void checkWireTransfer() {
+    public void checkWireTransferAndSettledScheduler() {
         User user = modelTestUtil.createAndSaveUser(17L);
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
         User user2 = modelTestUtil.createAndSaveUser(18L);
@@ -172,6 +176,11 @@ public class TransactionControllerTest {
         Assertions.assertEquals(availableAmountBA2, bankAccount2AfterWireTransfer.getAvailableAmount());
         Transaction transaction = transactionRepository.findAll().get(0);
         Assertions.assertEquals(Transaction.Status.AUTHORISED, transaction.getStatus());
+        transaction.setExecutionDate(LocalDate.now());
+        transactionRepository.saveAndFlush(transaction);
+        transactionHelper.processScheduledTransfers();
+        transaction = transactionRepository.findAll().get(0);
+        Assertions.assertEquals(Transaction.Status.SETTLED, transaction.getStatus());
     }
 
     @Test

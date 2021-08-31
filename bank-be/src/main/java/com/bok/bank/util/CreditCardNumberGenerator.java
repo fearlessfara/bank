@@ -84,8 +84,8 @@ public class CreditCardNumberGenerator {
         return StringUtils.overlay(ccNumber, StringUtils.repeat("X", ccNumber.length() - 4), 0, ccNumber.length() - 4);
     }
 
-    public int generateCvv() {
-        return Integer.parseInt(this.randomNum() + "" + this.randomNum() + "" + this.randomNum());
+    public String generateCvv() {
+        return this.randomNum() + "" + this.randomNum() + "" + this.randomNum();
     }
 
     public String generateToken() {

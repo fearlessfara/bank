@@ -252,7 +252,7 @@ public class TransactionHelper {
     public void processScheduledTransfers() {
         List<Transaction> wireTransfers = transactionRepository.findTransactionsByStatusAndTypeAndExecutionDate(Transaction.Status.AUTHORISED, WIRE_TRANSFER, LocalDate.now());
         wireTransfers.forEach(transaction -> {
-            performTransaction(new TransactionDTO(new com.bok.bank.integration.util.Money(transaction.getAmount().getCurrency(), transaction.getAmount().getValue()), transaction.getTransactionOwner().getId(), transaction.getDestinationIban(), transaction.getCausal(), transaction.getBeneficiary(), transaction.getInstantTransfer(), transaction.getExecutionDate(), WIRE_TRANSFER.name()));
+            performTransaction(new TransactionDTO(new com.bok.bank.integration.util.Money(transaction.getAmount().getCurrency(), transaction.getAmount().getValue()), transaction.getTransactionOwner().getId(), transaction.getDestinationIban(), transaction.getCausal(), transaction.getBeneficiary(), transaction.getInstantTransfer(), transaction.getPublicId(), transaction.getExecutionDate(), WIRE_TRANSFER.name()));
         });
     }
 }

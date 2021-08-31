@@ -30,7 +30,7 @@ public interface CardController {
     public String getCardToken(@RequestParam Long accountId, @PathVariable Long cardId);
 
     @PostMapping("/getCvv/{cardId}")
-    public Integer getCvv(@RequestParam Long accountId, @PathVariable Long cardId, @RequestBody PinDTO pinDTO);
+    public String getCvv(@RequestParam Long accountId, @PathVariable Long cardId, @RequestBody PinDTO pinDTO);
 
     @GetMapping("/getPIN/{cardId}")
     public String getPIN(@RequestParam Long accountId, @PathVariable Long cardId);

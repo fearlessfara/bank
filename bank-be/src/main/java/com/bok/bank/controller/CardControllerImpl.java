@@ -51,7 +51,7 @@ public class CardControllerImpl implements CardController {
     }
 
     @Override
-    public Integer getCvv(Long accountId, Long cardId, PinDTO pinDTO) {
+    public String getCvv(Long accountId, Long cardId, PinDTO pinDTO) {
         Preconditions.checkNotNull(cardId, "cardId must not be null");
         cardHelper.checkPin(accountId, cardId, pinDTO.pin);
         return cardHelper.getCvv(accountId, cardId);

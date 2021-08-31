@@ -30,7 +30,7 @@ public interface CardRepository extends JpaRepository<Card, Long> {
 
     @Query("SELECT c.cvv " +
             "FROM Card c WHERE c.account.id = :accountId AND c.id = :cardId")
-    Optional<Integer> findCvvByAccountIdAndCardId(Long accountId, Long cardId);
+    Optional<String> findCvvByAccountIdAndCardId(Long accountId, Long cardId);
 
     @Query("UPDATE Card set cardStatus = :status where id= :cardId")
     int changeCardStatus(Long cardId, Card.CardStatus status);

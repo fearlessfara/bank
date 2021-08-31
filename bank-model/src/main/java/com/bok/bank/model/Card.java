@@ -56,7 +56,7 @@ public class Card implements Serializable {
     private String maskedPan;
 
     @Column(nullable = false)
-    private int cvv;
+    private String cvv;
 
     @Column(nullable = false)
     private String PIN;
@@ -77,7 +77,7 @@ public class Card implements Serializable {
     public Card() {
     }
 
-    public Card(String name, Account account, CardStatus cardStatus, Type type, Instant expirationDate, String token, String label, String maskedPan, BankAccount bankAccount, int cvv, String PIN) {
+    public Card(String name, Account account, CardStatus cardStatus, Type type, Instant expirationDate, String token, String label, String maskedPan, BankAccount bankAccount, String cvv, String PIN) {
         this.name = name;
         this.account = account;
         this.cardStatus = cardStatus;
@@ -184,11 +184,11 @@ public class Card implements Serializable {
         this.type = type;
     }
 
-    public int getCvv() {
+    public String getCvv() {
         return cvv;
     }
 
-    public void setCvv(int cvv) {
+    public void setCvv(String cvv) {
         this.cvv = cvv;
     }
 

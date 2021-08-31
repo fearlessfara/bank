@@ -24,7 +24,10 @@ import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
+
+import static com.bok.bank.model.Card.CardStatus.EXPIRED;
 
 @Component
 public class CardHelper {
@@ -101,7 +104,7 @@ public class CardHelper {
      * @param cardId
      * @return
      */
-    public int getCvv(Long accountId, Long cardId) {
+    public String getCvv(Long accountId, Long cardId) {
         return cardRepository.findCvvByAccountIdAndCardId(accountId, cardId).orElseThrow(() -> new IllegalArgumentException("Card not found for cardId: " + cardId + " and accountId: " + accountId));
     }
 
@@ -159,8 +162,8 @@ public class CardHelper {
             return;
         }
         List<Card> cardsExpired = new ArrayList<>();
-        cards.stream().filter(card -> card.getExpirationDate().isAfter(Instant.now())).forEach(card -> {
-            card.setCardStatus(Card.CardStatus.EXPIRED);
+        cards.stream().filter(card -> card.getExpirationDate().isBefore(Instant.now())).forEach(card -> {
+            card.setCardStatus(EXPIRED);
             cardsExpired.add(card);
         });
         cardRepository.saveAll(cardsExpired);
@@ -176,10 +179,13 @@ public class CardHelper {
      */
     public String changeCardStatus(Long cardId, Card.CardStatus status) {
         if (status.equals(Card.CardStatus.ACTIVE) || status.equals(Card.CardStatus.DESTROYED)) {
-            throw new IllegalArgumentException("Cannot " + status + " card from this endpoint, please use delete endpoint");
+            throw new IllegalArgumentException("Cannot " + status + " card from this endpoint, please use " + status.name().toLowerCase(Locale.ROOT) + " endpoint");
         }
         Card card = cardRepository.findById(cardId).orElseThrow(CardException::new);
-        if (card.getCardStatus().equals(Card.CardStatus.DESTROYED) || card.getCardStatus().equals(Card.CardStatus.STOLEN) || card.getCardStatus().equals(Card.CardStatus.EXPIRED) || card.getCardStatus().equals(Card.CardStatus.BROKEN)) {
+        if(status.equals(EXPIRED)) {
+            throw new IllegalArgumentException("Cannot set status at EXPIRED, please wait until " + card.getExpirationDate());
+        }
+        if (card.getCardStatus().equals(Card.CardStatus.DESTROYED) || card.getCardStatus().equals(Card.CardStatus.STOLEN) || card.getCardStatus().equals(EXPIRED) || card.getCardStatus().equals(Card.CardStatus.BROKEN)) {
             throw new IllegalArgumentException("Cannot change status of a " + card.getCardStatus().name());
         }
         card.setCardStatus(status);

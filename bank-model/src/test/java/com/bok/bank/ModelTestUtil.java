@@ -108,8 +108,8 @@ public class ModelTestUtil {
         exchangeCurrencyValueRepository.saveAll(exchangeCurrencyValues);
 
         List<Card> cards = Arrays.asList(
-                new Card("firstCard", accounts.stream().filter(account -> account.getName().equals("Domenico")).findFirst().get(), Card.CardStatus.ACTIVE, Card.Type.DEBIT, Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS), "1352462", "prova", "*1234", bankAccounts.stream().filter(bankAccount -> bankAccount.getName().equals("Domenico")).findFirst().get(), 123, "22222"),
-                new Card("firstVirtualCard", accounts.stream().filter(account -> account.getName().equals("Chris")).findFirst().get(), Card.CardStatus.ACTIVE, Card.Type.VIRTUAL, Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS), "1352472", "provaV", "*1235", bankAccounts.stream().filter(bankAccount -> bankAccount.getName().equals("Chris")).findFirst().get(), 371, "23232")
+                new Card("firstCard", accounts.stream().filter(account -> account.getName().equals("Domenico")).findFirst().get(), Card.CardStatus.ACTIVE, Card.Type.DEBIT, Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS), "1352462", "prova", "*1234", bankAccounts.stream().filter(bankAccount -> bankAccount.getName().equals("Domenico")).findFirst().get(), "123", "22222"),
+                new Card("firstVirtualCard", accounts.stream().filter(account -> account.getName().equals("Chris")).findFirst().get(), Card.CardStatus.ACTIVE, Card.Type.VIRTUAL, Instant.now().plus(Period.ofYears(4).getDays(), ChronoUnit.DAYS), "1352472", "provaV", "*1235", bankAccounts.stream().filter(bankAccount -> bankAccount.getName().equals("Chris")).findFirst().get(), "371", "23232")
         );
 
         cardRepository.saveAll(cards);
