@@ -24,6 +24,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Instant;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.Currency;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -206,7 +208,7 @@ public class CardControllerTest {
         User user = modelTestUtil.createAndSaveUser(17L);
         BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user, Currency.getInstance("EUR"));
         Card card = modelTestUtil.createAndSaveActiveCard(user, bankAccount);
-        card.setExpirationDate(Instant.now()); //.minus(Period.ofDays(4).getDays(), ChronoUnit.DAYS)
+        card.setExpirationDate(Instant.now().plus(Period.ofDays(4).getDays(), ChronoUnit.DAYS));
         cardRepository.saveAndFlush(card);
         Thread.sleep(700);
         cardHelper.checkCardExpired();

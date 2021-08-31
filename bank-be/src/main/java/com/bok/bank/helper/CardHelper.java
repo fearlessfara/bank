@@ -162,7 +162,7 @@ public class CardHelper {
             return;
         }
         List<Card> cardsExpired = new ArrayList<>();
-        cards.stream().filter(card -> card.getExpirationDate().isBefore(Instant.now())).forEach(card -> {
+        cards.stream().filter(card -> card.getExpirationDate().isAfter(Instant.now())).forEach(card -> {
             card.setCardStatus(EXPIRED);
             cardsExpired.add(card);
         });
