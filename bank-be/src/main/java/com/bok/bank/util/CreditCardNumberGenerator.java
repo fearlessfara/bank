@@ -85,7 +85,7 @@ public class CreditCardNumberGenerator {
     }
 
     public String generateCvv() {
-        return firstNumber() + this.randomNum() + "" + this.randomNum();
+        return firstNumber() + "" + this.randomNum() + "" + this.randomNum();
     }
 
     public String generateToken() {
