@@ -2,6 +2,7 @@ package com.bok.bank.repository;
 
 import com.bok.bank.model.Account;
 import com.bok.bank.model.BankAccount;
+import com.bok.bank.model.Card;
 import com.bok.bank.model.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,7 +12,8 @@ import java.util.Optional;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-    int deleteByTransactionOwnerOrFromBankAccountOrToBankAccount(Account account, BankAccount bankAccount, BankAccount bankAccount2);
+    void deleteByTransactionOwnerOrFromBankAccountOrToBankAccountOrCardIn(Account account, BankAccount bankAccount, BankAccount bankAccount2, List<Card> cards);
+    void deleteByTransactionOwnerOrFromBankAccountOrToBankAccount(Account account, BankAccount bankAccount, BankAccount bankAccount2);
 
     List<Transaction> findDistinctByTransactionOwnerOrFromBankAccountOrToBankAccountOrderByTimestampDesc(Account account, BankAccount bankAccount, BankAccount bankAccount2);
 

@@ -7,6 +7,7 @@ import com.bok.bank.integration.dto.WireTransferRequestDTO;
 import com.bok.bank.integration.service.TransactionController;
 import com.bok.bank.model.Account;
 import com.bok.bank.model.BankAccount;
+import com.bok.bank.model.Card;
 import com.bok.bank.repository.AccountRepository;
 import com.bok.bank.repository.BankAccountRepository;
 import com.bok.bank.repository.CardRepository;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -57,8 +59,13 @@ public class AccountConsumer {
             throw new IllegalStateException("WARN: Some transactions are in authorization status and they are waiting to be settled");
         }
         confirmationEmailHistoryRepository.deleteByAccount(account);
+        List<Card> cardList = cardRepository.findByAccount_Id(account.getId());
+        if(cardList.isEmpty()){
+            transactionRepository.deleteByTransactionOwnerOrFromBankAccountOrToBankAccountOrCardIn(account, bankAccount, bankAccount, cardList);
+        } else {
+            transactionRepository.deleteByTransactionOwnerOrFromBankAccountOrToBankAccountOrCardIn(account, bankAccount, bankAccount, cardList);
+        }
         cardRepository.deleteByAccount(account);
-        transactionRepository.deleteByTransactionOwnerOrFromBankAccountOrToBankAccount(account, bankAccount, bankAccount);
         bankAccountRepository.deleteById(bankAccount.getId());
         accountRepository.deleteById(account.getId());
     }

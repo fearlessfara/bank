@@ -12,6 +12,8 @@ public interface CardRepository extends JpaRepository<Card, Long> {
 
     int deleteByAccount(Account account);
 
+    List<Card> findByAccount_Id(Long accountId);
+
     @Query("SELECT c.id as cardId, c.name as name, c.cardStatus as cardStatus, c.type as type, c.label as label, c.maskedPan as maskedPan, c.cvv as cvv " +
             "FROM Card c WHERE c.account.id = :accountId")
     List<Projection.CardInfo> findAllCardInfoByAccountId(Long accountId);

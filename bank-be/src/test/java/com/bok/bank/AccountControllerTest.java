@@ -2,10 +2,14 @@ package com.bok.bank;
 
 import com.bok.bank.helper.AccountHelper;
 import com.bok.bank.integration.dto.AccountInfoDTO;
+import com.bok.bank.integration.dto.AuthorizationRequestDTO;
+import com.bok.bank.integration.dto.AuthorizationResponseDTO;
 import com.bok.bank.integration.service.AccountController;
+import com.bok.bank.integration.service.TransactionController;
 import com.bok.bank.messaging.AccountConsumer;
 import com.bok.bank.model.Account;
 import com.bok.bank.model.BankAccount;
+import com.bok.bank.model.Card;
 import com.bok.bank.model.Company;
 import com.bok.bank.model.User;
 import com.bok.bank.repository.AccountRepository;
@@ -45,6 +49,10 @@ public class AccountControllerTest {
 
     @Autowired
     AccountHelper accountHelper;
+
+
+    @Autowired
+    TransactionController transactionController;
 
     @Autowired
     AccountConsumer accountConsumer;
@@ -139,6 +147,23 @@ public class AccountControllerTest {
         Optional<BankAccount> bankAccount = bankAccountRepository.findByAccountId(123L);
         Assertions.assertFalse(account.isPresent());
         Assertions.assertFalse(bankAccount.isPresent());
+    }
+
+    @Test
+    public void deleteUserFullTest() {
+        User user = modelTestUtil.createAndSaveUser(17L);
+        BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user);
+        Card card = modelTestUtil.createAndSaveActiveCard(user, bankAccount);
+        Money moneyToAuthorize = new Money(new BigDecimal(10).setScale(2, RoundingMode.FLOOR), bankAccount.getCurrency());
+        AuthorizationResponseDTO checkPaymentAmount = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), null, new com.bok.bank.integration.util.Money(moneyToAuthorize.getCurrency(), moneyToAuthorize.getValue()), "MARKET", card.getToken()));
+        bankAccount = bankAccountRepository.findById(bankAccount.getId()).get();
+        bankAccount.setBlockedAmount(Money.ZERO);
+        bankAccountRepository.saveAndFlush(bankAccount);
+        accountConsumer.deleteUserListener(new AccountClosureMessage(17L, "AAAA"));
+        Optional<Account> account = accountRepository.findById(17L);
+        Optional<BankAccount> bankAccountOpt = bankAccountRepository.findByAccountId(17L);
+        Assertions.assertFalse(account.isPresent());
+        Assertions.assertFalse(bankAccountOpt.isPresent());
     }
 
 }
