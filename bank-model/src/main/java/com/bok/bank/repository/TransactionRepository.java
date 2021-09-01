@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-    int deleteByFromBankAccount(BankAccount toBankAccount);
+    int deleteByTransactionOwnerOrFromBankAccountOrToBankAccount(Account account, BankAccount bankAccount, BankAccount bankAccount2);
 
     List<Transaction> findDistinctByTransactionOwnerOrFromBankAccountOrToBankAccountOrderByTimestampDesc(Account account, BankAccount bankAccount, BankAccount bankAccount2);
 

@@ -54,7 +54,7 @@ public class AccountConsumer {
                     new com.bok.bank.integration.util.Money(bankAccount.getAvailableAmount().getCurrency(), bankAccount.getAvailableAmount().getValue()), LocalDate.now(), true));
         }
         confirmationEmailHistoryRepository.deleteByAccount(account);
-        transactionRepository.deleteByFromBankAccount(bankAccount);
+        transactionRepository.deleteByTransactionOwnerOrFromBankAccountOrToBankAccount(account, bankAccount, bankAccount);
         cardRepository.deleteByAccount(account);
         bankAccountRepository.deleteById(bankAccount.getId());
         accountRepository.deleteById(account.getId());
