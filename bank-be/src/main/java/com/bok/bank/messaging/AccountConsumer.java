@@ -53,6 +53,9 @@ public class AccountConsumer {
             transactionController.wireTransfer(message.accountId, new WireTransferRequestDTO(message.iban, account.getName(), "Account Closure",
                     new com.bok.bank.integration.util.Money(bankAccount.getAvailableAmount().getCurrency(), bankAccount.getAvailableAmount().getValue()), LocalDate.now(), true));
         }
+        if(bankAccount.getBlockedAmount().isGreaterThan(Money.ZERO)) {
+            throw new IllegalStateException("WARN: Some transactions are in authorization status and they are waiting to be settled");
+        }
         confirmationEmailHistoryRepository.deleteByAccount(account);
         cardRepository.deleteByAccount(account);
         transactionRepository.deleteByTransactionOwnerOrFromBankAccountOrToBankAccount(account, bankAccount, bankAccount);
