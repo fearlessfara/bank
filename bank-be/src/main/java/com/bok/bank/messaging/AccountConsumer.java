@@ -48,14 +48,14 @@ public class AccountConsumer {
         log.info("Received Message: " + message.toString());
         Account account = accountRepository.findById(message.accountId).orElseThrow(AccountException::new);
         BankAccount bankAccount = bankAccountRepository.findByAccountId(account.getId()).orElseThrow(BankAccountException::new);
-        if (bankAccount.getAvailableAmount().isGreaterThan(Money.ZERO) || bankAccount.getBlockedAmount().isGreaterThan(Money.ZERO)) {
+        if (bankAccount.getAvailableAmount().isGreaterThan(Money.ZERO)) {
             log.warn("The account {} contain an available amount: {} and blocked: {}", message.accountId, bankAccount.getAvailableAmount(), bankAccount.getBlockedAmount());
             transactionController.wireTransfer(message.accountId, new WireTransferRequestDTO(message.iban, account.getName(), "Account Closure",
                     new com.bok.bank.integration.util.Money(bankAccount.getAvailableAmount().getCurrency(), bankAccount.getAvailableAmount().getValue()), LocalDate.now(), true));
         }
         confirmationEmailHistoryRepository.deleteByAccount(account);
-        transactionRepository.deleteByTransactionOwnerOrFromBankAccountOrToBankAccount(account, bankAccount, bankAccount);
         cardRepository.deleteByAccount(account);
+        transactionRepository.deleteByTransactionOwnerOrFromBankAccountOrToBankAccount(account, bankAccount, bankAccount);
         bankAccountRepository.deleteById(bankAccount.getId());
         accountRepository.deleteById(account.getId());
     }

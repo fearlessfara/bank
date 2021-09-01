@@ -85,19 +85,27 @@ public class CreditCardNumberGenerator {
     }
 
     public String generateCvv() {
-        return this.randomNum() + "" + this.randomNum() + "" + this.randomNum();
+        return firstNumber() + this.randomNum() + "" + this.randomNum();
     }
 
     public String generateToken() {
-        return this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + randomNum() + "" + this.randomNum();
+        return firstNumber() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + randomNum() + "" + this.randomNum();
     }
 
     public String generatePIN() {
-        return this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum();
+        return firstNumber() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum() + "" + this.randomNum();
     }
 
     private int randomNum() {
         return this.random.nextInt(9);
+    }
+
+    private int firstNumber() {
+        int first = this.randomNum();
+        if (first == 0) {
+            this.randomNum();
+        }
+        return first;
     }
 
 }
