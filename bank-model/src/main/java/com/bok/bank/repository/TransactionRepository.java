@@ -21,5 +21,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     List<Transaction> findTransactionsByCard_Id(Long cardId);
 
+    List<Transaction> findTransactionsByCardIn(List<Card> cards);
+
     List<Transaction> findTransactionsByStatusAndTypeAndExecutionDate(Transaction.Status status, Transaction.Type type, LocalDate localDate);
 }

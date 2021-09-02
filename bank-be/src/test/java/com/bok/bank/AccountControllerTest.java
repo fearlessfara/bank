@@ -166,4 +166,14 @@ public class AccountControllerTest {
         Assertions.assertFalse(bankAccountOpt.isPresent());
     }
 
+    @Test
+    public void deleteUserFullFailBlockedAmountTest() {
+        User user = modelTestUtil.createAndSaveUser(17L);
+        BankAccount bankAccount = modelTestUtil.createAndSaveBankAccount(user);
+        Card card = modelTestUtil.createAndSaveActiveCard(user, bankAccount);
+        Money moneyToAuthorize = new Money(new BigDecimal(10).setScale(2, RoundingMode.FLOOR), bankAccount.getCurrency());
+        AuthorizationResponseDTO checkPaymentAmount = transactionController.authorize(user.getId(), new AuthorizationRequestDTO(user.getId(), null, new com.bok.bank.integration.util.Money(moneyToAuthorize.getCurrency(), moneyToAuthorize.getValue()), "MARKET", card.getToken()));
+        Assertions.assertThrows(IllegalStateException.class, () -> accountConsumer.deleteUserListener(new AccountClosureMessage(17L, "AAAA")));
+    }
+
 }

@@ -24,7 +24,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.HSQLDialect
-    show-sql: false
+    show-sql: true
     database: hsql
 eureka:
   client:
