@@ -53,7 +53,7 @@ exchange-currency:
 bank-info:
   bank-bin: "593796"
   bank-code: "59379"
-  init-bonus: 100000
+  init-bonus: 100
 eureka:
   client:
     serviceUrl:
