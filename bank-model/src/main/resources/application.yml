@@ -48,7 +48,7 @@ spring:
 
 exchange-currency:
   endpoint: https://v6.exchangerate-api.com/v6/
-  api-key: ceb94d443f6398dd5e640cd1
+  api-key: xxxxxxxxxx
   base-currency: USD
 bank-info:
   bank-bin: "593796"
